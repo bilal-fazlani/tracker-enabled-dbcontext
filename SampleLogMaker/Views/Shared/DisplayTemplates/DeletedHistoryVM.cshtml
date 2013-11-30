@@ -1,0 +1,10 @@
+﻿@using SampleLogMaker.ViewModels
+@model DeletedHistoryVM
+
+<div class="deleted">
+    @Model.UserName deleted
+    <span class="historySpan deletedHistoySpan tooltipper" title="deleted">
+        @Model.TableName @Model.RecordId
+    </span>
+     on @(Model.Date.ToString(Model.DateFormat)).
+</div>

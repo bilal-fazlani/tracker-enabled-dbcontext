@@ -1,0 +1,12 @@
+﻿@using SampleLogMaker.ViewModels
+@model AddedHistoryVM
+
+<div class="added">
+    @Model.UserName added
+    
+    <span class=" historySpan addedHistoySpan tooltipper" title="added" logid="@Model.LogId">
+        @Model.TableName @Model.RecordId
+    </span>
+    
+    on @(Model.Date.ToString(Model.DateFormat)).
+</div>

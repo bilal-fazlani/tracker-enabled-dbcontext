@@ -1,0 +1,22 @@
+﻿@using SampleLogMaker.ViewModels
+@model ChangedHostoryVM
+
+<div class="changed">
+    @Model.UserName changed @Model.ColumnName for
+    
+    @Model.TableName @Model.RecordId
+    
+     from
+
+    <b>
+        @Model.OldValue
+    </b>
+
+    to
+
+    <b>
+        @Model.NewValue
+    </b>
+
+    on @(Model.Date.ToString(Model.DateFormat)).
+</div>

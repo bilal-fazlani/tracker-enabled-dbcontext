@@ -1,0 +1,68 @@
+﻿@using SampleLogMaker.ViewModels
+@model IEnumerable<BaseHistoryVM>
+@{
+    ViewBag.Title = "Log";
+}
+
+<style type="text/css">
+    #historyList {
+    }
+
+    .historySpan {
+        border-radius: 3px;
+        padding: 2px;
+        margin: 2px;
+        border: 1px solid;
+        cursor: pointer;
+    }
+
+    .addedHistoySpan {
+        border-color: green;
+        background-color: rgb(210, 246, 193);
+    }
+
+    .deletedHistoySpan {
+        border-color: red;
+        background-color: rgb(248, 211, 187);
+    }
+
+        .deletedHistoySpan:hover {
+            background-color: rgb(240, 176, 152);
+        }
+
+    .addedHistoySpan:hover {
+        background-color: rgb(169, 238, 137);
+    }
+
+    .deleted {
+        background-color: #ffd4d4;
+        color: #b91212;
+    }
+
+    .changed {
+        background-color: #c5dcf8;
+        color: #142885;
+    }
+
+    .added {
+        background-color: #ddfaa8;
+        color: #215803;
+    }
+
+    #historyList > div {
+        margin-top: 1px;
+        padding: 3px;
+        padding-left: 6px;
+    }
+</style>
+
+<h2>Log</h2>
+
+<div id="historyList">
+    @foreach (var log in Model)
+    {
+        <text>
+            @Html.DisplayFor(x => log)
+        </text>
+    }
+</div>
