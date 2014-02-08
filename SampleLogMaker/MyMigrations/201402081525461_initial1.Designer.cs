@@ -7,13 +7,13 @@ namespace SampleLogMaker.MyMigrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.0.0-20911")]
-    public sealed partial class InitialCreate : IMigrationMetadata
+    public sealed partial class initial1 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initial1));
         
         string IMigrationMetadata.Id
         {
-            get { return "201311041111519_InitialCreate"; }
+            get { return "201402081525461_initial1"; }
         }
         
         string IMigrationMetadata.Source

@@ -18,7 +18,7 @@ namespace SampleLogMaker.Models
 
     public class MyDbContext : TrackerContext
     {
-        public MyDbContext() : base("DefaultConnection",true) 
+        public MyDbContext() : base("DefaultConnection") 
         {
         }
 

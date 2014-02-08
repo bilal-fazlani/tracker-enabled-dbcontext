@@ -9,7 +9,7 @@ namespace SampleLogMaker.ViewModels
     {
         public string DateFormat = "dd-MMM-yyyy  hh:mm tt";
 
-        public Guid LogId { get; set; }
+        public int LogId { get; set; }
         
         public int RecordId { get; set; }
 
@@ -22,7 +22,7 @@ namespace SampleLogMaker.ViewModels
         public virtual string Message { get; set; }
     }
 
-    public class ChangedHostoryVM : BaseHistoryVM
+    public class ChangedHistoryVM : BaseHistoryVM
     {
         public string ColumnName { get; set; }
 

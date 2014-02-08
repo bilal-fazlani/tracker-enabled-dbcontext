@@ -16,20 +16,20 @@ namespace TrackerEnabledDbContext
     {
         public AuditLog()
         {
-            Children = new List<AuditLogChild>();
+            LogDetails = new List<AuditLogDetail>();
         }
 
         [Key]
-        public Guid AuditLogID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int AuditLogId { get; set; }
 
-        public string UserId { get; set; }
+        public string UserName { get; set; }
 
         [Required]
         public DateTimeOffset EventDateUTC { get; set; }
 
         [Required]
-        [MaxLength(1)]
-        public string EventType { get; set; }
+        public EventType EventType { get; set; }
 
         [Required]
         [MaxLength(256)]
@@ -37,33 +37,9 @@ namespace TrackerEnabledDbContext
 
         [Required]
         [MaxLength(256)]
-        public string RecordID { get; set; }
+        public string RecordId { get; set; }
 
-        [Required]
-        [MaxLength(256)]
-        public string ColumnName { get; set; }
+        public virtual ICollection<AuditLogDetail> LogDetails { get; set; }
 
-        public string OriginalValue { get; set; }
-
-        public string NewValue { get; set; }
-
-        public virtual ICollection<AuditLogChild> Children { get; set; }
-
-    }
-
-    public class AuditLogChild
-    {
-        [Key]
-        public int Id { get; set; }
-
-        public virtual Guid AuditLogId { get; set; }
-        
-        [ForeignKey("AuditLogId")]
-        public virtual AuditLog Log { get; set; }
-        
-        [Required]
-        public string Key { get; set; }
-
-        public string Value { get; set; }
     }
 }

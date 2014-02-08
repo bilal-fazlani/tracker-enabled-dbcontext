@@ -46,7 +46,7 @@ namespace SampleLogMaker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Title")] Blog blog)
+        public ActionResult Create([Bind(Include = "Id,Description,Title")] Blog blog)
         {
             if (ModelState.IsValid)
             {
@@ -78,11 +78,12 @@ namespace SampleLogMaker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Title")] Blog blog)
+        public ActionResult Edit([Bind(Include = "Id,Description,Title")] Blog blog)
         {
             if (ModelState.IsValid)
             {
                 db.Blogs.Find(blog.Id).Title = blog.Title;
+                db.Blogs.Find(blog.Id).Description = blog.Description;
                 db.SaveChanges(User.Identity.Name);
                 return RedirectToAction("Index");
             }

@@ -169,21 +169,9 @@
     <Compile Include="Models\BlogModel.cs" />
     <Compile Include="Models\DbContexts.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="MyMigrations\201311041111519_InitialCreate.cs" />
-    <Compile Include="MyMigrations\201311041111519_InitialCreate.Designer.cs">
-      <DependentUpon>201311041111519_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MyMigrations\201311041123218_changed userId column type.cs" />
-    <Compile Include="MyMigrations\201311041123218_changed userId column type.Designer.cs">
-      <DependentUpon>201311041123218_changed userId column type.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MyMigrations\201311041432506_changed aufit log datetime column to datetime offset.cs" />
-    <Compile Include="MyMigrations\201311041432506_changed aufit log datetime column to datetime offset.Designer.cs">
-      <DependentUpon>201311041432506_changed aufit log datetime column to datetime offset.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MyMigrations\201311041659078_added the logic to save values in child table.cs" />
-    <Compile Include="MyMigrations\201311041659078_added the logic to save values in child table.Designer.cs">
-      <DependentUpon>201311041659078_added the logic to save values in child table.cs</DependentUpon>
+    <Compile Include="MyMigrations\201402081525461_initial1.cs" />
+    <Compile Include="MyMigrations\201402081525461_initial1.Designer.cs">
+      <DependentUpon>201402081525461_initial1.cs</DependentUpon>
     </Compile>
     <Compile Include="MyMigrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -251,7 +239,7 @@
     <Content Include="Views\Blogs\Edit.cshtml" />
     <Content Include="Views\Blogs\Index.cshtml" />
     <Content Include="Views\History\Index.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\ChangedHostoryVM.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\ChangedHistoryVM.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\DeletedHistoryVM.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\AddedHistoryVM.cshtml" />
   </ItemGroup>
@@ -272,17 +260,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MyMigrations\201311041111519_InitialCreate.resx">
-      <DependentUpon>201311041111519_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MyMigrations\201311041123218_changed userId column type.resx">
-      <DependentUpon>201311041123218_changed userId column type.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MyMigrations\201311041432506_changed aufit log datetime column to datetime offset.resx">
-      <DependentUpon>201311041432506_changed aufit log datetime column to datetime offset.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MyMigrations\201311041659078_added the logic to save values in child table.resx">
-      <DependentUpon>201311041659078_added the logic to save values in child table.cs</DependentUpon>
+    <EmbeddedResource Include="MyMigrations\201402081525461_initial1.resx">
+      <DependentUpon>201402081525461_initial1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

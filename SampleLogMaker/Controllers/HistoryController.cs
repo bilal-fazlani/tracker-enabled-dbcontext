@@ -26,36 +26,36 @@ namespace SampleLogMaker.Controllers
             {
                 switch (log.EventType)
                 {
-                    case "A": // added
+                    case EventType.Added : // added
                     vm.Add(new AddedHistoryVM {
                         Date = log.EventDateUTC.ToLocalTime().DateTime,
-                        LogId = log.AuditLogID,
-                        RecordId = int.Parse(log.RecordID),
+                        LogId = log.AuditLogId,
+                        RecordId = int.Parse(log.RecordId),
                         TableName = log.TableName,
-                        UserName = log.UserId
+                        UserName = log.UserName
                     });
                     break;
 
-                    case "D": //deleted
+                    case EventType.Deleted: //deleted
                     vm.Add(new DeletedHistoryVM {
                         Date = log.EventDateUTC.ToLocalTime().DateTime,
-                        LogId = log.AuditLogID,
-                        RecordId = int.Parse(log.RecordID),
+                        LogId = log.AuditLogId,
+                        RecordId = int.Parse(log.RecordId),
                         TableName = log.TableName,
-                        UserName = log.UserId
+                        UserName = log.UserName
                     });
                     break;
 
-                    case "M" : //modified
-                    vm.Add(new ChangedHostoryVM {
-                        ColumnName = log.ColumnName,
+                    case EventType.Modified: //modified
+                    vm.Add(new ChangedHistoryVM {
+                        //ColumnName = log.ColumnName,
                         Date = log.EventDateUTC.ToLocalTime().DateTime,
-                        LogId = log.AuditLogID,
-                        RecordId = int.Parse(log.RecordID),
+                        LogId = log.AuditLogId,
+                        RecordId = int.Parse(log.RecordId),
                         TableName = log.TableName,
-                        UserName = log.UserId,
-                        OldValue = log.OriginalValue,
-                        NewValue = log.NewValue
+                        UserName = log.UserName,
+                        //OldValue = log.OriginalValue,
+                        //NewValue = log.NewValue
                     });
                     break;
                 }
