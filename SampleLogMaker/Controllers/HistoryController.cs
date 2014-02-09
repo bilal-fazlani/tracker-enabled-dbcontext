@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using SampleLogMaker.Models;
 using TrackerEnabledDbContext;
 using SampleLogMaker.ViewModels;
+using TrackerEnabledDbContext.Models;
 
 namespace SampleLogMaker.Controllers
 {

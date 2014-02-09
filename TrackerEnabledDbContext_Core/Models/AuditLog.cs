@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace TrackerEnabledDbContext
+namespace TrackerEnabledDbContext.Models
 {
     /// <summary>
     /// This model class is used to store the changes made in datbase values

@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TrackerEnabledDbContext
+namespace TrackerEnabledDbContext.Models
 {
     public class AuditLogDetail
     {

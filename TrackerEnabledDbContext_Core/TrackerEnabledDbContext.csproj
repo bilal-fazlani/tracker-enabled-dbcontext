@@ -56,11 +56,12 @@
   <ItemGroup>
     <Compile Include="Attributes\SkipTracking.cs" />
     <Compile Include="Attributes\TrackChanges.cs" />
-    <Compile Include="AuditLog.cs" />
-    <Compile Include="AuditLogDetail.cs" />
-    <Compile Include="EntityDesription.cs" />
-    <Compile Include="EventType.cs" />
-    <Compile Include="TrackerEnabledDbContext-TrackData.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="LogDetailsAuditor.cs" />
+    <Compile Include="LogAuditor.cs" />
+    <Compile Include="Models\AuditLog.cs" />
+    <Compile Include="Models\AuditLogDetail.cs" />
+    <Compile Include="Models\EventType.cs" />
     <Compile Include="TrackerEnabledDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

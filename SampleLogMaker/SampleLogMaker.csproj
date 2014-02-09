@@ -173,6 +173,18 @@
     <Compile Include="MyMigrations\201402081525461_initial1.Designer.cs">
       <DependentUpon>201402081525461_initial1.cs</DependentUpon>
     </Compile>
+    <Compile Include="MyMigrations\201402081741015_initial2.cs" />
+    <Compile Include="MyMigrations\201402081741015_initial2.Designer.cs">
+      <DependentUpon>201402081741015_initial2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MyMigrations\201402081745041_initial3.cs" />
+    <Compile Include="MyMigrations\201402081745041_initial3.Designer.cs">
+      <DependentUpon>201402081745041_initial3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MyMigrations\201402090404224_initial4.cs" />
+    <Compile Include="MyMigrations\201402090404224_initial4.Designer.cs">
+      <DependentUpon>201402090404224_initial4.cs</DependentUpon>
+    </Compile>
     <Compile Include="MyMigrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -262,6 +274,15 @@
   <ItemGroup>
     <EmbeddedResource Include="MyMigrations\201402081525461_initial1.resx">
       <DependentUpon>201402081525461_initial1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MyMigrations\201402081741015_initial2.resx">
+      <DependentUpon>201402081741015_initial2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MyMigrations\201402081745041_initial3.resx">
+      <DependentUpon>201402081745041_initial3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MyMigrations\201402090404224_initial4.resx">
+      <DependentUpon>201402090404224_initial4.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
