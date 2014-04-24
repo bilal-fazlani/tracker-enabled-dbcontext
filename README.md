@@ -1,4 +1,4 @@
-tracker-enabled-dbcontext
+Tracker-enabled DbContext
 =========================
 
 This library is built on top of entity framework. If offers you to implement full auditing in your application. With the help of this library, we can track all the CRUD operations on database including colun names, what was the old value, what's the new value,
