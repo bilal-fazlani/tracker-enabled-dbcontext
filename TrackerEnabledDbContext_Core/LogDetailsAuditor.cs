@@ -60,6 +60,7 @@ namespace TrackerEnabledDbContext
             }
             else
             {
+                //GoliathDeveloper 21/08/2014
                 originalValue = _dbEntry.GetDatabaseValues().GetValue<object>(propertyName) == null ? null : _dbEntry.GetDatabaseValues().GetValue<object>(propertyName).ToString();
             }
 

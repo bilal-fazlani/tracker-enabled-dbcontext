@@ -50,6 +50,7 @@ The entity '{0}' does not contain a primary key attribute or contains more than 
                 EventDateUTC = changeTime,
                 EventType = eventType,
                 TableName = GetTableName(entityType, context),
+                //GoliathDeveloper 21/08/2014
                 RecordId = _dbEntry.GetDatabaseValues().GetValue<object>(keyName).ToString()
             };
             
