@@ -50,7 +50,7 @@ The entity '{0}' does not contain a primary key attribute or contains more than 
                 EventDateUTC = changeTime,
                 EventType = eventType,
                 TableName = GetTableName(entityType, context),
-                RecordId = _dbEntry.OriginalValues.GetValue<object>(keyName).ToString()
+                RecordId = _dbEntry.GetDatabaseValues().GetValue<object>(keyName).ToString()
             };
             
             using (var detailsAuditor = new LogDetailsAuditor(_dbEntry, newlog))
