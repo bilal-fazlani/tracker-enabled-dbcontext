@@ -7,7 +7,7 @@ namespace TrackerEnabledDbContext.Models
 {
     /// <summary>
     /// This model class is used to store the changes made in datbase values
-    /// For the audit purpose. Only selected tables can be tracked with the help of TrackChanges Attribute present in the common library.
+    /// For the audit purpose. Only selected tables can be tracked with the help of TrackChangesAttribute Attribute present in the common library.
     /// </summary>
     public class AuditLog
     {

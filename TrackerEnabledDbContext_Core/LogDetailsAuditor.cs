@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Reflection;
 using TrackerEnabledDbContext.Models;
 
 namespace TrackerEnabledDbContext
@@ -23,26 +19,21 @@ namespace TrackerEnabledDbContext
 
         public IEnumerable<AuditLogDetail> GetLogDetails()
         {
-            foreach (string propertyName in _dbEntry.OriginalValues.PropertyNames)
+            var type = _dbEntry.Entity.GetType().GetEntityType();
+
+            foreach (var propertyName in _dbEntry.OriginalValues.PropertyNames)
             {
-                if (IsTrackingEnabled(propertyName) && IsValueChanged(propertyName))
+                if (type.IsTrackingEnabled(propertyName) && IsValueChanged(propertyName))
                 {
                     yield return new AuditLogDetail
                     {
-                        ColumnName = GetColumnName(propertyName),
+                        ColumnName = type.GetColumnName(propertyName),
                         OrginalValue = OriginalValue(propertyName),
                         NewValue = CurrentValue(propertyName),
                         Log = _log
                     };
                 }
             }
-        }
-
-        private bool IsTrackingEnabled(string propertyName)
-        {
-            var entityType = Helper.GetEntityType(_dbEntry.Entity.GetType());
-            var skipTracking = entityType.GetProperty(propertyName).GetCustomAttributes(false).OfType<SkipTracking>().SingleOrDefault();
-            return skipTracking == null || !skipTracking.Enabled;
         }
 
         private bool IsValueChanged(string propertyName)
@@ -60,8 +51,8 @@ namespace TrackerEnabledDbContext
             }
             else
             {
-                //GoliathDeveloper 21/08/2014
-                originalValue = _dbEntry.GetDatabaseValues().GetValue<object>(propertyName) == null ? null : _dbEntry.GetDatabaseValues().GetValue<object>(propertyName).ToString();
+                var value = _dbEntry.GetDatabaseValue(propertyName);
+                originalValue = (value != null) ? value.ToString() : null;
             }
 
             return originalValue;
@@ -73,9 +64,8 @@ namespace TrackerEnabledDbContext
 
             try
             {
-                newValue = _dbEntry.CurrentValues.GetValue<object>(propertyName) == null
-                    ? null
-                    : _dbEntry.CurrentValues.GetValue<object>(propertyName).ToString();
+                var value = _dbEntry.GetCurrentValue(propertyName);
+                newValue = (value != null) ? value.ToString() : null;
             }
             catch (InvalidOperationException) // It will be invalid operation when its in deleted state. in that case, new value should be null
             {
@@ -83,19 +73,6 @@ namespace TrackerEnabledDbContext
             }
 
             return newValue;
-        }
-
-        private string GetColumnName(string propertyName)
-        {
-            string columnName = propertyName;
-
-            var entityType = Helper.GetEntityType(_dbEntry.Entity.GetType());
-            var columnAttribute = entityType.GetProperty(propertyName).GetCustomAttribute<ColumnAttribute>(false);
-            if (columnAttribute != null && !string.IsNullOrEmpty(columnAttribute.Name))
-            {
-                columnName = columnAttribute.Name;
-            }
-            return columnName;
         }
 
         public void Dispose()

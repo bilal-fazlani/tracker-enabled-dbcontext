@@ -6,10 +6,10 @@ namespace System.ComponentModel.DataAnnotations
     /// Place this attributer on the entity property which you dont wish to track for audit.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public class SkipTracking : Attribute
+    public class SkipTrackingAttribute : Attribute
     {
         public bool Enabled { get; set; }
-        public SkipTracking(bool skipTracking = true)
+        public SkipTrackingAttribute(bool skipTracking = true)
         {
             Enabled = skipTracking;
         }
