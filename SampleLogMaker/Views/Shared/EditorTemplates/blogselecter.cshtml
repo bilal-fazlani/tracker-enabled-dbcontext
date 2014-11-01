@@ -1,0 +1,14 @@
+﻿@model SampleLogMaker.Models.Blog
+
+<div class="form-group">
+    @Html.LabelForModel()
+    <span>:</span>
+    
+    @{
+        string name = "Id";
+    }
+
+    @Html.DropDownList(name,new SelectList(ViewBag.Blogs,dataTextField:"Title",dataValueField:"Id"),optionLabel:"")
+    <br/>
+    @Html.ValidationMessageFor(x=>x)
+</div>

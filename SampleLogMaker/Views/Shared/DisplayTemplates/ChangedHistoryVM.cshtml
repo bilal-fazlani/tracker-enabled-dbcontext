@@ -2,21 +2,21 @@
 @model ChangedHistoryVM
 
 <div class="changed">
-    @Model.UserName changed @Model.ColumnName for
-    
-    @Model.TableName @Model.RecordId
+    @Model.UserName changed 
+
+   
+
+    <span class="historySpan changedHistoySpan tooltipper" title=" <div>
+        @foreach (var item in Model.Details)
+        {
+            <div>
+                @item.PropertyName : @item.OldValue -> @item.NewValue
+            </div>
+        }
+    </div>">
+        @Model.TableName # @Model.RecordId
+    </span>
     
      from
-
-    <b>
-        @Model.OldValue
-    </b>
-
-    to
-
-    <b>
-        @Model.NewValue
-    </b>
-
-    on @(Model.Date.ToString(Model.DateFormat)).
+    on @(Model.Date.ToString(Constants.DateFormat)).
 </div>
