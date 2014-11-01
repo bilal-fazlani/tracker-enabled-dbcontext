@@ -171,12 +171,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BlogModel.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\DbContexts.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="MyMigrations\201411011747380_added forkey for blog.cs" />
+    <Compile Include="MyMigrations\201411011747380_added forkey for blog.Designer.cs">
+      <DependentUpon>201411011747380_added forkey for blog.cs</DependentUpon>
+    </Compile>
     <Compile Include="MyMigrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -274,6 +277,11 @@
       <Project>{bde8feb8-3a4f-491d-9aad-426c355aac76}</Project>
       <Name>TrackerEnabledDbContext</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MyMigrations\201411011747380_added forkey for blog.resx">
+      <DependentUpon>201411011747380_added forkey for blog.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

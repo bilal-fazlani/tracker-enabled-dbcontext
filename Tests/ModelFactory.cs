@@ -10,16 +10,18 @@ namespace Tests
 {
     public static class ModelFactory
     {
+        public const string USERNAME = "unit test";
+
         public static Blog CreateBlog(this MyDbContext context)
         {
             Blog b = new Blog
             {
-                Description = "test",
-                Title = "test"
+                Description = RandomString(),
+                Title = RandomString()
             };
 
             context.Blogs.Add(b);
-            context.SaveChanges("unit test");
+            context.SaveChanges(USERNAME);
             return b;
         }
 
@@ -27,13 +29,18 @@ namespace Tests
         {
             Comment c = new Comment
             {
-                Text = "text",
+                Text = RandomString(),
                 ParentBlog = blog
             };
 
             context.Comments.Add(c);
-            context.SaveChanges("unit test");
+            context.SaveChanges(USERNAME);
             return c;
+        }
+
+        private static string RandomString()
+        {
+            return Guid.NewGuid().ToString();
         }
     }
 }

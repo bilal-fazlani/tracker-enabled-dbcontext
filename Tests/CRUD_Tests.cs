@@ -7,14 +7,13 @@ using SampleLogMaker.Models;
 namespace Tests
 {
     [TestClass]
-    public class CRUD_Tests
+    public class CRUD_Tests : PersistanceTests
     {
-        MyDbContext db = new MyDbContext();
         Blog b;
         Comment c;
 
         [TestInitialize]
-        public void Initialize()
+        public void LocalInitialise()
         {
             b = db.CreateBlog();
             c = db.CreateComment(b);

@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using TrackerEnabledDbContext.Models;
 
@@ -67,5 +69,18 @@ namespace TrackerEnabledDbContext
             return result;
         }
 
+
+        public IEnumerable<AuditLog> GetLogs<TTable>()
+        {
+            var tableName = typeof(TTable).GetTableName(this);
+            return this.AuditLog.Where(x => x.TableName == tableName);
+        }
+
+        public IEnumerable<AuditLog> GetLogs<TTable>(object primaryKey)
+        {
+            string key = primaryKey.ToString();
+            var tableName = typeof(TTable).GetTableName(this);
+            return this.AuditLog.Where(x => x.TableName == tableName && x.RecordId == key);
+        }
     }
 }
