@@ -8,7 +8,7 @@ namespace Tests
     [TestClass]
     public class PersistanceTests
     {
-        public MyDbContext db = new MyDbContext();
+        public TestTrackerContext db = new TestTrackerContext();
         public DbContextTransaction transaction = null;
 
         [TestInitialize]

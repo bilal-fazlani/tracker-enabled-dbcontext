@@ -12,7 +12,7 @@ namespace Tests
     {
         public const string USERNAME = "unit test";
 
-        public static Blog CreateBlog(this MyDbContext context)
+        public static Blog CreateBlog(this TestTrackerContext context)
         {
             Blog b = new Blog
             {
@@ -25,7 +25,7 @@ namespace Tests
             return b;
         }
 
-        public static Comment CreateComment(this MyDbContext context, Blog blog)
+        public static Comment CreateComment(this TestTrackerContext context, Blog blog)
         {
             Comment c = new Comment
             {

@@ -5,20 +5,14 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using TrackerEnabledDbContext;
+using TrackerEnabledDbContext.Identity;
 
 namespace SampleLogMaker.Models
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : TrackerIdentityContext<ApplicationUser>
     {
         public ApplicationDbContext()
             : base("DefaultConnection")
-        {
-        }
-    }
-
-    public class MyDbContext : TrackerContext
-    {
-        public MyDbContext() : base("DefaultConnection") 
         {
         }
 

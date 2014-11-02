@@ -13,10 +13,12 @@
     <div class="form-horizontal">
         <h4>Comment</h4>
         <hr />
-        @Html.ValidationSummary(true)
+        @Html.ValidationSummary(false)
         @Html.HiddenFor(model => model.Id)
 
         @Html.EditorFor(model => model.Text)
+
+        @Html.EditorFor(x => x.ParentBlog)
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

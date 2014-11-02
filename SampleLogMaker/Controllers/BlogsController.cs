@@ -12,7 +12,7 @@ namespace SampleLogMaker.Controllers
 {
     public class BlogsController : Controller
     {
-        private MyDbContext db = new MyDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: /Blogs/
         public ActionResult Index()

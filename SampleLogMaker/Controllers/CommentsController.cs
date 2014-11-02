@@ -12,7 +12,7 @@ namespace SampleLogMaker.Controllers
 {
     public class CommentsController : Controller
     {
-        private MyDbContext db = new MyDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: /Comments/
         public ActionResult Index(int? blogId = null)
@@ -56,7 +56,7 @@ namespace SampleLogMaker.Controllers
             {
                 comment.ParentBlog = db.Blogs.Find(comment.ParentBlog.Id);
                 db.Comments.Add(comment);
-                db.SaveChanges("bilal");
+                db.SaveChanges(User.Identity.Name);
 
                 return RedirectToAction("Index");
             }
@@ -67,15 +67,8 @@ namespace SampleLogMaker.Controllers
         // GET: /Comments/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             Comment comment = db.Comments.Find(id);
-            if (comment == null)
-            {
-                return HttpNotFound();
-            }
+            ViewBag.Blogs = db.Blogs;
             return View(comment);
         }
 
@@ -84,14 +77,25 @@ namespace SampleLogMaker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Text")] Comment comment)
+        public ActionResult Edit(Comment comment)
         {
+            if (ModelState.Any(x => x.Key == "ParentBlog.Title"))
+            {
+                ModelState.Remove("ParentBlog.Title");
+            }
+
             if (ModelState.IsValid)
             {
-                db.Entry(comment).State = EntityState.Modified;
-                db.SaveChanges();
+                var c = db.Comments.Find(comment.Id);
+                var b = db.Blogs.Find(comment.ParentBlog.Id);
+
+                c.ParentBlog = b;
+                c.Text = comment.Text;
+
+                db.SaveChanges(User.Identity.Name);
                 return RedirectToAction("Index");
             }
+            ViewBag.Blogs = db.Blogs;
             return View(comment);
         }
 
@@ -117,7 +121,7 @@ namespace SampleLogMaker.Controllers
         {
             Comment comment = db.Comments.Find(id);
             db.Comments.Remove(comment);
-            db.SaveChanges();
+            db.SaveChanges(User.Identity.Name);
             return RedirectToAction("Index");
         }
 

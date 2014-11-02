@@ -17,7 +17,7 @@ namespace SampleLogMaker.Controllers
 		// GET: /History/
 		public ActionResult Index()
 		{
-			var db = new MyDbContext();
+			var db = new ApplicationDbContext();
 			var data = db.AuditLog
 				.OrderByDescending(x=>x.EventDateUTC)
 				.ToList();

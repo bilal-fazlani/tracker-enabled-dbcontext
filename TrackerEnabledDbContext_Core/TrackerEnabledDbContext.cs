@@ -69,17 +69,49 @@ namespace TrackerEnabledDbContext
             return result;
         }
 
-
+        /// <summary>
+        /// Get all logs for the given model type
+        /// </summary>
+        /// <typeparam name="TTable">Type of domain model</typeparam>
+        /// <returns></returns>
         public IEnumerable<AuditLog> GetLogs<TTable>()
         {
             var tableName = typeof(TTable).GetTableName(this);
             return this.AuditLog.Where(x => x.TableName == tableName);
         }
 
+        /// <summary>
+        /// Get all logs for the given table name
+        /// </summary>
+        /// <param name="tableName">Name of table</param>
+        /// <returns></returns>
+        public IEnumerable<AuditLog> GetLogs(string tableName)
+        {
+            return this.AuditLog.Where(x => x.TableName == tableName);
+        }
+
+        /// <summary>
+        /// Get all logs for the given model type for a specific record
+        /// </summary>
+        /// <typeparam name="TTable">Type of domain model</typeparam>
+        /// <param name="primaryKey">primary key of record</param>
+        /// <returns></returns>
         public IEnumerable<AuditLog> GetLogs<TTable>(object primaryKey)
         {
             string key = primaryKey.ToString();
             var tableName = typeof(TTable).GetTableName(this);
+            return this.AuditLog.Where(x => x.TableName == tableName && x.RecordId == key);
+        }
+
+        /// <summary>
+        /// Get all logs for the given table name for a specific record
+        /// </summary>
+        /// <param name="tableName">table name</param>
+        /// <param name="primaryKey">primary key of record</param>
+        /// <returns></returns>
+        public IEnumerable<AuditLog> GetLogs(string tableName, object primaryKey)
+        {
+            string key = primaryKey.ToString();
             return this.AuditLog.Where(x => x.TableName == tableName && x.RecordId == key);
         }
     }
