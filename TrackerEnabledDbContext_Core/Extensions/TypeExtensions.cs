@@ -34,7 +34,7 @@ namespace TrackerEnabledDbContext
 
         public static string GetPrimaryKeyName(this Type type)
         {
-            var key = string.Format("{0}", type.FullName);
+            var key = type.FullName;
 
             return GetFromCache(PrimaryKeyNameCache, key, () =>
             {
