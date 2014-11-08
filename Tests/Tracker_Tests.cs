@@ -1,11 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SampleLogMaker.Models;
-using TrackerEnabledDbContext.Models;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Data.Entity;
+using TrackerEnabledDbContext.Common.Models;
 
 namespace Tests
 {

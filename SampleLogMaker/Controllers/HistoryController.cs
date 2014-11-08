@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using SampleLogMaker.Models;
-using TrackerEnabledDbContext;
 using SampleLogMaker.ViewModels;
-using TrackerEnabledDbContext.Models;
+using TrackerEnabledDbContext.Common.Models;
 
 namespace SampleLogMaker.Controllers
 {
-	[Authorize]
+    [Authorize]
 	public class HistoryController : Controller
 	{
 		//

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TrackerEnabledDbContext.Models
+namespace TrackerEnabledDbContext.Common.Models
 {
     /// <summary>
     /// This model class is used to store the changes made in datbase values

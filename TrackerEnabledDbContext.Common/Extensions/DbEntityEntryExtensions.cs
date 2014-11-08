@@ -1,4 +1,4 @@
-﻿namespace TrackerEnabledDbContext
+﻿namespace TrackerEnabledDbContext.Common.Extensions
 {
     using System.Data.Entity.Infrastructure;
 

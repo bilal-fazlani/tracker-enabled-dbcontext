@@ -283,13 +283,13 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj">
+      <Project>{ac9808cc-8932-40ae-8f26-3fba558a5549}</Project>
+      <Name>TrackerEnabledDbContext.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj">
       <Project>{8a73486c-9d6b-4132-b94b-007e6737b734}</Project>
       <Name>TrackerEnabledDbContext.Identity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TrackerEnabledDbContext_Core\TrackerEnabledDbContext.csproj">
-      <Project>{bde8feb8-3a4f-491d-9aad-426c355aac76}</Project>
-      <Name>TrackerEnabledDbContext</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

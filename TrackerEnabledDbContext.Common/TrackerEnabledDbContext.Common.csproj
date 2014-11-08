@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8A73486C-9D6B-4132-B94B-007E6737B734}</ProjectGuid>
+    <ProjectGuid>{AC9808CC-8932-40AE-8F26-3FBA558A5549}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TrackerEnabledDbContext.Identity</RootNamespace>
-    <AssemblyName>TrackerEnabledDbContext.Identity</AssemblyName>
+    <RootNamespace>TrackerEnabledDbContext.Common</RootNamespace>
+    <AssemblyName>TrackerEnabledDbContext.Common</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -36,12 +36,6 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -52,18 +46,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TrackerIdentityContext.cs" />
+    <Compile Include="Attributes\SkipTrackingAttribute.cs" />
+    <Compile Include="Attributes\TrackChangesAttribute.cs" />
+    <Compile Include="Extensions\DbEntityEntryExtensions.cs" />
+    <Compile Include="CommonTracker.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Interfaces\IDbContext.cs" />
+    <Compile Include="Interfaces\ITrackerContext.cs" />
+    <Compile Include="LogAuditor.cs" />
+    <Compile Include="LogDetailsAuditor.cs" />
+    <Compile Include="Models\AuditLog.cs" />
+    <Compile Include="Models\AuditLogDetail.cs" />
+    <Compile Include="Models\EventType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj">
-      <Project>{ac9808cc-8932-40ae-8f26-3fba558a5549}</Project>
-      <Name>TrackerEnabledDbContext.Common</Name>
-    </ProjectReference>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

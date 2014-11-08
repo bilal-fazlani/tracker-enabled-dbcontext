@@ -1,26 +1,25 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using TrackerEnabledDbContext.Common;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
 
-namespace TrackerEnabledDbContext.Identity
+namespace TrackerEnabledDbContext
 {
-    public class TrackerIdentityContext<TUser> : IdentityDbContext<TUser>, ITrackerContext where TUser : IdentityUser
+    public class TrackerContext : DbContext, ITrackerContext
     {
-        public TrackerIdentityContext()
+        public TrackerContext()
             : base()
         {
-
+            
         }
 
-        public TrackerIdentityContext(string connectinString)
+        public TrackerContext(string connectinString)
             : base(connectinString)
         {
-
+            
         }
-
+        
         public DbSet<AuditLog> AuditLog { get; set; }
         public DbSet<AuditLogDetail> LogDetails { get; set; }
 

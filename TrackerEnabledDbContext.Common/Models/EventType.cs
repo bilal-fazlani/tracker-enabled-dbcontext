@@ -1,4 +1,4 @@
-﻿namespace TrackerEnabledDbContext.Models
+﻿namespace TrackerEnabledDbContext.Common.Models
 {
     public enum EventType
     {

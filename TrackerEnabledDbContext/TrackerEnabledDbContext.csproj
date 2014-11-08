@@ -54,21 +54,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\SkipTrackingAttribute.cs" />
-    <Compile Include="Attributes\TrackChangesAttribute.cs" />
-    <Compile Include="Extensions\DbEntityEntryExtensions.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
-    <Compile Include="LogDetailsAuditor.cs" />
-    <Compile Include="LogAuditor.cs" />
-    <Compile Include="Models\AuditLog.cs" />
-    <Compile Include="Models\AuditLogDetail.cs" />
-    <Compile Include="Models\EventType.cs" />
-    <Compile Include="TrackerEnabledDbContext.cs" />
+    <Compile Include="TrackerContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj">
+      <Project>{ac9808cc-8932-40ae-8f26-3fba558a5549}</Project>
+      <Name>TrackerEnabledDbContext.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

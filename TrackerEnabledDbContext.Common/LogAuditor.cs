@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using TrackerEnabledDbContext.Models;
+using TrackerEnabledDbContext.Common.Extensions;
+using TrackerEnabledDbContext.Common.Interfaces;
+using TrackerEnabledDbContext.Common.Models;
 
-namespace TrackerEnabledDbContext
+namespace TrackerEnabledDbContext.Common
 {
     public class LogAuditor : IDisposable
     {
@@ -15,7 +16,7 @@ namespace TrackerEnabledDbContext
             _dbEntry = dbEntry;
         }
 
-        public AuditLog GetLogRecord(object userName, EventType eventType,DbContext context)
+        public AuditLog CreateLogRecord(object userName, EventType eventType, ITrackerContext context)
         {
             var entityType = _dbEntry.Entity.GetType().GetEntityType();
             var changeTime = DateTime.UtcNow;
@@ -39,7 +40,7 @@ namespace TrackerEnabledDbContext
             
             using (var detailsAuditor = new LogDetailsAuditor(_dbEntry, newlog))
             {
-                newlog.LogDetails = detailsAuditor.GetLogDetails().ToList();
+                newlog.LogDetails = detailsAuditor.CreateLogDetails().ToList();
             }
 
             return newlog;

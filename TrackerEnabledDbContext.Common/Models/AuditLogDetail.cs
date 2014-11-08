@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TrackerEnabledDbContext.Models
+namespace TrackerEnabledDbContext.Common.Models
 {
     public class AuditLogDetail
     {

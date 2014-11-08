@@ -71,7 +71,11 @@
       <Project>{3ee0fe30-1616-4ebe-9694-b4f4017c3c99}</Project>
       <Name>SampleLogMaker</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TrackerEnabledDbContext_Core\TrackerEnabledDbContext.csproj">
+    <ProjectReference Include="..\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj">
+      <Project>{ac9808cc-8932-40ae-8f26-3fba558a5549}</Project>
+      <Name>TrackerEnabledDbContext.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj">
       <Project>{bde8feb8-3a4f-491d-9aad-426c355aac76}</Project>
       <Name>TrackerEnabledDbContext</Name>
     </ProjectReference>

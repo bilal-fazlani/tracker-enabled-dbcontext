@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using TrackerEnabledDbContext.Models;
+using TrackerEnabledDbContext.Common.Extensions;
+using TrackerEnabledDbContext.Common.Models;
 
-namespace TrackerEnabledDbContext
+namespace TrackerEnabledDbContext.Common
 {
     public class LogDetailsAuditor : IDisposable
     {
@@ -17,7 +18,7 @@ namespace TrackerEnabledDbContext
             _log = log;
         }
 
-        public IEnumerable<AuditLogDetail> GetLogDetails()
+        public IEnumerable<AuditLogDetail> CreateLogDetails()
         {
             var type = _dbEntry.Entity.GetType().GetEntityType();
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TrackerEnabledDbContext
+namespace TrackerEnabledDbContext.Common.Extensions
 {
     using System;
     using System.Data.Entity;
@@ -9,6 +9,7 @@ namespace TrackerEnabledDbContext
     using System.Collections.Concurrent;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using TrackerEnabledDbContext.Common.Interfaces;
 
     public static class TypeExtensions
     {
@@ -77,7 +78,7 @@ The entity '{0}' does not contain a primary key attribute or contains more than 
             });
         }
 
-        public static string GetTableName(this Type entityType, DbContext context)
+        public static string GetTableName(this Type entityType, ITrackerContext context)
         {
             var key = entityType.FullName;
 
