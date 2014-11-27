@@ -9,17 +9,19 @@ namespace TrackerEnabledDbContext.Identity
 {
     public class TrackerIdentityContext<TUser> : IdentityDbContext<TUser>, ITrackerContext where TUser : IdentityUser
     {
-        public TrackerIdentityContext()
-            : base()
-        {
+        public TrackerIdentityContext(): base() { }
 
-        }
+        public TrackerIdentityContext(string connectinString) : base(connectinString) { }
 
-        public TrackerIdentityContext(string connectinString)
-            : base(connectinString)
-        {
-
-        }
+        // Summary:
+        //     Constructor which takes the connection string to use
+        //
+        // Parameters:
+        //   nameOrConnectionString:
+        //
+        //   throwIfV1Schema:
+        //     Will throw an exception if the schema matches that of Identity 1.0.0
+        public TrackerIdentityContext(string nameOrConnectionString, bool throwIfV1Schema) : base(nameOrConnectionString, throwIfV1Schema) { }
 
         public DbSet<AuditLog> AuditLog { get; set; }
         public DbSet<AuditLogDetail> LogDetails { get; set; }
