@@ -42,13 +42,13 @@ namespace SampleLogMaker.Controllers
 						RecordId = int.Parse(log.RecordId),
 						TableName = log.TableName,
 						UserName = log.UserName,
-                        Details = log.LogDetails.Select(x=> new LogDetail { PropertyName = x.ColumnName, OldValue = x.OrginalValue })
+                        Details = log.LogDetails.Select(x=> new LogDetail { PropertyName = x.ColumnName, OldValue = x.OriginalValue })
 					});
 					break;
 
 					case EventType.Modified: //modified
 					vm.Add(new ChangedHistoryVM {
-                        Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.ColumnName, NewValue = x.NewValue, OldValue = x.OrginalValue }),
+                        Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.ColumnName, NewValue = x.NewValue, OldValue = x.OriginalValue }),
                         Date = log.EventDateUTC.ToLocalTime().DateTime,
 						LogId = log.AuditLogId,
 						RecordId = int.Parse(log.RecordId),
