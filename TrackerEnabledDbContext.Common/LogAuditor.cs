@@ -31,7 +31,7 @@ namespace TrackerEnabledDbContext.Common
 
             var newlog = new AuditLog
             {
-                UserName = userName.ToString(),
+                UserName = userName != null ? userName.ToString() : null,
                 EventDateUTC = changeTime,
                 EventType = eventType,
                 TableName = entityType.GetTableName(context),
