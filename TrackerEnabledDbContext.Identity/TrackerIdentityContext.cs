@@ -33,7 +33,7 @@ namespace TrackerEnabledDbContext.Identity
         /// </summary>
         /// <param name="userName">Username of the logged in identity</param>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
-        public int SaveChanges(object userName)
+        public virtual int SaveChanges(object userName)
         {
             return CommonTracker.SaveChanges(this, userName);
         }
