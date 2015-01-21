@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.Entity;
 using TrackerEnabledDbContext.Common;
 using TrackerEnabledDbContext.Common.Interfaces;
@@ -16,6 +17,12 @@ namespace TrackerEnabledDbContext
 
         public TrackerContext(string connectinString)
             : base(connectinString)
+        {
+            
+        }
+
+        public TrackerContext(DbConnection dbconnection, bool contextOwnsConnection)
+            : base(dbconnection, contextOwnsConnection)
         {
             
         }
