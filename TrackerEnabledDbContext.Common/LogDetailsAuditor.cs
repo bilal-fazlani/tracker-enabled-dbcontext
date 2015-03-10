@@ -29,7 +29,7 @@ namespace TrackerEnabledDbContext.Common
                     yield return new AuditLogDetail
                     {
                         ColumnName = type.GetColumnName(propertyName),
-                        OrginalValue = OriginalValue(propertyName),
+                        OriginalValue = OriginalValue(propertyName),
                         NewValue = CurrentValue(propertyName),
                         Log = _log
                     };

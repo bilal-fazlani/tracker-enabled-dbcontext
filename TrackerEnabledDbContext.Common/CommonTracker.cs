@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Threading.Tasks;
 using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
@@ -9,7 +11,7 @@ namespace TrackerEnabledDbContext.Common
 {
     public static class CommonTracker
     {
-        public static int SaveChanges(ITrackerContext dbContext, object userName)
+        public static void AuditChanges(ITrackerContext dbContext, object userName)
         {
             // Get all Deleted/Modified entities (not Unmodified or Detached or Added)
             foreach (var ent in dbContext.ChangeTracker.Entries().Where(p => p.State == EntityState.Deleted || p.State == EntityState.Modified))
@@ -24,12 +26,15 @@ namespace TrackerEnabledDbContext.Common
                     }
                 }
             }
+        }
 
-            var addedEntries = dbContext.ChangeTracker.Entries().Where(p => p.State == EntityState.Added).ToList();
-            // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
-            var result = dbContext.SaveChanges();
-            //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
+        public static IEnumerable<DbEntityEntry> GetAdditions(ITrackerContext dbContext)
+        {
+            return dbContext.ChangeTracker.Entries().Where(p => p.State == EntityState.Added).ToList();
+        }
 
+        public static void AuditAdditions(ITrackerContext dbContext, object userName, IEnumerable<DbEntityEntry> addedEntries)
+        {
             // Get all Added entities
             foreach (var ent in addedEntries)
             {
@@ -42,10 +47,6 @@ namespace TrackerEnabledDbContext.Common
                     }
                 }
             }
-
-            //save changed to audit of added entries
-            dbContext.SaveChanges();
-            return result;
         }
 
         /// <summary>

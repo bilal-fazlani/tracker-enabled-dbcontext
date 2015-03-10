@@ -53,7 +53,7 @@ namespace Tests
             //fetch log
             var log = db.GetLogs<Blog>(blog.Id).ToList().SingleOrDefault(x => x.RecordId == blog.Id.ToString() && x.EventType == EventType.Modified);
             Assert.IsNotNull(log);
-            Assert.IsTrue(log.LogDetails.Any(x => x.ColumnName == "Title" && x.NewValue == newTitle && x.OrginalValue == oldTitle));
+            Assert.IsTrue(log.LogDetails.Any(x => x.ColumnName == "Title" && x.NewValue == newTitle && x.OriginalValue == oldTitle));
         }
 
         [TestMethod]
