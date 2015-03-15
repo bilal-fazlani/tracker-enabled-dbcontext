@@ -9,10 +9,12 @@
 <div>
     @Html.DisplayFor(x=>x.Id)
     @Html.DisplayFor(x => x.Text)
-    @Html.DisplayFor(x=>x.ParentBlog)
 
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+
+@{Html.RenderAction("EntityHistory", "History", new { entity = "Comments", entityId = Model.Id });}

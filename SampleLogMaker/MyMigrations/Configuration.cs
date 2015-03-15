@@ -9,7 +9,7 @@ namespace SampleLogMaker.MyMigrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             MigrationsDirectory = @"MyMigrations";
             ContextKey = "SampleLogMaker.Models.ApplicationDbContext";
         }

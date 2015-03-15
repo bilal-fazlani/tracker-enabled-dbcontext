@@ -54,7 +54,7 @@ namespace TrackerEnabledDbContext.Common
         /// </summary>
         /// <typeparam name="TTable">Type of domain model</typeparam>
         /// <returns></returns>
-        public static IEnumerable<AuditLog> GetLogs<TTable>(ITrackerContext context)
+        public static IQueryable<AuditLog> GetLogs<TTable>(ITrackerContext context)
         {
             var tableName = typeof(TTable).GetTableName(context);
             return context.AuditLog.Where(x => x.TableName == tableName);
@@ -65,7 +65,7 @@ namespace TrackerEnabledDbContext.Common
         /// </summary>
         /// <param name="tableName">Name of table</param>
         /// <returns></returns>
-        public static IEnumerable<AuditLog> GetLogs(ITrackerContext context, string tableName)
+        public static IQueryable<AuditLog> GetLogs(ITrackerContext context, string tableName)
         {
             return context.AuditLog.Where(x => x.TableName == tableName);
         }
@@ -76,7 +76,7 @@ namespace TrackerEnabledDbContext.Common
         /// <typeparam name="TTable">Type of domain model</typeparam>
         /// <param name="primaryKey">primary key of record</param>
         /// <returns></returns>
-        public static IEnumerable<AuditLog> GetLogs<TTable>(ITrackerContext context, object primaryKey)
+        public static IQueryable<AuditLog> GetLogs<TTable>(ITrackerContext context, object primaryKey)
         {
             string key = primaryKey.ToString();
             var tableName = typeof(TTable).GetTableName(context);
@@ -89,7 +89,7 @@ namespace TrackerEnabledDbContext.Common
         /// <param name="tableName">table name</param>
         /// <param name="primaryKey">primary key of record</param>
         /// <returns></returns>
-        public static IEnumerable<AuditLog> GetLogs(ITrackerContext context, string tableName, object primaryKey)
+        public static IQueryable<AuditLog> GetLogs(ITrackerContext context, string tableName, object primaryKey)
         {
             string key = primaryKey.ToString();
             return context.AuditLog.Where(x => x.TableName == tableName && x.RecordId == key);

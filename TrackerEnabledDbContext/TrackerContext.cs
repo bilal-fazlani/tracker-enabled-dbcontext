@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TrackerEnabledDbContext.Common;
@@ -145,7 +146,7 @@ namespace TrackerEnabledDbContext
         /// </summary>
         /// <typeparam name="TTable">Type of domain model</typeparam>
         /// <returns></returns>
-        public IEnumerable<AuditLog> GetLogs<TTable>()
+        public IQueryable<AuditLog> GetLogs<TTable>()
         {
             return CommonTracker.GetLogs<TTable>(this);
         }
@@ -155,7 +156,7 @@ namespace TrackerEnabledDbContext
         /// </summary>
         /// <param name="tableName">Name of table</param>
         /// <returns></returns>
-        public IEnumerable<AuditLog> GetLogs(string tableName)
+        public IQueryable<AuditLog> GetLogs(string tableName)
         {
             return CommonTracker.GetLogs(this, tableName);
         }
@@ -166,7 +167,7 @@ namespace TrackerEnabledDbContext
         /// <typeparam name="TTable">Type of domain model</typeparam>
         /// <param name="primaryKey">primary key of record</param>
         /// <returns></returns>
-        public IEnumerable<AuditLog> GetLogs<TTable>(object primaryKey)
+        public IQueryable<AuditLog> GetLogs<TTable>(object primaryKey)
         {
             return CommonTracker.GetLogs<TTable>(this, primaryKey);
         }
@@ -177,7 +178,7 @@ namespace TrackerEnabledDbContext
         /// <param name="tableName">table name</param>
         /// <param name="primaryKey">primary key of record</param>
         /// <returns></returns>
-        public IEnumerable<AuditLog> GetLogs(string tableName, object primaryKey)
+        public IQueryable<AuditLog> GetLogs(string tableName, object primaryKey)
         {
             return CommonTracker.GetLogs(this, tableName, primaryKey);
         }

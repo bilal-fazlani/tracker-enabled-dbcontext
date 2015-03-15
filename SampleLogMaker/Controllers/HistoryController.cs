@@ -13,54 +13,77 @@ namespace SampleLogMaker.Controllers
 		//
 		// GET: /History/
 		public ActionResult Index()
-		{
-			var db = new ApplicationDbContext();
-			var data = db.AuditLog
-				.OrderByDescending(x=>x.EventDateUTC)
-				.ToList();
-			var vm = new List<BaseHistoryVM>();
+        {
+            var db = new ApplicationDbContext();
+            var data = db.AuditLog
+                .OrderByDescending(x => x.EventDateUTC)
+                .ToList();
+            List<BaseHistoryVM> vm = ConvertToHistoryViewModel(data);
 
-			foreach (var log in data)
-			{
-				switch (log.EventType)
-				{
-					case EventType.Added : // added
-					vm.Add(new AddedHistoryVM {
-						Date = log.EventDateUTC.ToLocalTime().DateTime,
-						LogId = log.AuditLogId,
-						RecordId = int.Parse(log.RecordId),
-						TableName = log.TableName,
-						UserName = log.UserName,
-                        Details = log.LogDetails.Select(x=> new LogDetail {PropertyName = x.ColumnName, NewValue = x.NewValue })
-					});
-					break;
+            return View(vm);
+        }
 
-					case EventType.Deleted: //deleted
-					vm.Add(new DeletedHistoryVM {
-						Date = log.EventDateUTC.ToLocalTime().DateTime,
-						LogId = log.AuditLogId,
-						RecordId = int.Parse(log.RecordId),
-						TableName = log.TableName,
-						UserName = log.UserName,
-                        Details = log.LogDetails.Select(x=> new LogDetail { PropertyName = x.ColumnName, OldValue = x.OriginalValue })
-					});
-					break;
+        private static List<BaseHistoryVM> ConvertToHistoryViewModel(IEnumerable<AuditLog> data)
+        {
+            var vm = new List<BaseHistoryVM>();
 
-					case EventType.Modified: //modified
-					vm.Add(new ChangedHistoryVM {
-                        Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.ColumnName, NewValue = x.NewValue, OldValue = x.OriginalValue }),
-                        Date = log.EventDateUTC.ToLocalTime().DateTime,
-						LogId = log.AuditLogId,
-						RecordId = int.Parse(log.RecordId),
-						TableName = log.TableName,
-						UserName = log.UserName,
-					});
-					break;
-				}
-				
-			}
+            foreach (var log in data)
+            {
+                switch (log.EventType)
+                {
+                    case EventType.Added: // added
+                        vm.Add(new AddedHistoryVM
+                        {
+                            Date = log.EventDateUTC.ToLocalTime().DateTime,
+                            LogId = log.AuditLogId,
+                            RecordId = int.Parse(log.RecordId),
+                            TableName = log.TableName,
+                            UserName = log.UserName,
+                            Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.ColumnName, NewValue = x.NewValue })
+                        });
+                        break;
 
-			return View(vm);
-		}
+                    case EventType.Deleted: //deleted
+                        vm.Add(new DeletedHistoryVM
+                        {
+                            Date = log.EventDateUTC.ToLocalTime().DateTime,
+                            LogId = log.AuditLogId,
+                            RecordId = int.Parse(log.RecordId),
+                            TableName = log.TableName,
+                            UserName = log.UserName,
+                            Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.ColumnName, OldValue = x.OriginalValue })
+                        });
+                        break;
+
+                    case EventType.Modified: //modified
+                        vm.Add(new ChangedHistoryVM
+                        {
+                            Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.ColumnName, NewValue = x.NewValue, OldValue = x.OriginalValue }),
+                            Date = log.EventDateUTC.ToLocalTime().DateTime,
+                            LogId = log.AuditLogId,
+                            RecordId = int.Parse(log.RecordId),
+                            TableName = log.TableName,
+                            UserName = log.UserName,
+                        });
+                        break;
+                }
+
+            }
+
+            return vm;
+        }
+
+        public PartialViewResult EntityHistory(string entity, object entityId)
+        {
+            var db = new ApplicationDbContext();
+            var auditLogs = db.GetLogs(entity, entityId)
+                .OrderByDescending(x=>x.EventDateUTC);
+            var viewModels = ConvertToHistoryViewModel(auditLogs);
+
+            ViewBag.EntityType = entity;
+            ViewBag.EntityId = entityId;
+
+            return PartialView("_EntityHistory", viewModels);
+        }
 	}
 }

@@ -1,10 +1,11 @@
 ﻿@using SampleLogMaker.ViewModels
 @model IEnumerable<BaseHistoryVM>
-@{
-    ViewBag.Title = "Log";
-}
 
-<h2>Log</h2>
+<div>
+    <h4>
+        History for @ViewBag.EntityType (@ViewBag.EntityId)
+    </h4>
+</div>
 
 <div id="historyList">
     @foreach (var log in Model)

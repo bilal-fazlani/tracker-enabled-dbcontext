@@ -180,10 +180,6 @@
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\DbContexts.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="MyMigrations\201411011747380_added forkey for blog.cs" />
-    <Compile Include="MyMigrations\201411011747380_added forkey for blog.Designer.cs">
-      <DependentUpon>201411011747380_added forkey for blog.cs</DependentUpon>
-    </Compile>
     <Compile Include="MyMigrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -195,6 +191,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\HistoryStyles.css" />
     <Content Include="Content\ToolTipster\css\reset.css" />
     <Content Include="Content\ToolTipster\css\style.css" />
     <Content Include="Content\ToolTipster\css\themes\tooltipster-light.css" />
@@ -274,6 +271,7 @@
     <Content Include="Views\Shared\DisplayTemplates\Blog.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\int.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\string.cshtml" />
+    <Content Include="Views\History\_EntityHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -291,11 +289,6 @@
       <Project>{8a73486c-9d6b-4132-b94b-007e6737b734}</Project>
       <Name>TrackerEnabledDbContext.Identity</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MyMigrations\201411011747380_added forkey for blog.resx">
-      <DependentUpon>201411011747380_added forkey for blog.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -14,3 +14,6 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+
+@{Html.RenderAction("EntityHistory", "History", new { entity = "Blogs", entityId = Model.Id });}
