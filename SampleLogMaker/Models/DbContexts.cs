@@ -17,6 +17,9 @@ namespace SampleLogMaker.Models
         }
 
         public DbSet<Blog> Blogs { get; set; }
+
         public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<Car> Cars { get; set; }
     }
 }

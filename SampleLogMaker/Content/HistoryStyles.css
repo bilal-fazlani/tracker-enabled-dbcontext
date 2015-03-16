@@ -1,61 +1,69 @@
 ﻿
-    #historyList {
-    }
+.history-block {
+    border: 1px dashed rgb(178, 178, 178);
+    padding: 10px;
+    border-radius: 4px;
+    border-bottom: 4px solid #A19E9E;
+    border-right: 4px solid #A19E9E;
+}
 
-    .historySpan {
-        border-radius: 3px;
-        padding: 2px;
-        margin: 2px;
-        border: 1px solid;
-        cursor: pointer;
-    }
+#historyList {
+}
+
+.historySpan {
+    border-radius: 3px;
+    padding: 2px;
+    margin: 2px;
+    border: 1px solid;
+    cursor: pointer;
+}
 
 
-    .addedHistoySpan {
-        border-color: green;
-        background-color: rgb(210, 246, 193);
-    }
+.addedHistoySpan {
+    border-color: green;
+    background-color: rgb(210, 246, 193);
+}
 
     .addedHistoySpan:hover {
         background-color: rgb(169, 238, 137);
     }
 
 
-    .deletedHistoySpan {
-        border-color: red;
-        background-color: rgb(248, 211, 187);
-    }
+.deletedHistoySpan {
+    border-color: red;
+    background-color: rgb(248, 211, 187);
+}
 
     .deletedHistoySpan:hover {
-            background-color: rgb(240, 176, 152);
-        }
-
-    .changedHistoySpan {
-        border-color: rgb(0, 177, 200);
-        background-color: rgb(205, 244, 247);
+        background-color: rgb(240, 176, 152);
     }
+
+.changedHistoySpan {
+    border-color: rgb(0, 177, 200);
+    background-color: rgb(205, 244, 247);
+}
 
     .changedHistoySpan:hover {
         background-color: rgb(134, 224, 240);
     }
 
-    .deleted {
-        background-color: #ffd4d4;
-        color: #b91212;
-    }
+.deleted {
+    background-color: #ffd4d4;
+    color: #b91212;
+}
 
-    .changed {
-        background-color: #c5dcf8;
-        color: #142885;
-    }
+.changed {
+    background-color: #c5dcf8;
+    color: #142885;
+}
 
-    .added {
-        background-color: #ddfaa8;
-        color: #215803;
-    }
+.added {
+    background-color: #ddfaa8;
+    color: #215803;
+}
 
-    #historyList > div {
-        margin-top: 1px;
-        padding: 3px;
-        padding-left: 6px;
-    }
+#historyList > div {
+    margin-top: 1px;
+    padding: 3px;
+    padding-left: 6px;
+}

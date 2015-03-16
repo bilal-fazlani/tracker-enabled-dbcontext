@@ -4,13 +4,10 @@
     ViewBag.Title = "Log";
 }
 
-<h2>Log</h2>
+<h2>Audit History</h2>
 
-<div id="historyList">
-    @foreach (var log in Model)
-    {
-        <text>
-            @Html.DisplayFor(x => log)
-        </text>
-    }
+<div class="history-block">
+    <div id="historyList">
+        @Html.DisplayForModel()
+    </div>
 </div>

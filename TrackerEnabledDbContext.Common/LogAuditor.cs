@@ -26,8 +26,7 @@ namespace TrackerEnabledDbContext.Common
                 return null;
             }
 
-            //Get primary key value (If you have more than one key column, this will need to be adjusted)
-            var keyName = entityType.GetPrimaryKeyName();
+            var keyNames = entityType.GetPrimaryKeyNames(context);
 
             var newlog = new AuditLog
             {
@@ -35,7 +34,7 @@ namespace TrackerEnabledDbContext.Common
                 EventDateUTC = changeTime,
                 EventType = eventType,
                 TableName = entityType.GetTableName(context),
-                RecordId = _dbEntry.GetDatabaseValue(keyName).ToString()
+                RecordId = _dbEntry.GetPrimaryKeyValues(keyNames).ToString()
             };
             
             using (var detailsAuditor = new LogDetailsAuditor(_dbEntry, newlog))

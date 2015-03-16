@@ -36,7 +36,7 @@ namespace SampleLogMaker.Controllers
                         {
                             Date = log.EventDateUTC.ToLocalTime().DateTime,
                             LogId = log.AuditLogId,
-                            RecordId = int.Parse(log.RecordId),
+                            RecordId = log.RecordId,
                             TableName = log.TableName,
                             UserName = log.UserName,
                             Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.ColumnName, NewValue = x.NewValue })
@@ -48,7 +48,7 @@ namespace SampleLogMaker.Controllers
                         {
                             Date = log.EventDateUTC.ToLocalTime().DateTime,
                             LogId = log.AuditLogId,
-                            RecordId = int.Parse(log.RecordId),
+                            RecordId = log.RecordId,
                             TableName = log.TableName,
                             UserName = log.UserName,
                             Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.ColumnName, OldValue = x.OriginalValue })
@@ -61,7 +61,7 @@ namespace SampleLogMaker.Controllers
                             Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.ColumnName, NewValue = x.NewValue, OldValue = x.OriginalValue }),
                             Date = log.EventDateUTC.ToLocalTime().DateTime,
                             LogId = log.AuditLogId,
-                            RecordId = int.Parse(log.RecordId),
+                            RecordId = log.RecordId,
                             TableName = log.TableName,
                             UserName = log.UserName,
                         });

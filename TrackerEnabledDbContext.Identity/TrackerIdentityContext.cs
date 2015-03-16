@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -8,13 +9,14 @@ using TrackerEnabledDbContext.Common;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
 
+[assembly: CLSCompliant(true)]
 namespace TrackerEnabledDbContext.Identity
 {
     public class TrackerIdentityContext<TUser> : IdentityDbContext<TUser>, ITrackerContext where TUser : IdentityUser
     {
         public TrackerIdentityContext(): base() { }
 
-        public TrackerIdentityContext(string connectinString) : base(connectinString) { }
+        public TrackerIdentityContext(string connectionString) : base(connectionString) { }
 
         // Summary:
         //     Constructor which takes the connection string to use
@@ -27,6 +29,7 @@ namespace TrackerEnabledDbContext.Identity
         public TrackerIdentityContext(string nameOrConnectionString, bool throwIfV1Schema) : base(nameOrConnectionString, throwIfV1Schema) { }
 
         public DbSet<AuditLog> AuditLog { get; set; }
+
         public DbSet<AuditLogDetail> LogDetails { get; set; }
 
         /// <summary>
@@ -52,7 +55,6 @@ namespace TrackerEnabledDbContext.Identity
             return result;
         }
 
-
         /// <summary>
         /// This method saves the model changes to the database.
         /// If the tracker for a table is active, it will also put the old values in tracking table.
@@ -64,6 +66,7 @@ namespace TrackerEnabledDbContext.Identity
             return this.SaveChanges(null);
         }
 
+        #region -- Async --
         /// <summary>
         /// Asynchronously saves all changes made in this context to the underlying database.
         /// If the tracker for a table is active, it will also put the old values in tracking table.
@@ -74,7 +77,7 @@ namespace TrackerEnabledDbContext.Identity
         /// to complete.
         /// </param>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
-        public async virtual Task<int> SaveChangesAsync(object userName, CancellationToken cancellationToken)
+        public async Task<int> SaveChangesAsync(object userName, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested == true)
                 cancellationToken.ThrowIfCancellationRequested();
@@ -102,9 +105,9 @@ namespace TrackerEnabledDbContext.Identity
         /// </summary>
         /// <param name="userName">Username of the logged in identity</param>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
-        public virtual Task<int> SaveChangesAsync(object userName)
+        public async Task<int> SaveChangesAsync(object userName)
         {
-            return this.SaveChangesAsync(userName, CancellationToken.None);
+            return await this.SaveChangesAsync(userName, CancellationToken.None);
         }
 
         /// <summary>
@@ -115,9 +118,9 @@ namespace TrackerEnabledDbContext.Identity
         /// A task that represents the asynchronous save operation.  The task result
         /// contains the number of objects written to the underlying database.
         /// </returns>
-        public override Task<int> SaveChangesAsync()
+        public async override Task<int> SaveChangesAsync()
         {
-            return this.SaveChangesAsync(null, CancellationToken.None);
+            return await this.SaveChangesAsync(null, CancellationToken.None);
         }
 
         /// <summary>
@@ -132,10 +135,11 @@ namespace TrackerEnabledDbContext.Identity
         /// A task that represents the asynchronous save operation.  The task result
         /// contains the number of objects written to the underlying database.
         /// </returns>
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            return this.SaveChangesAsync(cancellationToken);
+            return await this.SaveChangesAsync(cancellationToken);
         }
+        #endregion --
 
         /// <summary>
         /// Get all logs for the given model type
