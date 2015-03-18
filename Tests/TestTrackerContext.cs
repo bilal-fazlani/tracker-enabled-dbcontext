@@ -1,8 +1,8 @@
 ﻿using System.Data.Entity;
-using Tests.Models;
 using TrackerEnabledDbContext;
+using TrackerEnabledDbContext.Common.Testing.Models;
 
-namespace Tests
+namespace TrackerEnabledDbContext.IntegrationTests
 {
     public class TestTrackerContext : TrackerEnabledDbContext.TrackerContext
     {

@@ -5,14 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tests.Models
+namespace TrackerEnabledDbContext.Common.Testing.Models
 {
     [TrackChanges]
-    public class NormalModel
+    public class ParentModel
     {
+        public ParentModel()
+        {
+            Children = new List<ChildModel>();
+        }
+
         [Key]
         public int Id { get; set; }
-
-        public string Description { get; set; }
+        public virtual List<ChildModel> Children { get; set; } 
     }
 }

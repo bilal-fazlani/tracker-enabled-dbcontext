@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.22609.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleLogMaker", "SampleLogMaker\SampleLogMaker.csproj", "{3EE0FE30-1616-4EBE-9694-B4F4017C3C99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{3EA1B657-CABF-4A33-84D6-28F5E1893743}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerEnabledDbContext.IntegrationTests", "Tests\TrackerEnabledDbContext.IntegrationTests.csproj", "{3EA1B657-CABF-4A33-84D6-28F5E1893743}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerEnabledDbContext.Identity", "TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj", "{8A73486C-9D6B-4132-B94B-007E6737B734}"
 EndProject
@@ -13,10 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerEnabledDbContext.Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerEnabledDbContext", "TrackerEnabledDbContext\TrackerEnabledDbContext.csproj", "{BDE8FEB8-3A4F-491D-9AAD-426C355AAC76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerEnabledDbContext.Identity.IntegrationTests", "TrackerEnabledDbContext.Identity.IntegrationTests\TrackerEnabledDbContext.Identity.IntegrationTests.csproj", "{68DD7B39-55E4-4B0E-A818-DB6019743FC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerEnabledDbContext.Common.Testing", "TrackerEnabledDbContext.Common.Testing\TrackerEnabledDbContext.Common.Testing.csproj", "{D56578A4-4642-4FCE-B7F7-993D815DD2FD}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -42,6 +43,14 @@ Global
 		{BDE8FEB8-3A4F-491D-9AAD-426C355AAC76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDE8FEB8-3A4F-491D-9AAD-426C355AAC76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDE8FEB8-3A4F-491D-9AAD-426C355AAC76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68DD7B39-55E4-4B0E-A818-DB6019743FC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68DD7B39-55E4-4B0E-A818-DB6019743FC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68DD7B39-55E4-4B0E-A818-DB6019743FC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68DD7B39-55E4-4B0E-A818-DB6019743FC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D56578A4-4642-4FCE-B7F7-993D815DD2FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D56578A4-4642-4FCE-B7F7-993D815DD2FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D56578A4-4642-4FCE-B7F7-993D815DD2FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D56578A4-4642-4FCE-B7F7-993D815DD2FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

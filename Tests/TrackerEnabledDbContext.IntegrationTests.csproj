@@ -6,8 +6,8 @@
     <ProjectGuid>{3EA1B657-CABF-4A33-84D6-28F5E1893743}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tests</RootNamespace>
-    <AssemblyName>Tests</AssemblyName>
+    <RootNamespace>TrackerEnabledDbContext.IntegrationTests</RootNamespace>
+    <AssemblyName>TrackerEnabledDbContext.IntegrationTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -61,23 +61,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Code\ObjectFiller.cs" />
-    <Compile Include="Extensions\AssertExtensions.cs" />
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="ModelFactory.cs" />
-    <Compile Include="CRUD_Tests.cs" />
-    <Compile Include="Models\ChildModel.cs" />
-    <Compile Include="Models\ModelWithCompositeKey.cs" />
-    <Compile Include="Models\ModelWithConventionalKey.cs" />
-    <Compile Include="Models\NormalModel.cs" />
-    <Compile Include="Models\ParentModel.cs" />
-    <Compile Include="Code\ObjectFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTrackerContext.cs" />
-    <Compile Include="IntegrationTests\TrackerContextIntegrationTests.cs" />
-    <Compile Include="PersistanceTests.cs" />
+    <Compile Include="TrackerContextIntegrationTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TrackerEnabledDbContext.Common.Testing\TrackerEnabledDbContext.Common.Testing.csproj">
+      <Project>{d56578a4-4642-4fce-b7f7-993d815dd2fd}</Project>
+      <Name>TrackerEnabledDbContext.Common.Testing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj">
       <Project>{ac9808cc-8932-40ae-8f26-3fba558a5549}</Project>
       <Name>TrackerEnabledDbContext.Common</Name>

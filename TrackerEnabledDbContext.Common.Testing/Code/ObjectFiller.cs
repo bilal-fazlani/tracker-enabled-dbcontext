@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tests
+namespace TrackerEnabledDbContext.Common.Testing
 {
     public static class ObjectFiller<ObjectType> where ObjectType : class
     {

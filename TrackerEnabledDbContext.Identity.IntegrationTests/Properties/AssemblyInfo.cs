@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TrackerEnabledDbContext.IntegrationTests")]
+[assembly: AssemblyTitle("TrackerEnabledDbContext.Identity.IntegrationTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TrackerEnabledDbContext.IntegrationTests")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyProduct("TrackerEnabledDbContext.Identity.IntegrationTests")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c71d3ab7-6eec-4ecf-ae79-e4aef01c7a0e")]
+[assembly: Guid("ba60a359-9fb6-400c-b8a5-00534681e18f")]
 
 // Version information for an assembly consists of the following four values:
 //
