@@ -25,7 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -38,12 +38,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -61,18 +61,23 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Code\ObjectFiller.cs" />
+    <Compile Include="Extensions\AssertExtensions.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ModelFactory.cs" />
     <Compile Include="CRUD_Tests.cs" />
+    <Compile Include="Models\ChildModel.cs" />
+    <Compile Include="Models\ModelWithCompositeKey.cs" />
+    <Compile Include="Models\ModelWithConventionalKey.cs" />
+    <Compile Include="Models\NormalModel.cs" />
+    <Compile Include="Models\ParentModel.cs" />
+    <Compile Include="Code\ObjectFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTrackerContext.cs" />
-    <Compile Include="Tracker_Tests.cs" />
+    <Compile Include="IntegrationTests\TrackerContextIntegrationTests.cs" />
     <Compile Include="PersistanceTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SampleLogMaker\SampleLogMaker.csproj">
-      <Project>{3ee0fe30-1616-4ebe-9694-b4f4017c3c99}</Project>
-      <Name>SampleLogMaker</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj">
       <Project>{ac9808cc-8932-40ae-8f26-3fba558a5549}</Project>
       <Name>TrackerEnabledDbContext.Common</Name>
@@ -83,8 +88,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestCases.txt" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
