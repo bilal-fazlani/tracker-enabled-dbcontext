@@ -9,7 +9,6 @@ using TrackerEnabledDbContext.Common;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
 
-[assembly: CLSCompliant(true)]
 namespace TrackerEnabledDbContext.Identity
 {
     public class TrackerIdentityContext<TUser> : IdentityDbContext<TUser>, ITrackerContext where TUser : IdentityUser

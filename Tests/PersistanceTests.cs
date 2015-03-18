@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SampleLogMaker.Models;
 using System.Data.Entity;
 
 namespace Tests

@@ -1,17 +1,20 @@
-﻿using SampleLogMaker.Models;
-using System.Data.Entity;
+﻿using System.Data.Entity;
+using Tests.Models;
 using TrackerEnabledDbContext;
 
 namespace Tests
 {
-    public class TestTrackerContext : TrackerContext
+    public class TestTrackerContext : TrackerEnabledDbContext.TrackerContext
     {
         public TestTrackerContext()
-            : base("DefaultConnection")
+            : base("DefaultTestConnection")
         {
         }
 
-        public DbSet<Blog> Blogs { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+        public DbSet<NormalModel> NormalModels { get; set; }
+        public DbSet<ParentModel> ParentModels { get; set; }
+        public DbSet<ChildModel> Children { get; set; }
+        public DbSet<ModelWithCompositeKey> ModelsWithCompositeKey { get; set; }
+        public DbSet<ModelWithConventionalKey> ModelsWithConventionalKey { get; set; }
     }
 }
