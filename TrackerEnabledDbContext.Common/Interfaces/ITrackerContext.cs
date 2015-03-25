@@ -20,6 +20,7 @@ namespace TrackerEnabledDbContext.Common.Interfaces
 
         //async
         Task<int> SaveChangesAsync(object userName, CancellationToken cancellationToken);
-        Task<int> SaveChangesAsync(object userName);
+        Task<int> SaveChangesAsync(int userId);
+        Task<int> SaveChangesAsync(string userName);
     }
 }

@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Data.Entity;
-using TrackerEnabledDbContext.Common.Interfaces;
-using TrackerEnabledDbContext.Common.Models;
-using TrackerEnabledDbContext.Common.Testing.Extensions;
-using TrackerEnabledDbContext.Common.Testing.Models;
 
 namespace TrackerEnabledDbContext.Common.Testing
 {
@@ -29,6 +21,14 @@ namespace TrackerEnabledDbContext.Common.Testing
             get
             {
                 return Guid.NewGuid().ToString();
+            }
+        }
+
+        protected int RandomNumber
+        {
+            get
+            {
+                return new Random().Next();
             }
         }
 

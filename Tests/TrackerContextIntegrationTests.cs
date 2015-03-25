@@ -7,8 +7,6 @@ using TrackerEnabledDbContext.Common.Testing.Models;
 using TrackerEnabledDbContext.Common.Testing.Extensions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using TrackerEnabledDbContext;
-using TrackerEnabledDbContext.Common.Testing.Models;
 using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Models;
 
@@ -276,6 +274,97 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 new KeyValuePair<string, string>("Key1", key1),
                 new KeyValuePair<string, string>("Key2", key2)
                 );
+        }
+
+        [TestMethod]
+        public async Task Can_get_logs_by_table_name()
+        {
+            string descr = RandomText;
+            var model = ObjectFactory<NormalModel>.Create();
+            model.Description = descr;
+
+            db.NormalModels.Add(model);
+            await db.SaveChangesAsync(CancellationToken.None);
+            model.Id.AssertIsNotZero();
+
+            var logs = db.GetLogs("NormalModels", model.Id)
+                .AssertCountIsNotZero("logs not found");
+
+            var lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
+
+            var details = lastLog.LogDetails
+                .AssertIsNotNull("log details is null")
+                .AssertCountIsNotZero("no log details found");
+        }
+
+        [TestMethod]
+        public async Task Can_get_logs_by_entity_type()
+        {
+            string descr = RandomText;
+            var model = ObjectFactory<NormalModel>.Create();
+            model.Description = descr;
+
+            db.NormalModels.Add(model);
+            await db.SaveChangesAsync(CancellationToken.None);
+            model.Id.AssertIsNotZero();
+
+            var logs = db.GetLogs<NormalModel>(model.Id)
+                .AssertCountIsNotZero("logs not found");
+
+            var lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
+
+            var details = lastLog.LogDetails
+                .AssertIsNotNull("log details is null")
+                .AssertCountIsNotZero("no log details found");
+        }
+
+        [TestMethod]
+        public async Task Can_get_all_logs()
+        {
+            string descr = RandomText;
+            var model = ObjectFactory<NormalModel>.Create();
+            model.Description = descr;
+
+            db.NormalModels.Add(model);
+            await db.SaveChangesAsync(RandomText);
+            model.Id.AssertIsNotZero();
+
+            var logs = db.GetLogs("NormalModels")
+                .AssertCountIsNotZero("logs not found");
+
+            var lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
+
+            var details = lastLog.LogDetails
+                .AssertIsNotNull("log details is null")
+                .AssertCountIsNotZero("no log details found");
+        }
+        
+        [TestMethod]
+        public async Task Can_save_changes_with_userID()
+        {
+            int userId = RandomNumber;
+
+            //add enity
+            var oldDescription = RandomText;
+            var newDescription = RandomText;
+            var entity = new NormalModel { Description = oldDescription };
+            db.Entry(entity).State = System.Data.Entity.EntityState.Added;
+            db.SaveChanges();
+
+            //modify entity
+            entity.Description = newDescription;
+            await db.SaveChangesAsync(userId);
+
+            var expectedLog = new List<AuditLogDetail> {
+                new AuditLogDetail{
+                    NewValue = newDescription,
+                    OriginalValue = oldDescription,
+                    ColumnName = "Description"
+                }}.ToArray();
+
+
+            //assert
+            entity.AssertAuditForModification(db, entity.Id, userId, expectedLog);
         }
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
 
@@ -53,12 +50,12 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
         }
 
         public static T AssertAuditForModification<T>(this T entity, ITrackerContext db, object entityId, 
-            string userName = null, params AuditLogDetail[] logdetails)
+            object userName = null, params AuditLogDetail[] logdetails)
         {
             var logs = db.GetLogs<T>(entityId)
                 .AssertCountIsNotZero("log count is zero");
 
-            var lastLog = logs.Last(x => x.EventType == EventType.Modified && x.UserName == userName)
+            var lastLog = logs.Last(x => x.EventType == EventType.Modified && x.UserName == (userName != null ? userName.ToString(): null))
                 .AssertIsNotNull("log not found");
 
             lastLog.LogDetails
