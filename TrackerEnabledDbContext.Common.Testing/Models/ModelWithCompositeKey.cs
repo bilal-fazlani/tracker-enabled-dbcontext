@@ -16,5 +16,7 @@ namespace TrackerEnabledDbContext.Common.Testing.Models
 
         [Key, Column(Order = 2)]
         public string Key2 { get; set; }
+
+        public string Description { get; set; }
     }
 }

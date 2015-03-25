@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using TrackerEnabledDbContext.Common.Testing.Models;
@@ -16,14 +18,6 @@ namespace TrackerEnabledDbContext.IntegrationTests
     [TestClass]
     public class TrackerContextIntegrationTests : PersistanceTests<TestTrackerContext>
     {
-        private string RandomText
-        {
-            get
-            {
-                return Guid.NewGuid().ToString();
-            }
-        }
-
         [TestMethod]
         public void Can_save_model()
         {
@@ -92,8 +86,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.NormalModels.Add(normalModel);
             db.SaveChanges(userName);
 
-            normalModel.AssertAuditForAddition(db, normalModel.Id, userName, 
-                new KeyValuePair<string,string>("Description", randomText),
+            normalModel.AssertAuditForAddition(db, normalModel.Id, userName,
+                new KeyValuePair<string, string>("Description", randomText),
                 new KeyValuePair<string, string>("Id", normalModel.Id.ToString())
                 );
         }
@@ -108,8 +102,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.NormalModels.Add(normalModel);
             db.SaveChanges();
 
-            normalModel.AssertAuditForAddition(db, normalModel.Id, null, 
-                new KeyValuePair<string,string>("Description", randomText),
+            normalModel.AssertAuditForAddition(db, normalModel.Id, null,
+                new KeyValuePair<string, string>("Description", randomText),
                 new KeyValuePair<string, string>("Id", normalModel.Id.ToString())
                 );
         }
@@ -184,7 +178,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             //add enity
             var oldDescription = RandomText;
             var newDescription = RandomText;
-            var entity = new NormalModel {Description = oldDescription };
+            var entity = new NormalModel { Description = oldDescription };
             db.Entry(entity).State = System.Data.Entity.EntityState.Added;
             db.SaveChanges();
 
@@ -236,6 +230,52 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
             //assert change
             child.AssertAuditForModification(db, child.Id, null, expectedLog);
+        }
+
+        [TestMethod]
+        public async Task Can_skip_tracking_of_property()
+        {
+            string username = RandomText;
+
+            //add enitties
+            var entity = new ModelWithSkipTracking { TrackedProperty = Guid.NewGuid(), UnTrackedProperty = RandomText };
+            db.ModelsWithSkipTracking.Add(entity);
+            await db.SaveChangesAsync(username, CancellationToken.None);
+
+            //assert enity added
+            entity.Id.AssertIsNotZero();
+
+            //assert addtion
+            entity.AssertAuditForAddition(db, entity.Id, username,
+                new KeyValuePair<string, string>("TrackedProperty", entity.TrackedProperty.ToString()),
+                new KeyValuePair<string, string>("Id", entity.Id.ToString(CultureInfo.InvariantCulture))
+                );
+        }
+
+        [TestMethod]
+        public void Can_track_composite_keys()
+        {
+            var key1 = RandomText;
+            var key2 = RandomText;
+            var userName = RandomText;
+            var descr = RandomText;
+
+
+            var entity = ObjectFactory<ModelWithCompositeKey>.Create();
+            entity.Description = descr;
+            entity.Key1 = key1;
+            entity.Key2 = key2;
+
+            db.ModelsWithCompositeKey.Add(entity);
+            db.SaveChanges(userName);
+
+            string expectedKey = string.Format("[{0},{1}]", key1, key2);
+
+            entity.AssertAuditForAddition(db, expectedKey, userName,
+                new KeyValuePair<string, string>("Description", descr),
+                new KeyValuePair<string, string>("Key1", key1),
+                new KeyValuePair<string, string>("Key2", key2)
+                );
         }
     }
 }

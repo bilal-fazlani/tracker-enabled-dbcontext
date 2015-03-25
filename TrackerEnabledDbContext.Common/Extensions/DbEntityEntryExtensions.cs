@@ -19,14 +19,14 @@
             }
             else if(columnNames.Count() > 1)
             {
-                string output = "{";
+                string output = "[";
 
                 output += string.Join(",", columnNames.Select(colName =>
                 {
                     return dbEntry.GetDatabaseValues().GetValue<object>(colName);
                 }));
 
-                output += "}";
+                output += "]";
                 return output;
             }
             else
