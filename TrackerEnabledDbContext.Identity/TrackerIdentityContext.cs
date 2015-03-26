@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
@@ -102,9 +100,19 @@ namespace TrackerEnabledDbContext.Identity
         /// If the tracker for a table is active, it will also put the old values in tracking table.
         /// Always use this method instead of SaveChangesAsync() whenever possible.
         /// </summary>
-        /// <param name="userName">Username of the logged in identity</param>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
-        public async Task<int> SaveChangesAsync(object userName)
+        public async virtual Task<int> SaveChangesAsync(int userId)
+        {
+            return await this.SaveChangesAsync(userId, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Asynchronously saves all changes made in this context to the underlying database.
+        /// If the tracker for a table is active, it will also put the old values in tracking table.
+        /// Always use this method instead of SaveChangesAsync() whenever possible.
+        /// </summary>
+        /// <returns>Returns the number of objects written to the underlying database.</returns>
+        public async virtual Task<int> SaveChangesAsync(string userName)
         {
             return await this.SaveChangesAsync(userName, CancellationToken.None);
         }
@@ -136,7 +144,7 @@ namespace TrackerEnabledDbContext.Identity
         /// </returns>
         public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            return await this.SaveChangesAsync(cancellationToken);
+            return await this.SaveChangesAsync(null ,cancellationToken);
         }
         #endregion --
 

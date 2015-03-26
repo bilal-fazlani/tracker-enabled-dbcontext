@@ -5,14 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tests.Models
+namespace TrackerEnabledDbContext.Common.Testing.Models
 {
     [TrackChanges]
-    public class NormalModel
+    public class ModelWithSkipTracking
     {
-        [Key]
         public int Id { get; set; }
+        public Guid TrackedProperty { get; set; }
 
-        public string Description { get; set; }
+        [SkipTracking]
+        public string UnTrackedProperty { get; set; }
     }
 }

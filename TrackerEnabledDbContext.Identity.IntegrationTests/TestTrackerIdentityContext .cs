@@ -1,13 +1,14 @@
-﻿using System.Data.Entity;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System.Data.Entity;
 using TrackerEnabledDbContext;
 using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Models;
 
-namespace TrackerEnabledDbContext.IntegrationTests
+namespace TrackerEnabledDbContext.Identity.IntegrationTests
 {
-    public class TestTrackerContext : TrackerContext, ITestDbContext
+    public class TestTrackerIdentityContext : TrackerIdentityContext<IdentityUser>, ITestDbContext
     {
-        public TestTrackerContext()
+        public TestTrackerIdentityContext()
             : base("DefaultTestConnection")
         {
         }

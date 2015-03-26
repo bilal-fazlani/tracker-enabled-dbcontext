@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tests.Models
+namespace TrackerEnabledDbContext.Common.Testing.Models
 {
     [TrackChanges]
-    public class ModelWithConventionalKey
+    public class NormalModel
     {
+        [Key]
         public int Id { get; set; }
+
         public string Description { get; set; }
     }
 }

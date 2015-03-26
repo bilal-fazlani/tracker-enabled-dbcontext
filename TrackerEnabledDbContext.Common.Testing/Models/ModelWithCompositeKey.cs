@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tests.Models
+namespace TrackerEnabledDbContext.Common.Testing.Models
 {
     [TrackChanges]
     public class ModelWithCompositeKey
@@ -16,5 +16,7 @@ namespace Tests.Models
 
         [Key, Column(Order = 2)]
         public string Key2 { get; set; }
+
+        public string Description { get; set; }
     }
 }
