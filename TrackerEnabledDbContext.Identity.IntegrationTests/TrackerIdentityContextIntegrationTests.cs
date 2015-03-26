@@ -1,13 +1,14 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
-using TrackerEnabledDbContext.Common.Models;
-using System.Threading.Tasks;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
-using TrackerEnabledDbContext;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using TrackerEnabledDbContext.Common.Models;
 using TrackerEnabledDbContext.Common.Testing;
-using TrackerEnabledDbContext.Common.Testing.Models;
 using TrackerEnabledDbContext.Common.Testing.Extensions;
+using TrackerEnabledDbContext.Common.Testing.Models;
 
 
 namespace TrackerEnabledDbContext.Identity.IntegrationTests
@@ -15,14 +16,6 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
     [TestClass]
     public class TrackerIdentityContextIntegrationTests : PersistanceTests<TestTrackerIdentityContext>
     {
-        private string RandomText
-        {
-            get
-            {
-                return Guid.NewGuid().ToString();
-            }
-        }
-
         [TestMethod]
         public void Can_save_model()
         {
@@ -91,8 +84,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             db.NormalModels.Add(normalModel);
             db.SaveChanges(userName);
 
-            normalModel.AssertAuditForAddition(db, normalModel.Id, userName, 
-                new KeyValuePair<string,string>("Description", randomText),
+            normalModel.AssertAuditForAddition(db, normalModel.Id, userName,
+                new KeyValuePair<string, string>("Description", randomText),
                 new KeyValuePair<string, string>("Id", normalModel.Id.ToString())
                 );
         }
@@ -107,8 +100,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             db.NormalModels.Add(normalModel);
             db.SaveChanges();
 
-            normalModel.AssertAuditForAddition(db, normalModel.Id, null, 
-                new KeyValuePair<string,string>("Description", randomText),
+            normalModel.AssertAuditForAddition(db, normalModel.Id, null,
+                new KeyValuePair<string, string>("Description", randomText),
                 new KeyValuePair<string, string>("Id", normalModel.Id.ToString())
                 );
         }
@@ -183,7 +176,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             //add enity
             var oldDescription = RandomText;
             var newDescription = RandomText;
-            var entity = new NormalModel {Description = oldDescription };
+            var entity = new NormalModel { Description = oldDescription };
             db.Entry(entity).State = System.Data.Entity.EntityState.Added;
             db.SaveChanges();
 
@@ -235,6 +228,143 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
 
             //assert change
             child.AssertAuditForModification(db, child.Id, null, expectedLog);
+        }
+
+        [TestMethod]
+        public async Task Can_skip_tracking_of_property()
+        {
+            string username = RandomText;
+
+            //add enitties
+            var entity = new ModelWithSkipTracking { TrackedProperty = Guid.NewGuid(), UnTrackedProperty = RandomText };
+            db.ModelsWithSkipTracking.Add(entity);
+            await db.SaveChangesAsync(username, CancellationToken.None);
+
+            //assert enity added
+            entity.Id.AssertIsNotZero();
+
+            //assert addtion
+            entity.AssertAuditForAddition(db, entity.Id, username,
+                new KeyValuePair<string, string>("TrackedProperty", entity.TrackedProperty.ToString()),
+                new KeyValuePair<string, string>("Id", entity.Id.ToString(CultureInfo.InvariantCulture))
+                );
+        }
+
+        [TestMethod]
+        public void Can_track_composite_keys()
+        {
+            var key1 = RandomText;
+            var key2 = RandomText;
+            var userName = RandomText;
+            var descr = RandomText;
+
+
+            var entity = ObjectFactory<ModelWithCompositeKey>.Create();
+            entity.Description = descr;
+            entity.Key1 = key1;
+            entity.Key2 = key2;
+
+            db.ModelsWithCompositeKey.Add(entity);
+            db.SaveChanges(userName);
+
+            string expectedKey = string.Format("[{0},{1}]",key1,key2);
+
+            entity.AssertAuditForAddition(db, expectedKey, userName,
+                new KeyValuePair<string, string>("Description", descr),
+                new KeyValuePair<string, string>("Key1", key1),
+                new KeyValuePair<string, string>("Key2", key2)
+                );
+        }
+
+        [TestMethod]
+        public async Task Can_get_logs_by_table_name()
+        {
+            string descr = RandomText;
+            var model = ObjectFactory<NormalModel>.Create();
+            model.Description = descr;
+
+            db.NormalModels.Add(model);
+            await db.SaveChangesAsync(CancellationToken.None);
+            model.Id.AssertIsNotZero();
+
+            var logs = db.GetLogs("NormalModels", model.Id)
+                .AssertCountIsNotZero("logs not found");
+
+            var lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
+
+            var details = lastLog.LogDetails
+                .AssertIsNotNull("log details is null")
+                .AssertCountIsNotZero("no log details found");
+        }
+
+        [TestMethod]
+        public async Task Can_get_logs_by_entity_type()
+        {
+            string descr = RandomText;
+            var model = ObjectFactory<NormalModel>.Create();
+            model.Description = descr;
+
+            db.NormalModels.Add(model);
+            await db.SaveChangesAsync(CancellationToken.None);
+            model.Id.AssertIsNotZero();
+
+            var logs = db.GetLogs<NormalModel>(model.Id)
+                .AssertCountIsNotZero("logs not found");
+
+            var lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
+
+            var details = lastLog.LogDetails
+                .AssertIsNotNull("log details is null")
+                .AssertCountIsNotZero("no log details found");
+        }
+
+        [TestMethod]
+        public async Task Can_get_all_logs()
+        {
+            string descr = RandomText;
+            var model = ObjectFactory<NormalModel>.Create();
+            model.Description = descr;
+
+            db.NormalModels.Add(model);
+            await db.SaveChangesAsync(RandomText);
+            model.Id.AssertIsNotZero();
+
+            var logs = db.GetLogs("NormalModels")
+                .AssertCountIsNotZero("logs not found");
+
+            var lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
+
+            var details = lastLog.LogDetails
+                .AssertIsNotNull("log details is null")
+                .AssertCountIsNotZero("no log details found");
+        }
+
+        [TestMethod]
+        public async Task Can_save_changes_with_userID()
+        {
+            int userId = RandomNumber;
+
+            //add enity
+            var oldDescription = RandomText;
+            var newDescription = RandomText;
+            var entity = new NormalModel { Description = oldDescription };
+            db.Entry(entity).State = System.Data.Entity.EntityState.Added;
+            db.SaveChanges(userId);
+
+            //modify entity
+            entity.Description = newDescription;
+            await db.SaveChangesAsync(userId);
+
+            var expectedLog = new List<AuditLogDetail> {
+                new AuditLogDetail{
+                    NewValue = newDescription,
+                    OriginalValue = oldDescription,
+                    ColumnName = "Description"
+                }}.ToArray();
+
+
+            //assert
+            entity.AssertAuditForModification(db, entity.Id, userId, expectedLog);
         }
     }
 }

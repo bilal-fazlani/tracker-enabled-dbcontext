@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using TrackerEnabledDbContext;
+using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Models;
 
 namespace TrackerEnabledDbContext.Identity.IntegrationTests
 {
-    public class TestTrackerIdentityContext : TrackerIdentityContext<IdentityUser>
+    public class TestTrackerIdentityContext : TrackerIdentityContext<IdentityUser>, ITestDbContext
     {
         public TestTrackerIdentityContext()
             : base("DefaultTestConnection")
@@ -17,5 +18,6 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
         public DbSet<ChildModel> Children { get; set; }
         public DbSet<ModelWithCompositeKey> ModelsWithCompositeKey { get; set; }
         public DbSet<ModelWithConventionalKey> ModelsWithConventionalKey { get; set; }
+        public DbSet<ModelWithSkipTracking> ModelsWithSkipTracking { get; set; }
     }
 }
