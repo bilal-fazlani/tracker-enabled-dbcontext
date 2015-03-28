@@ -6,8 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TrackerEnabledDbContext.Common.Models
 {
     /// <summary>
-    /// This model class is used to store the changes made in datbase values
-    /// For the audit purpose. Only selected tables can be tracked with the help of TrackChangesAttribute Attribute present in the common library.
+    ///     This model class is used to store the changes made in datbase values
+    ///     For the audit purpose. Only selected tables can be tracked with the help of TrackChangesAttribute Attribute present
+    ///     in the common library.
     /// </summary>
     public class AuditLog
     {
@@ -37,6 +38,5 @@ namespace TrackerEnabledDbContext.Common.Models
         public string RecordId { get; set; }
 
         public virtual ICollection<AuditLogDetail> LogDetails { get; set; }
-
     }
 }

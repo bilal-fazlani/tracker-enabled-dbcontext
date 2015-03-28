@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.EntityFramework;
 using TrackerEnabledDbContext.Common;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
@@ -11,9 +13,13 @@ namespace TrackerEnabledDbContext.Identity
 {
     public class TrackerIdentityContext<TUser> : IdentityDbContext<TUser>, ITrackerContext where TUser : IdentityUser
     {
-        public TrackerIdentityContext(): base() { }
+        public TrackerIdentityContext()
+        {
+        }
 
-        public TrackerIdentityContext(string connectionString) : base(connectionString) { }
+        public TrackerIdentityContext(string connectionString) : base(connectionString)
+        {
+        }
 
         // Summary:
         //     Constructor which takes the connection string to use
@@ -23,16 +29,19 @@ namespace TrackerEnabledDbContext.Identity
         //
         //   throwIfV1Schema:
         //     Will throw an exception if the schema matches that of Identity 1.0.0
-        public TrackerIdentityContext(string nameOrConnectionString, bool throwIfV1Schema) : base(nameOrConnectionString, throwIfV1Schema) { }
+        public TrackerIdentityContext(string nameOrConnectionString, bool throwIfV1Schema)
+            : base(nameOrConnectionString, throwIfV1Schema)
+        {
+        }
 
         public DbSet<AuditLog> AuditLog { get; set; }
 
         public DbSet<AuditLogDetail> LogDetails { get; set; }
 
         /// <summary>
-        /// This method saves the model changes to the database.
-        /// If the tracker for a table is active, it will also put the old values in tracking table.
-        /// Always use this method instead of SaveChanges() whenever possible.
+        ///     This method saves the model changes to the database.
+        ///     If the tracker for a table is active, it will also put the old values in tracking table.
+        ///     Always use this method instead of SaveChanges() whenever possible.
         /// </summary>
         /// <param name="userName">Username of the logged in identity</param>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
@@ -40,7 +49,7 @@ namespace TrackerEnabledDbContext.Identity
         {
             CommonTracker.AuditChanges(this, userName);
 
-            var addedEntries = CommonTracker.GetAdditions(this);
+            IEnumerable<DbEntityEntry> addedEntries = CommonTracker.GetAdditions(this);
             // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
             int result = base.SaveChanges();
             //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
@@ -53,35 +62,78 @@ namespace TrackerEnabledDbContext.Identity
         }
 
         /// <summary>
-        /// This method saves the model changes to the database.
-        /// If the tracker for a table is active, it will also put the old values in tracking table.
+        ///     This method saves the model changes to the database.
+        ///     If the tracker for a table is active, it will also put the old values in tracking table.
         /// </summary>
         /// <param name="userName">Username of the logged in identity</param>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public override int SaveChanges()
         {
-            return this.SaveChanges(null);
+            return SaveChanges(null);
+        }
+
+        /// <summary>
+        ///     Get all logs for the given model type
+        /// </summary>
+        /// <typeparam name="TTable">Type of domain model</typeparam>
+        /// <returns></returns>
+        public IQueryable<AuditLog> GetLogs<TTable>()
+        {
+            return CommonTracker.GetLogs<TTable>(this);
+        }
+
+        /// <summary>
+        ///     Get all logs for the given table name
+        /// </summary>
+        /// <param name="tableName">Name of table</param>
+        /// <returns></returns>
+        public IQueryable<AuditLog> GetLogs(string tableName)
+        {
+            return CommonTracker.GetLogs(this, tableName);
+        }
+
+        /// <summary>
+        ///     Get all logs for the given model type for a specific record
+        /// </summary>
+        /// <typeparam name="TTable">Type of domain model</typeparam>
+        /// <param name="primaryKey">primary key of record</param>
+        /// <returns></returns>
+        public IQueryable<AuditLog> GetLogs<TTable>(object primaryKey)
+        {
+            return CommonTracker.GetLogs<TTable>(this, primaryKey);
+        }
+
+        /// <summary>
+        ///     Get all logs for the given table name for a specific record
+        /// </summary>
+        /// <param name="tableName">table name</param>
+        /// <param name="primaryKey">primary key of record</param>
+        /// <returns></returns>
+        public IQueryable<AuditLog> GetLogs(string tableName, object primaryKey)
+        {
+            return CommonTracker.GetLogs(this, tableName, primaryKey);
         }
 
         #region -- Async --
+
         /// <summary>
-        /// Asynchronously saves all changes made in this context to the underlying database.
-        /// If the tracker for a table is active, it will also put the old values in tracking table.
+        ///     Asynchronously saves all changes made in this context to the underlying database.
+        ///     If the tracker for a table is active, it will also put the old values in tracking table.
         /// </summary>
         /// <param name="userName">Username of the logged in identity</param>
         /// <param name="cancellationToken">
-        /// A System.Threading.CancellationToken to observe while waiting for the task
-        /// to complete.
+        ///     A System.Threading.CancellationToken to observe while waiting for the task
+        ///     to complete.
         /// </param>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public async Task<int> SaveChangesAsync(object userName, CancellationToken cancellationToken)
         {
-            if (cancellationToken.IsCancellationRequested == true)
+            if (cancellationToken.IsCancellationRequested)
                 cancellationToken.ThrowIfCancellationRequested();
 
             CommonTracker.AuditChanges(this, userName);
 
-            var addedEntries = CommonTracker.GetAdditions(this);
+            IEnumerable<DbEntityEntry> addedEntries = CommonTracker.GetAdditions(this);
 
             // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
             int result = await base.SaveChangesAsync(cancellationToken);
@@ -96,98 +148,57 @@ namespace TrackerEnabledDbContext.Identity
         }
 
         /// <summary>
-        /// Asynchronously saves all changes made in this context to the underlying database.
-        /// If the tracker for a table is active, it will also put the old values in tracking table.
-        /// Always use this method instead of SaveChangesAsync() whenever possible.
+        ///     Asynchronously saves all changes made in this context to the underlying database.
+        ///     If the tracker for a table is active, it will also put the old values in tracking table.
+        ///     Always use this method instead of SaveChangesAsync() whenever possible.
         /// </summary>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
-        public async virtual Task<int> SaveChangesAsync(int userId)
+        public virtual async Task<int> SaveChangesAsync(int userId)
         {
-            return await this.SaveChangesAsync(userId, CancellationToken.None);
+            return await SaveChangesAsync(userId, CancellationToken.None);
         }
 
         /// <summary>
-        /// Asynchronously saves all changes made in this context to the underlying database.
-        /// If the tracker for a table is active, it will also put the old values in tracking table.
-        /// Always use this method instead of SaveChangesAsync() whenever possible.
+        ///     Asynchronously saves all changes made in this context to the underlying database.
+        ///     If the tracker for a table is active, it will also put the old values in tracking table.
+        ///     Always use this method instead of SaveChangesAsync() whenever possible.
         /// </summary>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
-        public async virtual Task<int> SaveChangesAsync(string userName)
+        public virtual async Task<int> SaveChangesAsync(string userName)
         {
-            return await this.SaveChangesAsync(userName, CancellationToken.None);
+            return await SaveChangesAsync(userName, CancellationToken.None);
         }
 
         /// <summary>
-        /// Asynchronously saves all changes made in this context to the underlying database.
-        /// If the tracker for a table is active, it will also put the old values in tracking table with null UserName.
+        ///     Asynchronously saves all changes made in this context to the underlying database.
+        ///     If the tracker for a table is active, it will also put the old values in tracking table with null UserName.
         /// </summary>
         /// <returns>
-        /// A task that represents the asynchronous save operation.  The task result
-        /// contains the number of objects written to the underlying database.
+        ///     A task that represents the asynchronous save operation.  The task result
+        ///     contains the number of objects written to the underlying database.
         /// </returns>
-        public async override Task<int> SaveChangesAsync()
+        public override async Task<int> SaveChangesAsync()
         {
-            return await this.SaveChangesAsync(null, CancellationToken.None);
+            return await SaveChangesAsync(null, CancellationToken.None);
         }
 
         /// <summary>
-        /// Asynchronously saves all changes made in this context to the underlying database.
-        /// If the tracker for a table is active, it will also put the old values in tracking table with null UserName.
+        ///     Asynchronously saves all changes made in this context to the underlying database.
+        ///     If the tracker for a table is active, it will also put the old values in tracking table with null UserName.
         /// </summary>
         /// <param name="cancellationToken">
-        /// A System.Threading.CancellationToken to observe while waiting for the task
-        /// to complete.
+        ///     A System.Threading.CancellationToken to observe while waiting for the task
+        ///     to complete.
         /// </param>
         /// <returns>
-        /// A task that represents the asynchronous save operation.  The task result
-        /// contains the number of objects written to the underlying database.
+        ///     A task that represents the asynchronous save operation.  The task result
+        ///     contains the number of objects written to the underlying database.
         /// </returns>
-        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            return await this.SaveChangesAsync(null ,cancellationToken);
+            return await SaveChangesAsync(null, cancellationToken);
         }
+
         #endregion --
-
-        /// <summary>
-        /// Get all logs for the given model type
-        /// </summary>
-        /// <typeparam name="TTable">Type of domain model</typeparam>
-        /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs<TTable>()
-        {
-            return CommonTracker.GetLogs<TTable>(this);
-        }
-
-        /// <summary>
-        /// Get all logs for the given table name
-        /// </summary>
-        /// <param name="tableName">Name of table</param>
-        /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs(string tableName)
-        {
-            return CommonTracker.GetLogs(this, tableName);
-        }
-
-        /// <summary>
-        /// Get all logs for the given model type for a specific record
-        /// </summary>
-        /// <typeparam name="TTable">Type of domain model</typeparam>
-        /// <param name="primaryKey">primary key of record</param>
-        /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs<TTable>(object primaryKey)
-        {
-            return CommonTracker.GetLogs<TTable>(this, primaryKey);
-        }
-
-        /// <summary>
-        /// Get all logs for the given table name for a specific record
-        /// </summary>
-        /// <param name="tableName">table name</param>
-        /// <param name="primaryKey">primary key of record</param>
-        /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs(string tableName, object primaryKey)
-        {
-            return CommonTracker.GetLogs(this, tableName, primaryKey);
-        }
     }
 }

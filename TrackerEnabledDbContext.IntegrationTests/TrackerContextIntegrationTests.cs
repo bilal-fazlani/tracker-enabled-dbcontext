@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Globalization;
-using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
-using TrackerEnabledDbContext.Common.Testing.Models;
-using TrackerEnabledDbContext.Common.Testing.Extensions;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using TrackerEnabledDbContext.Common.Testing;
+using System.Data.Entity;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Models;
-
+using TrackerEnabledDbContext.Common.Testing;
+using TrackerEnabledDbContext.Common.Testing.Extensions;
+using TrackerEnabledDbContext.Common.Testing.Models;
 
 namespace TrackerEnabledDbContext.IntegrationTests
 {
@@ -19,7 +19,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_save_model()
         {
-            var model = ObjectFactory<NormalModel>.Create();
+            NormalModel model = ObjectFactory<NormalModel>.Create();
             db.NormalModels.Add(model);
             db.SaveChanges();
             model.Id.AssertIsNotZero();
@@ -28,8 +28,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_save_when_entity_state_changed()
         {
-            var model = ObjectFactory<NormalModel>.Create();
-            db.Entry(model).State = System.Data.Entity.EntityState.Added;
+            NormalModel model = ObjectFactory<NormalModel>.Create();
+            db.Entry(model).State = EntityState.Added;
             db.SaveChanges();
             model.Id.AssertIsNotZero();
         }
@@ -37,8 +37,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public async Task Can_save_async()
         {
-            var model = ObjectFactory<NormalModel>.Create();
-            db.Entry(model).State = System.Data.Entity.EntityState.Added;
+            NormalModel model = ObjectFactory<NormalModel>.Create();
+            db.Entry(model).State = EntityState.Added;
             await db.SaveChangesAsync();
             model.Id.AssertIsNotZero();
         }
@@ -65,7 +65,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             var parent = new ParentModel();
             child.Parent = parent;
 
-            db.Entry(child).State = System.Data.Entity.EntityState.Added;
+            db.Entry(child).State = EntityState.Added;
 
             db.SaveChanges();
 
@@ -76,10 +76,10 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_track_addition_when_username_provided()
         {
-            var randomText = RandomText;
-            var userName = RandomText;
+            string randomText = RandomText;
+            string userName = RandomText;
 
-            var normalModel = ObjectFactory<NormalModel>.Create();
+            NormalModel normalModel = ObjectFactory<NormalModel>.Create();
             normalModel.Description = randomText;
             db.NormalModels.Add(normalModel);
             db.SaveChanges(userName);
@@ -93,9 +93,9 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_track_addition_when_usermane_not_provided()
         {
-            var randomText = RandomText;
+            string randomText = RandomText;
 
-            var normalModel = ObjectFactory<NormalModel>.Create();
+            NormalModel normalModel = ObjectFactory<NormalModel>.Create();
             normalModel.Description = randomText;
             db.NormalModels.Add(normalModel);
             db.SaveChanges();
@@ -109,12 +109,12 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_track_addition_when_state_changed_directly()
         {
-            var randomText = RandomText;
-            var userName = RandomText;
+            string randomText = RandomText;
+            string userName = RandomText;
 
-            var model = ObjectFactory<NormalModel>.Create();
+            NormalModel model = ObjectFactory<NormalModel>.Create();
             model.Description = randomText;
-            db.Entry(model).State = System.Data.Entity.EntityState.Added;
+            db.Entry(model).State = EntityState.Added;
             db.SaveChanges(userName);
 
             model.AssertAuditForAddition(db, model.Id, userName,
@@ -126,11 +126,11 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_track_deletion()
         {
-            var description = RandomText;
-            var userName = RandomText;
+            string description = RandomText;
+            string userName = RandomText;
 
             //add
-            var normalModel = ObjectFactory<NormalModel>.Create();
+            NormalModel normalModel = ObjectFactory<NormalModel>.Create();
             normalModel.Description = description;
             db.NormalModels.Add(normalModel);
             db.SaveChanges(userName);
@@ -149,17 +149,17 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_track_deletion_when_state_changed()
         {
-            var description = RandomText;
+            string description = RandomText;
 
             //add
-            var normalModel = ObjectFactory<NormalModel>.Create();
+            NormalModel normalModel = ObjectFactory<NormalModel>.Create();
             normalModel.Description = description;
             db.NormalModels.Add(normalModel);
             db.SaveChanges();
 
 
             //remove
-            db.Entry(normalModel).State = System.Data.Entity.EntityState.Deleted;
+            db.Entry(normalModel).State = EntityState.Deleted;
             db.SaveChanges();
 
 
@@ -174,22 +174,25 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public void Can_track_local_propery_change()
         {
             //add enity
-            var oldDescription = RandomText;
-            var newDescription = RandomText;
-            var entity = new NormalModel { Description = oldDescription };
-            db.Entry(entity).State = System.Data.Entity.EntityState.Added;
+            string oldDescription = RandomText;
+            string newDescription = RandomText;
+            var entity = new NormalModel {Description = oldDescription};
+            db.Entry(entity).State = EntityState.Added;
             db.SaveChanges();
 
             //modify entity
             entity.Description = newDescription;
             db.SaveChanges();
 
-            var expectedLog = new List<AuditLogDetail> {
-                new AuditLogDetail{
+            AuditLogDetail[] expectedLog = new List<AuditLogDetail>
+            {
+                new AuditLogDetail
+                {
                     NewValue = newDescription,
                     OriginalValue = oldDescription,
                     ColumnName = "Description"
-                }}.ToArray();
+                }
+            }.ToArray();
 
 
             //assert
@@ -201,7 +204,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         {
             //add enitties
             var parent1 = new ParentModel();
-            var child = new ChildModel { Parent = parent1 };
+            var child = new ChildModel {Parent = parent1};
             db.Children.Add(child);
             db.SaveChanges();
 
@@ -219,12 +222,15 @@ namespace TrackerEnabledDbContext.IntegrationTests
             child.Parent = parent2;
             db.SaveChanges();
 
-            var expectedLog = new List<AuditLogDetail> {
-                new AuditLogDetail{
+            AuditLogDetail[] expectedLog = new List<AuditLogDetail>
+            {
+                new AuditLogDetail
+                {
                     NewValue = parent2.Id.ToString(),
                     OriginalValue = parent1.Id.ToString(),
                     ColumnName = "ParentId"
-                }}.ToArray();
+                }
+            }.ToArray();
 
             //assert change
             child.AssertAuditForModification(db, child.Id, null, expectedLog);
@@ -236,7 +242,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             string username = RandomText;
 
             //add enitties
-            var entity = new ModelWithSkipTracking { TrackedProperty = Guid.NewGuid(), UnTrackedProperty = RandomText };
+            var entity = new ModelWithSkipTracking {TrackedProperty = Guid.NewGuid(), UnTrackedProperty = RandomText};
             db.ModelsWithSkipTracking.Add(entity);
             await db.SaveChangesAsync(username, CancellationToken.None);
 
@@ -253,13 +259,13 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_track_composite_keys()
         {
-            var key1 = RandomText;
-            var key2 = RandomText;
-            var userName = RandomText;
-            var descr = RandomText;
+            string key1 = RandomText;
+            string key2 = RandomText;
+            string userName = RandomText;
+            string descr = RandomText;
 
 
-            var entity = ObjectFactory<ModelWithCompositeKey>.Create();
+            ModelWithCompositeKey entity = ObjectFactory<ModelWithCompositeKey>.Create();
             entity.Description = descr;
             entity.Key1 = key1;
             entity.Key2 = key2;
@@ -280,19 +286,19 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public async Task Can_get_logs_by_table_name()
         {
             string descr = RandomText;
-            var model = ObjectFactory<NormalModel>.Create();
+            NormalModel model = ObjectFactory<NormalModel>.Create();
             model.Description = descr;
 
             db.NormalModels.Add(model);
             await db.SaveChangesAsync(CancellationToken.None);
             model.Id.AssertIsNotZero();
 
-            var logs = db.GetLogs("NormalModels", model.Id)
+            IEnumerable<AuditLog> logs = db.GetLogs("NormalModels", model.Id)
                 .AssertCountIsNotZero("logs not found");
 
-            var lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
+            AuditLog lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
 
-            var details = lastLog.LogDetails
+            IEnumerable<AuditLogDetail> details = lastLog.LogDetails
                 .AssertIsNotNull("log details is null")
                 .AssertCountIsNotZero("no log details found");
         }
@@ -301,19 +307,19 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public async Task Can_get_logs_by_entity_type()
         {
             string descr = RandomText;
-            var model = ObjectFactory<NormalModel>.Create();
+            NormalModel model = ObjectFactory<NormalModel>.Create();
             model.Description = descr;
 
             db.NormalModels.Add(model);
             await db.SaveChangesAsync(CancellationToken.None);
             model.Id.AssertIsNotZero();
 
-            var logs = db.GetLogs<NormalModel>(model.Id)
+            IEnumerable<AuditLog> logs = db.GetLogs<NormalModel>(model.Id)
                 .AssertCountIsNotZero("logs not found");
 
-            var lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
+            AuditLog lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
 
-            var details = lastLog.LogDetails
+            IEnumerable<AuditLogDetail> details = lastLog.LogDetails
                 .AssertIsNotNull("log details is null")
                 .AssertCountIsNotZero("no log details found");
         }
@@ -322,45 +328,48 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public async Task Can_get_all_logs()
         {
             string descr = RandomText;
-            var model = ObjectFactory<NormalModel>.Create();
+            NormalModel model = ObjectFactory<NormalModel>.Create();
             model.Description = descr;
 
             db.NormalModels.Add(model);
             await db.SaveChangesAsync(RandomText);
             model.Id.AssertIsNotZero();
 
-            var logs = db.GetLogs("NormalModels")
+            IEnumerable<AuditLog> logs = db.GetLogs("NormalModels")
                 .AssertCountIsNotZero("logs not found");
 
-            var lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
+            AuditLog lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
 
-            var details = lastLog.LogDetails
+            IEnumerable<AuditLogDetail> details = lastLog.LogDetails
                 .AssertIsNotNull("log details is null")
                 .AssertCountIsNotZero("no log details found");
         }
-        
+
         [TestMethod]
         public async Task Can_save_changes_with_userID()
         {
             int userId = RandomNumber;
 
             //add enity
-            var oldDescription = RandomText;
-            var newDescription = RandomText;
-            var entity = new NormalModel { Description = oldDescription };
-            db.Entry(entity).State = System.Data.Entity.EntityState.Added;
+            string oldDescription = RandomText;
+            string newDescription = RandomText;
+            var entity = new NormalModel {Description = oldDescription};
+            db.Entry(entity).State = EntityState.Added;
             db.SaveChanges();
 
             //modify entity
             entity.Description = newDescription;
             await db.SaveChangesAsync(userId);
 
-            var expectedLog = new List<AuditLogDetail> {
-                new AuditLogDetail{
+            AuditLogDetail[] expectedLog = new List<AuditLogDetail>
+            {
+                new AuditLogDetail
+                {
                     NewValue = newDescription,
                     OriginalValue = oldDescription,
                     ColumnName = "Description"
-                }}.ToArray();
+                }
+            }.ToArray();
 
 
             //assert

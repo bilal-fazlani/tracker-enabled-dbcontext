@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using System.Data.Entity;
-using TrackerEnabledDbContext;
+﻿using System.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Models;
 

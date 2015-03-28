@@ -1,6 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Data.Entity;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TrackerEnabledDbContext.Common.Testing
 {
@@ -10,26 +10,20 @@ namespace TrackerEnabledDbContext.Common.Testing
         public TContext db = new TContext();
         public DbContextTransaction transaction = null;
 
-        [TestInitialize]
-        public virtual void Initialize()
-        {
-            transaction = db.Database.BeginTransaction();
-        }
-
         protected string RandomText
         {
-            get
-            {
-                return Guid.NewGuid().ToString();
-            }
+            get { return Guid.NewGuid().ToString(); }
         }
 
         protected int RandomNumber
         {
-            get
-            {
-                return new Random().Next();
-            }
+            get { return new Random().Next(); }
+        }
+
+        [TestInitialize]
+        public virtual void Initialize()
+        {
+            transaction = db.Database.BeginTransaction();
         }
 
         [TestCleanup]

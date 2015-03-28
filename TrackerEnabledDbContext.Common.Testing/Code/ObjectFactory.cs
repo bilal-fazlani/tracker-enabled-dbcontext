@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TrackerEnabledDbContext.Common.Testing
 {
-    public static class ObjectFactory<ObjectType> where ObjectType :class
+    public static class ObjectFactory<ObjectType> where ObjectType : class
     {
         static ObjectFactory()
         {

@@ -1,9 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TrackerEnabledDbContext.Common.Testing.Extensions
 {
@@ -20,13 +18,13 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
             Assert.AreNotEqual(0, value, errorMessage ?? "given value is zero");
             return value;
         }
-        
+
         public static long AssertIsNotZero(this long value, string errorMessage = null)
         {
             Assert.AreNotEqual(0, value, errorMessage ?? "given value is zero");
             return value;
         }
-        
+
         public static double AssertIsNotZero(this double value, string errorMessage = null)
         {
             Assert.AreNotEqual(0, value, errorMessage ?? "given value is zero");
@@ -39,13 +37,15 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
             return collection;
         }
 
-        public static IEnumerable<T> AssertAny<T>(this IEnumerable<T> collection, Func<T,bool> predicate, string errorMessage = null)
+        public static IEnumerable<T> AssertAny<T>(this IEnumerable<T> collection, Func<T, bool> predicate,
+            string errorMessage = null)
         {
             if (!collection.Any(predicate)) Assert.Fail(errorMessage);
             return collection;
         }
 
-        public static IEnumerable<T> AssertCount<T>(this IEnumerable<T> collection, int expectedCount, string errorMessage = null)
+        public static IEnumerable<T> AssertCount<T>(this IEnumerable<T> collection, int expectedCount,
+            string errorMessage = null)
         {
             Assert.AreEqual(expectedCount, collection.Count(), errorMessage);
             return collection;

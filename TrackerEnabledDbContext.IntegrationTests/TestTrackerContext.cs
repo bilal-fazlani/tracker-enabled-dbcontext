@@ -1,5 +1,4 @@
 ﻿using System.Data.Entity;
-using TrackerEnabledDbContext;
 using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Models;
 

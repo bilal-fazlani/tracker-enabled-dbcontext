@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using TrackerEnabledDbContext.Common.Extensions;
@@ -16,17 +17,21 @@ namespace TrackerEnabledDbContext.Common
             _dbEntry = dbEntry;
         }
 
+        public void Dispose()
+        {
+        }
+
         public AuditLog CreateLogRecord(object userName, EventType eventType, ITrackerContext context)
         {
-            var entityType = _dbEntry.Entity.GetType().GetEntityType();
-            var changeTime = DateTime.UtcNow;
+            Type entityType = _dbEntry.Entity.GetType().GetEntityType();
+            DateTime changeTime = DateTime.UtcNow;
 
             if (!entityType.IsTrackingEnabled())
             {
                 return null;
             }
 
-            var keyNames = entityType.GetPrimaryKeyNames(context);
+            IEnumerable<string> keyNames = entityType.GetPrimaryKeyNames(context);
 
             var newlog = new AuditLog
             {
@@ -36,18 +41,13 @@ namespace TrackerEnabledDbContext.Common
                 TableName = entityType.GetTableName(context),
                 RecordId = _dbEntry.GetPrimaryKeyValues(keyNames).ToString()
             };
-            
+
             using (var detailsAuditor = new LogDetailsAuditor(_dbEntry, newlog))
             {
                 newlog.LogDetails = detailsAuditor.CreateLogDetails().ToList();
             }
 
             return newlog;
-        }
-
-        public void Dispose()
-        {
-            
         }
     }
 }

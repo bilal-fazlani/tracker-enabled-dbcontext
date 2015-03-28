@@ -17,6 +17,7 @@ namespace TrackerEnabledDbContext.Common.Models
         public string NewValue { get; set; }
 
         public virtual int AuditLogId { get; set; }
+
         [ForeignKey("AuditLogId")]
         public virtual AuditLog Log { get; set; }
     }

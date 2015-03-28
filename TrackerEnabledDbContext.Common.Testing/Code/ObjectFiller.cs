@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TrackerEnabledDbContext.Common.Testing
 {
     public static class ObjectFiller<ObjectType> where ObjectType : class
     {
-        static Predicate<string> _propertyNameIgnoreRule = null;
+        private static Predicate<string> _propertyNameIgnoreRule;
 
         public static void IgnorePropertiesWhen(Predicate<string> propertyNameIgnoreRule)
         {

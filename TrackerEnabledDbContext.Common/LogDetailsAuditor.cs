@@ -18,11 +18,15 @@ namespace TrackerEnabledDbContext.Common
             _log = log;
         }
 
+        public void Dispose()
+        {
+        }
+
         public IEnumerable<AuditLogDetail> CreateLogDetails()
         {
-            var type = _dbEntry.Entity.GetType().GetEntityType();
+            Type type = _dbEntry.Entity.GetType().GetEntityType();
 
-            foreach (var propertyName in _dbEntry.OriginalValues.PropertyNames)
+            foreach (string propertyName in _dbEntry.OriginalValues.PropertyNames)
             {
                 if (type.IsTrackingEnabled(propertyName) && IsValueChanged(propertyName))
                 {
@@ -52,7 +56,7 @@ namespace TrackerEnabledDbContext.Common
             }
             else
             {
-                var value = _dbEntry.GetDatabaseValue(propertyName);
+                object value = _dbEntry.GetDatabaseValue(propertyName);
                 originalValue = (value != null) ? value.ToString() : null;
             }
 
@@ -65,20 +69,16 @@ namespace TrackerEnabledDbContext.Common
 
             try
             {
-                var value = _dbEntry.GetCurrentValue(propertyName);
+                object value = _dbEntry.GetCurrentValue(propertyName);
                 newValue = (value != null) ? value.ToString() : null;
             }
-            catch (InvalidOperationException) // It will be invalid operation when its in deleted state. in that case, new value should be null
+            catch (InvalidOperationException)
+                // It will be invalid operation when its in deleted state. in that case, new value should be null
             {
                 newValue = null;
             }
 
             return newValue;
-        }
-
-        public void Dispose()
-        {
-            
         }
     }
 }

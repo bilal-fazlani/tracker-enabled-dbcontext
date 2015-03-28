@@ -1,11 +1,8 @@
+using System.Data.Entity.Migrations;
+
 namespace TrackerEnabledDbContext.Identity.IntegrationTests.Migrations
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
-
-    internal sealed class Configuration : DbMigrationsConfiguration<TrackerEnabledDbContext.Identity.IntegrationTests.TestTrackerIdentityContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<TestTrackerIdentityContext>
     {
         public Configuration()
         {
@@ -13,7 +10,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests.Migrations
             AutomaticMigrationDataLossAllowed = true;
         }
 
-        protected override void Seed(TrackerEnabledDbContext.Identity.IntegrationTests.TestTrackerIdentityContext context)
+        protected override void Seed(TestTrackerIdentityContext context)
         {
             //  This method will be called after migrating to the latest version.
 
