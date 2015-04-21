@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedLogDetailsAuditor.cs" />
     <Compile Include="Attributes\SkipTrackingAttribute.cs" />
     <Compile Include="Attributes\TrackChangesAttribute.cs" />
     <Compile Include="Extensions\DbEntityEntryExtensions.cs" />
