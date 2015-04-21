@@ -42,7 +42,9 @@ namespace TrackerEnabledDbContext.Common
                 RecordId = _dbEntry.GetPrimaryKeyValues(keyNames).ToString()
             };
 
-            using (var detailsAuditor = new LogDetailsAuditor(_dbEntry, newlog))
+            using (var detailsAuditor = (eventType == EventType.Added)
+                ? new AddedLogDetailsAuditor(_dbEntry, newlog)
+                : new LogDetailsAuditor(_dbEntry, newlog))
             {
                 newlog.LogDetails = detailsAuditor.CreateLogDetails().ToList();
             }
