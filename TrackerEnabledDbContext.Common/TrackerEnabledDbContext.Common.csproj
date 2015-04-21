@@ -60,6 +60,8 @@
     <Compile Include="Extensions\DbEntityEntryExtensions.cs" />
     <Compile Include="CommonTracker.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Fluent\TrackerColumnConfigurator.cs" />
+    <Compile Include="Fluent\TrackerConfiguration.cs" />
     <Compile Include="Interfaces\IDbContext.cs" />
     <Compile Include="Interfaces\ITrackerContext.cs" />
     <Compile Include="LogAuditor.cs" />
