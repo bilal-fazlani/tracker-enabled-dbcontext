@@ -187,7 +187,7 @@ namespace TrackerEnabledDbContext.Common.Extensions
             string dbsetPropertyName =
                 context.GetType()
                     .GetProperties()
-                    .Single(x => x.PropertyType.GenericTypeArguments.Any(y => y == entityType))
+                    .Single(x => x.PropertyType.GenericTypeArguments.Any(y => y == entityType || entityType.IsSubclassOf(y)))
                     .Name;
 
             // Get table name (if it has a Table attribute, use that, otherwise dbset property name)
