@@ -258,6 +258,33 @@ namespace TrackerEnabledDbContext.IntegrationTests
         }
 
         [TestMethod]
+        public void Can_skip_tracking_of_adds_but_should_track_deletes()
+        {
+            string username = RandomText;
+
+            //add enitties
+            var entity = new ModelWithDeleteOnlyTracking { TrackedProperty = Guid.NewGuid(), UnTrackedProperty = RandomText };
+            db.ModelsWithDeleteOnlyTracking.Add(entity);
+            db.SaveChanges(username);
+
+            //assert enity added
+            entity.Id.AssertIsNotZero();
+
+            // assert no audit for addition
+            entity.AssertNoAuditForAddition(db, entity.Id, username, null);
+
+            //remove
+            db.Entry(entity).State = EntityState.Deleted;
+            db.SaveChanges(username);
+
+            //assert deletion
+            entity.AssertAuditForDeletion(db, entity.Id, username,
+                new KeyValuePair<string, string>("TrackedProperty", entity.TrackedProperty.ToString()),
+                new KeyValuePair<string, string>("Id", entity.Id.ToString(CultureInfo.InvariantCulture))
+                );
+        }
+
+        [TestMethod]
         public void Can_track_composite_keys()
         {
             string key1 = RandomText;

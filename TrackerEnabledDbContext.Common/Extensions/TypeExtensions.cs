@@ -10,6 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using TrackerEnabledDbContext.Common.Interfaces;
+using TrackerEnabledDbContext.Common.Models;
 
 namespace TrackerEnabledDbContext.Common.Extensions
 {
@@ -106,9 +107,9 @@ namespace TrackerEnabledDbContext.Common.Extensions
             return propInfo;
         }
 
-        public static bool IsTrackingEnabled(this Type type)
+        public static bool IsTrackingEnabled(this Type type, EventType eventType)
         {
-            return GetFromCache(TableTrackerCache, type.FullName, k => TableTrackerIndicatorFactory(type));
+            return GetFromCache(TableTrackerCache, type.FullName + eventType.ToString(), k => TableTrackerIndicatorFactory(type, eventType));
         }
 
         public static bool IsTrackingEnabled(this Type type, string propertyName)
@@ -161,12 +162,17 @@ namespace TrackerEnabledDbContext.Common.Extensions
             throw new Exception(string.Format("could not find type '{0}' from objectContext", type.FullName));
         }
 
-        private static bool TableTrackerIndicatorFactory(Type type)
+        private static bool TableTrackerIndicatorFactory(Type type, EventType eventType)
         {
             Type entityType = type.GetEntityType();
             TrackChangesAttribute trackChangesAttribute =
                 entityType.GetCustomAttributes(false).OfType<TrackChangesAttribute>().SingleOrDefault();
-            return trackChangesAttribute != null && trackChangesAttribute.Enabled;
+            return trackChangesAttribute != null && trackChangesAttribute.Enabled && IsValidEventTypeToTrackChanges(trackChangesAttribute, eventType);
+        }
+
+        private static bool IsValidEventTypeToTrackChanges(this TrackChangesAttribute attr, EventType eventType)
+        {
+            return attr != null && (attr.ChangeTypes == null || attr.ChangeTypes.Contains(eventType));
         }
 
         private static bool ColumnTrackerIndicatorFactory(Type type, string propertyName)
@@ -233,7 +239,9 @@ namespace TrackerEnabledDbContext.Common.Extensions
         #region internal -
         internal static void EnableTableTracking<TEntity>()
         {
-            TableTrackerCache.TryAdd(typeof(TEntity).FullName, true);
+            TableTrackerCache.TryAdd(typeof(TEntity).FullName + EventType.Added.ToString(), true);
+            TableTrackerCache.TryAdd(typeof(TEntity).FullName + EventType.Deleted.ToString(), true);
+            TableTrackerCache.TryAdd(typeof(TEntity).FullName + EventType.Modified.ToString(), true);
 
             var propertyNames = GetEntityColumnNames<TEntity>();
             foreach (var propertyName in propertyNames)

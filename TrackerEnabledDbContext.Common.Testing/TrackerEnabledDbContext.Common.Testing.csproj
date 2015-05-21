@@ -71,6 +71,7 @@
     <Compile Include="Models\ChildModel.cs" />
     <Compile Include="Models\ModelWithCompositeKey.cs" />
     <Compile Include="Models\ModelWithConventionalKey.cs" />
+    <Compile Include="Models\ModelWithDeleteOnlyTracking.cs" />
     <Compile Include="Models\ModelWithSkipTracking.cs" />
     <Compile Include="Models\NormalModel.cs" />
     <Compile Include="Models\ParentModel.cs" />

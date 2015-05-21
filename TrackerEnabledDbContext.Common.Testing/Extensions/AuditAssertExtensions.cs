@@ -7,6 +7,14 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
 {
     public static class AuditAssertExtensions
     {
+        public static T AssertNoAuditForAddition<T>(this T entity, ITrackerContext db, object entityId,
+            string userName = null, params KeyValuePair<string, string>[] newValues)
+        {
+            IEnumerable<AuditLog> logs = db.GetLogs<T>(entityId)
+                .AssertCount(0, "log count is not zero");
+
+            return entity;
+        }
         public static T AssertAuditForAddition<T>(this T entity, ITrackerContext db, object entityId,
             string userName = null, params KeyValuePair<string, string>[] newValues)
         {
