@@ -17,5 +17,6 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public DbSet<ModelWithCompositeKey> ModelsWithCompositeKey { get; set; }
         public DbSet<ModelWithConventionalKey> ModelsWithConventionalKey { get; set; }
         public DbSet<ModelWithSkipTracking> ModelsWithSkipTracking { get; set; }
+        public DbSet<ModelWithDeleteOnlyTracking> ModelsWithDeleteOnlyTracking { get; set; }
     }
 }

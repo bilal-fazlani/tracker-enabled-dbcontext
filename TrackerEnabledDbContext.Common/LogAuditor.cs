@@ -26,7 +26,7 @@ namespace TrackerEnabledDbContext.Common
             Type entityType = _dbEntry.Entity.GetType().GetEntityType();
             DateTime changeTime = DateTime.UtcNow;
 
-            if (!entityType.IsTrackingEnabled())
+            if (!entityType.IsTrackingEnabled(eventType))
             {
                 return null;
             }
