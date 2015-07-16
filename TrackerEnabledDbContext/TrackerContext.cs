@@ -33,7 +33,7 @@ namespace TrackerEnabledDbContext
 
         /// <summary>
         ///     This method saves the model changes to the database.
-        ///     If the tracker for a table is active, it will also put the old values in tracking table.
+        ///     If the tracker for an entity is active, it will also put the old values in tracking table.
         ///     Always use this method instead of SaveChanges() whenever possible.
         /// </summary>
         /// <param name="userName">Username of the logged in identity</param>
@@ -56,7 +56,7 @@ namespace TrackerEnabledDbContext
 
         /// <summary>
         ///     This method saves the model changes to the database.
-        ///     If the tracker for a table is active, it will also put the old values in tracking table.
+        ///     If the tracker for an entity is active, it will also put the old values in tracking table.
         /// </summary>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public override int SaveChanges()
@@ -75,13 +75,13 @@ namespace TrackerEnabledDbContext
         }
 
         /// <summary>
-        ///     Get all logs for the given table name
+        ///     Get all logs for the given entity name
         /// </summary>
-        /// <param name="tableName">Name of table</param>
+        /// <param name="entityName">full name of entity</param>
         /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs(string tableName)
+        public IQueryable<AuditLog> GetLogs(string entityName)
         {
-            return CommonTracker.GetLogs(this, tableName);
+            return CommonTracker.GetLogs(this, entityName);
         }
 
         /// <summary>
@@ -96,21 +96,21 @@ namespace TrackerEnabledDbContext
         }
 
         /// <summary>
-        ///     Get all logs for the given table name for a specific record
+        ///     Get all logs for the given entity name for a specific record
         /// </summary>
-        /// <param name="tableName">table name</param>
+        /// <param name="entityName">full name of entity</param>
         /// <param name="primaryKey">primary key of record</param>
         /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs(string tableName, object primaryKey)
+        public IQueryable<AuditLog> GetLogs(string entityName, object primaryKey)
         {
-            return CommonTracker.GetLogs(this, tableName, primaryKey);
+            return CommonTracker.GetLogs(this, entityName, primaryKey);
         }
 
         #region -- Async --
 
         /// <summary>
         ///     Asynchronously saves all changes made in this context to the underlying database.
-        ///     If the tracker for a table is active, it will also put the old values in tracking table.
+        ///     If the tracker for an entity is active, it will also put the old values in tracking table.
         /// </summary>
         /// <param name="userName">Username of the logged in identity</param>
         /// <param name="cancellationToken">
@@ -141,7 +141,7 @@ namespace TrackerEnabledDbContext
 
         /// <summary>
         ///     Asynchronously saves all changes made in this context to the underlying database.
-        ///     If the tracker for a table is active, it will also put the old values in tracking table.
+        ///     If the tracker for an entity is active, it will also put the old values in tracking table.
         ///     Always use this method instead of SaveChangesAsync() whenever possible.
         /// </summary>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
@@ -152,7 +152,7 @@ namespace TrackerEnabledDbContext
 
         /// <summary>
         ///     Asynchronously saves all changes made in this context to the underlying database.
-        ///     If the tracker for a table is active, it will also put the old values in tracking table.
+        ///     If the tracker for an entity is active, it will also put the old values in tracking table.
         ///     Always use this method instead of SaveChangesAsync() whenever possible.
         /// </summary>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
@@ -163,7 +163,7 @@ namespace TrackerEnabledDbContext
 
         /// <summary>
         ///     Asynchronously saves all changes made in this context to the underlying database.
-        ///     If the tracker for a table is active, it will also put the old values in tracking table with null UserName.
+        ///     If the tracker for an entity is active, it will also put the old values in tracking table with null UserName.
         /// </summary>
         /// <returns>
         ///     A task that represents the asynchronous save operation.  The task result
@@ -176,7 +176,7 @@ namespace TrackerEnabledDbContext
 
         /// <summary>
         ///     Asynchronously saves all changes made in this context to the underlying database.
-        ///     If the tracker for a table is active, it will also put the old values in tracking table with null UserName.
+        ///     If the tracker for an entity is active, it will also put the old values in tracking table with null UserName.
         /// </summary>
         /// <param name="cancellationToken">
         ///     A System.Threading.CancellationToken to observe while waiting for the task

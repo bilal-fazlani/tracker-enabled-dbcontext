@@ -100,7 +100,7 @@ namespace TrackerEnabledDbContext.Common
         }
 
         /// <summary>
-        ///     Get all logs for the given table name for a specific record
+        ///     Get all logs for the given entity name for a specific record
         /// </summary>
         /// <param name="entityTypeName">entity type name</param>
         /// <param name="primaryKey">primary key of record</param>

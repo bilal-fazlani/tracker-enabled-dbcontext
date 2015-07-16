@@ -117,12 +117,6 @@ namespace TrackerEnabledDbContext.Common.Extensions
             return GetFromCache(ColumnTrackerCache, key, k => ColumnTrackerIndicatorFactory(type, propertyName));
         }
 
-        //public static string GetTableName(this Type entityType, ITrackerContext context)
-        //{
-        //    string key = entityType.FullName;
-        //    return GetFromCache(TableNameCache, key, k => TableNameFactory(entityType, context));
-        //}
-
         public static string GetPropertyName(this Type type, string propertyName)
         {
             string key = GetFullPropertyName(type, propertyName);
