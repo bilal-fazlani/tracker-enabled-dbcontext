@@ -23,7 +23,7 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
             foreach (var keyValuePair in newValues)
             {
                 lastLog.LogDetails.AssertAny(x => x.NewValue == keyValuePair.Value
-                                                  && x.ColumnName == keyValuePair.Key);
+                                                  && x.PropertyName == keyValuePair.Key);
             }
 
             return entity;
@@ -45,7 +45,7 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
             foreach (var keyValuePair in oldValues)
             {
                 lastLog.LogDetails.AssertAny(x => x.OriginalValue == keyValuePair.Value
-                                                  && x.ColumnName == keyValuePair.Key);
+                                                  && x.PropertyName == keyValuePair.Key);
             }
 
             return entity;
@@ -68,7 +68,7 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
             foreach (AuditLogDetail logdetail in logdetails)
             {
                 lastLog.LogDetails.AssertAny(x => x.OriginalValue == logdetail.OriginalValue
-                                                  && x.ColumnName == logdetail.ColumnName
+                                                  && x.PropertyName == logdetail.PropertyName
                                                   && x.NewValue == logdetail.NewValue,
                     "could not find an expected auditlog detail");
             }

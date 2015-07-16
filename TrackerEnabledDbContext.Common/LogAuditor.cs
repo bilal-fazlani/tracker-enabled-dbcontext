@@ -38,7 +38,7 @@ namespace TrackerEnabledDbContext.Common
                 UserName = userName != null ? userName.ToString() : null,
                 EventDateUTC = changeTime,
                 EventType = eventType,
-                TableName = entityType.GetTableName(context),
+                TypeFullName = entityType.FullName,
                 RecordId = _dbEntry.GetPrimaryKeyValues(keyNames).ToString()
             };
 

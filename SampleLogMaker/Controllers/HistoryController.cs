@@ -37,9 +37,9 @@ namespace SampleLogMaker.Controllers
                             Date = log.EventDateUTC.ToLocalTime().DateTime,
                             LogId = log.AuditLogId,
                             RecordId = log.RecordId,
-                            TableName = log.TableName,
+                            TypeFullName = log.TypeFullName,
                             UserName = log.UserName,
-                            Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.ColumnName, NewValue = x.NewValue })
+                            Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.PropertyName, NewValue = x.NewValue })
                         });
                         break;
 
@@ -49,20 +49,20 @@ namespace SampleLogMaker.Controllers
                             Date = log.EventDateUTC.ToLocalTime().DateTime,
                             LogId = log.AuditLogId,
                             RecordId = log.RecordId,
-                            TableName = log.TableName,
+                            TypeFullName = log.TypeFullName,
                             UserName = log.UserName,
-                            Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.ColumnName, OldValue = x.OriginalValue })
+                            Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.PropertyName, OldValue = x.OriginalValue })
                         });
                         break;
 
                     case EventType.Modified: //modified
                         vm.Add(new ChangedHistoryVM
                         {
-                            Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.ColumnName, NewValue = x.NewValue, OldValue = x.OriginalValue }),
+                            Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.PropertyName, NewValue = x.NewValue, OldValue = x.OriginalValue }),
                             Date = log.EventDateUTC.ToLocalTime().DateTime,
                             LogId = log.AuditLogId,
                             RecordId = log.RecordId,
-                            TableName = log.TableName,
+                            TypeFullName = log.TypeFullName,
                             UserName = log.UserName,
                         });
                         break;

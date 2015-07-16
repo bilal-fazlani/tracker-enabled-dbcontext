@@ -117,13 +117,13 @@ namespace TrackerEnabledDbContext.Common.Extensions
             return GetFromCache(ColumnTrackerCache, key, k => ColumnTrackerIndicatorFactory(type, propertyName));
         }
 
-        public static string GetTableName(this Type entityType, ITrackerContext context)
-        {
-            string key = entityType.FullName;
-            return GetFromCache(TableNameCache, key, k => TableNameFactory(entityType, context));
-        }
+        //public static string GetTableName(this Type entityType, ITrackerContext context)
+        //{
+        //    string key = entityType.FullName;
+        //    return GetFromCache(TableNameCache, key, k => TableNameFactory(entityType, context));
+        //}
 
-        public static string GetColumnName(this Type type, string propertyName)
+        public static string GetPropertyName(this Type type, string propertyName)
         {
             string key = GetFullPropertyName(type, propertyName);
             return GetFromCache(ColumnNameCache, key, k => ColumnNameFactory(type, propertyName));
@@ -133,7 +133,7 @@ namespace TrackerEnabledDbContext.Common.Extensions
 
         #region Private Methods
 
-        private static string GetColumnTrackerCacheKey<TSource>(Expression<Func<TSource, object>> propertyLambda)
+        private static string GetPropertyTrackerCacheKey<TSource>(Expression<Func<TSource, object>> propertyLambda)
         {
             var propInfo = GetPropertyInfo(propertyLambda);
             string propertyName = propInfo.Name;
@@ -165,7 +165,7 @@ namespace TrackerEnabledDbContext.Common.Extensions
         {
             Type entityType = type.GetEntityType();
             TrackChangesAttribute trackChangesAttribute =
-                entityType.GetCustomAttributes(false).OfType<TrackChangesAttribute>().SingleOrDefault();
+                entityType.GetCustomAttributes(true).OfType<TrackChangesAttribute>().SingleOrDefault();
             return trackChangesAttribute != null && trackChangesAttribute.Enabled;
         }
 
@@ -178,21 +178,6 @@ namespace TrackerEnabledDbContext.Common.Extensions
                     .OfType<SkipTrackingAttribute>()
                     .SingleOrDefault();
             return skipTrackingAttribute == null || !skipTrackingAttribute.Enabled;
-        }
-
-        private static string TableNameFactory(Type entityType, ITrackerContext context)
-        {
-            var tableAttribute =
-                entityType.GetCustomAttributes(typeof(TableAttribute), false).SingleOrDefault() as TableAttribute;
-            string dbsetPropertyName =
-                context.GetType()
-                    .GetProperties()
-                    .Single(x => x.PropertyType.GenericTypeArguments.Any(y => y == entityType || entityType.IsSubclassOf(y)))
-                    .Name;
-
-            // Get table name (if it has a Table attribute, use that, otherwise dbset property name)
-            string tableName = (tableAttribute != null) ? tableAttribute.Name : dbsetPropertyName;
-            return tableName;
         }
 
         private static string ColumnNameFactory(this Type type, string propertyName)
@@ -244,7 +229,7 @@ namespace TrackerEnabledDbContext.Common.Extensions
 
         internal static void SkipTrackingFor<TSource>(Expression<Func<TSource, object>> propertyLambda)
         {
-            var key = GetColumnTrackerCacheKey(propertyLambda);
+            var key = GetPropertyTrackerCacheKey(propertyLambda);
             bool removeSuccess;
             TableTrackerCache.TryRemove(key, out removeSuccess);
         }

@@ -10,7 +10,7 @@ namespace TrackerEnabledDbContext.Common.Models
 
         [Required]
         [MaxLength(256)]
-        public string ColumnName { get; set; }
+        public string PropertyName { get; set; }
 
         public string OriginalValue { get; set; }
 

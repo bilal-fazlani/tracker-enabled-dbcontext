@@ -6,12 +6,12 @@ namespace System.ComponentModel.DataAnnotations
     ///     Enables tracking of Entity tables.
     ///     Place this attribute on a entity class which you want to track for audit.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class TrackChangesAttribute : Attribute
     {
-        public TrackChangesAttribute(bool trackChnages = true)
+        public TrackChangesAttribute(bool trackChanges = true)
         {
-            Enabled = trackChnages;
+            Enabled = trackChanges;
         }
 
         public bool Enabled { get; set; }
