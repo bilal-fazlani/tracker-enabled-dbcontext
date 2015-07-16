@@ -54,12 +54,10 @@ namespace TrackerEnabledDbContext.Common
         }
 
 
-
-
         private static IEnumerable<string> EntityTypeNames<TEntity>()
         {
             Type entityType = typeof(TEntity);
-            return typeof(TEntity).Assembly.GetTypes().Where(type => type.IsSubclassOf(entityType) || type.Name == entityType.Name).Select(m => m.FullName);
+            return typeof(TEntity).Assembly.GetTypes().Where(t => t.IsSubclassOf(entityType) || t.FullName == entityType.FullName).Select(m => m.FullName);
         }
 
         /// <summary>
