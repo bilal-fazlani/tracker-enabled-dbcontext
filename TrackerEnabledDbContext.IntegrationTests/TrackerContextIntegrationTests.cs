@@ -294,7 +294,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             await db.SaveChangesAsync(CancellationToken.None);
             model.Id.AssertIsNotZero();
 
-            IEnumerable<AuditLog> logs = db.GetLogs("NormalModels", model.Id)
+            IEnumerable<AuditLog> logs = db.GetLogs("TrackerEnabledDbContext.Common.Testing.Models.NormalModel", model.Id)
                 .AssertCountIsNotZero("logs not found");
 
             AuditLog lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
@@ -336,7 +336,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             await db.SaveChangesAsync(RandomText);
             model.Id.AssertIsNotZero();
 
-            IEnumerable<AuditLog> logs = db.GetLogs("NormalModels")
+            IEnumerable<AuditLog> logs = db.GetLogs("TrackerEnabledDbContext.Common.Testing.Models.NormalModel")
                 .AssertCountIsNotZero("logs not found");
 
             AuditLog lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
