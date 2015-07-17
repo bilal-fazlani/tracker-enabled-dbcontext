@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
@@ -52,50 +53,60 @@ namespace TrackerEnabledDbContext.Common
             }
         }
 
-        /// <summary>
-        ///     Get all logs for the given model type
-        /// </summary>
-        /// <typeparam name="TTable">Type of domain model</typeparam>
-        /// <returns></returns>
-        public static IQueryable<AuditLog> GetLogs<TTable>(ITrackerContext context)
+
+        private static IEnumerable<string> EntityTypeNames<TEntity>()
         {
-            string tableName = typeof (TTable).GetTableName(context);
-            return context.AuditLog.Where(x => x.TableName == tableName);
+            Type entityType = typeof(TEntity);
+            return typeof(TEntity).Assembly.GetTypes().Where(t => t.IsSubclassOf(entityType) || t.FullName == entityType.FullName).Select(m => m.FullName);
         }
 
         /// <summary>
-        ///     Get all logs for the given table name
+        ///     Get all logs for the given model type
         /// </summary>
-        /// <param name="tableName">Name of table</param>
+        /// <typeparam name="TEntity">Type of domain model</typeparam>
         /// <returns></returns>
-        public static IQueryable<AuditLog> GetLogs(ITrackerContext context, string tableName)
+        public static IQueryable<AuditLog> GetLogs<TEntity>(ITrackerContext context)
         {
-            return context.AuditLog.Where(x => x.TableName == tableName);
+            IEnumerable<string> entityTypeNames = EntityTypeNames<TEntity>();
+            string entityTypeName = typeof(TEntity).Name;
+            return context.AuditLog.Where(x => entityTypeNames.Contains(x.TypeFullName));
+        }
+
+        /// <summary>
+        ///     Get all logs for the enitity type name
+        /// </summary>
+        /// <param name="entityTypeName">Name of entity type</param>
+        /// <returns></returns>
+        public static IQueryable<AuditLog> GetLogs(ITrackerContext context, string entityTypeName)
+        {
+            return context.AuditLog.Where(x => x.TypeFullName == entityTypeName);
         }
 
         /// <summary>
         ///     Get all logs for the given model type for a specific record
         /// </summary>
-        /// <typeparam name="TTable">Type of domain model</typeparam>
+        /// <typeparam name="TEntity">Type of domain model</typeparam>
         /// <param name="primaryKey">primary key of record</param>
         /// <returns></returns>
-        public static IQueryable<AuditLog> GetLogs<TTable>(ITrackerContext context, object primaryKey)
+        public static IQueryable<AuditLog> GetLogs<TEntity>(ITrackerContext context, object primaryKey)
         {
             string key = primaryKey.ToString();
-            string tableName = typeof (TTable).GetTableName(context);
-            return context.AuditLog.Where(x => x.TableName == tableName && x.RecordId == key);
+            string entityTypeName = typeof(TEntity).Name;
+            IEnumerable<string> entityTypeNames = EntityTypeNames<TEntity>();
+
+            return context.AuditLog.Where(x => entityTypeNames.Contains(x.TypeFullName) && x.RecordId == key);
         }
 
         /// <summary>
-        ///     Get all logs for the given table name for a specific record
+        ///     Get all logs for the given entity name for a specific record
         /// </summary>
-        /// <param name="tableName">table name</param>
+        /// <param name="entityTypeName">entity type name</param>
         /// <param name="primaryKey">primary key of record</param>
         /// <returns></returns>
-        public static IQueryable<AuditLog> GetLogs(ITrackerContext context, string tableName, object primaryKey)
+        public static IQueryable<AuditLog> GetLogs(ITrackerContext context, string entityTypeName, object primaryKey)
         {
             string key = primaryKey.ToString();
-            return context.AuditLog.Where(x => x.TableName == tableName && x.RecordId == key);
+            return context.AuditLog.Where(x => x.TypeFullName == entityTypeName && x.RecordId == key);
         }
     }
 }

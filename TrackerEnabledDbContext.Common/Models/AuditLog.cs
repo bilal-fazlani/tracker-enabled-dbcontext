@@ -31,7 +31,7 @@ namespace TrackerEnabledDbContext.Common.Models
 
         [Required]
         [MaxLength(256)]
-        public string TableName { get; set; }
+        public string TypeFullName { get; set; }
 
         [Required]
         [MaxLength(256)]

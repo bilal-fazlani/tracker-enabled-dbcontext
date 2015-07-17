@@ -191,7 +191,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 {
                     NewValue = newDescription,
                     OriginalValue = oldDescription,
-                    ColumnName = "Description"
+                    PropertyName = "Description"
                 }
             }.ToArray();
 
@@ -229,7 +229,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 {
                     NewValue = parent2.Id.ToString(),
                     OriginalValue = parent1.Id.ToString(),
-                    ColumnName = "ParentId"
+                    PropertyName = "ParentId"
                 }
             }.ToArray();
 
@@ -368,7 +368,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 {
                     NewValue = newDescription,
                     OriginalValue = oldDescription,
-                    ColumnName = "Description"
+                    PropertyName = "Description"
                 }
             }.ToArray();
 

@@ -18,7 +18,7 @@ namespace SampleLogMaker.ViewModels
 
         public string UserName { get; set; }
 
-        public string TableName { get; set; }
+        public string TypeFullName { get; set; }
 
         public IEnumerable<LogDetail> Details = new List<LogDetail>();
     }
