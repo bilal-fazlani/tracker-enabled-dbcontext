@@ -64,6 +64,7 @@
     <Compile Include="Fluent\TrackerColumnConfigurator.cs" />
     <Compile Include="Fluent\TrackerConfiguration.cs" />
     <Compile Include="Interfaces\IDbContext.cs" />
+    <Compile Include="Interfaces\ISoftDelete.cs" />
     <Compile Include="Interfaces\ITrackerContext.cs" />
     <Compile Include="LogAuditor.cs" />
     <Compile Include="LogDetailsAuditor.cs" />

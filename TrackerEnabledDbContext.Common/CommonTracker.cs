@@ -25,6 +25,14 @@ namespace TrackerEnabledDbContext.Common
                         ent.State == EntityState.Modified ? EventType.Modified : EventType.Deleted, dbContext);
                     if (record != null)
                     {
+                        if (ent.Entity is ISoftDelete && ent.State == EntityState.Deleted)
+                        {
+                            ent.State = EntityState.Unchanged;
+                            var entity = (ISoftDelete)ent.Entity;
+                            entity.IsDeleted = true;
+                            ent.State = EntityState.Modified;
+                        }
+
                         dbContext.AuditLog.Add(record);
                     }
                 }
