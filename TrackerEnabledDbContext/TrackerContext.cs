@@ -15,17 +15,22 @@ namespace TrackerEnabledDbContext
     {
         public TrackerContext()
         {
+            AuditChanges = true;
         }
 
-        public TrackerContext(string connectinString)
-            : base(connectinString)
+        public TrackerContext(string connectionString)
+            : base(connectionString)
         {
+            AuditChanges = true;
         }
 
         public TrackerContext(DbConnection dbconnection, bool contextOwnsConnection)
             : base(dbconnection, contextOwnsConnection)
         {
+            AuditChanges = true;
         }
+
+        public bool AuditChanges { get; set; }
 
         public DbSet<AuditLog> AuditLog { get; set; }
 
@@ -40,18 +45,23 @@ namespace TrackerEnabledDbContext
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual int SaveChanges(object userName)
         {
-            CommonTracker.AuditChanges(this, userName);
+            int result = 0;
+            if (AuditChanges)
+            {
+                CommonTracker.AuditChanges(this, userName);
 
-            IEnumerable<DbEntityEntry> addedEntries = CommonTracker.GetAdditions(this);
-            // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
-            int result = base.SaveChanges();
-            //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
+                IEnumerable<DbEntityEntry> addedEntries = CommonTracker.GetAdditions(this);
+                // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
+                result = base.SaveChanges();
+                //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
 
-            CommonTracker.AuditAdditions(this, userName, addedEntries);
+                CommonTracker.AuditAdditions(this, userName, addedEntries);
+            }
 
-            //save changes to audit of added entries
-            base.SaveChanges();
-            return result;
+            int result2 = base.SaveChanges();
+
+            return (AuditChanges) ? result : result2;
+
         }
 
         /// <summary>
