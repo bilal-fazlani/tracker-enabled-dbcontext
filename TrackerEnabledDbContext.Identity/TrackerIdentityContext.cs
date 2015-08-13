@@ -199,7 +199,7 @@ namespace TrackerEnabledDbContext.Identity
     }
 
     public class TrackerIdentityContext<TUser> : TrackerIdentityContext<TUser, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
-        where TUser : IdentityUser, ITrackerContext
+        where TUser : IdentityUser
     {
         public TrackerIdentityContext()
         {
