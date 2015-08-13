@@ -9,7 +9,7 @@ namespace TrackerEnabledDbContext.Common.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         [MaxLength(256)]
@@ -19,7 +19,7 @@ namespace TrackerEnabledDbContext.Common.Models
 
         public string NewValue { get; set; }
 
-        public virtual Guid AuditLogId { get; set; }
+        public virtual long AuditLogId { get; set; }
 
         [ForeignKey("AuditLogId")]
         public virtual AuditLog Log { get; set; }
