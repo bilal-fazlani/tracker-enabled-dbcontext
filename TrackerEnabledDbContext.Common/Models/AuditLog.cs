@@ -19,7 +19,7 @@ namespace TrackerEnabledDbContext.Common.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AuditLogId { get; set; }
+        public Guid AuditLogId { get; set; }
 
         public string UserName { get; set; }
 
