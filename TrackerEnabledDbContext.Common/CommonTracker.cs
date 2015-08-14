@@ -108,5 +108,17 @@ namespace TrackerEnabledDbContext.Common
             string key = primaryKey.ToString();
             return context.AuditLog.Where(x => x.TypeFullName == entityTypeName && x.RecordId == key);
         }
+
+        /// <summary>
+        ///     Get the id of the most recently created log for the given table name for a specific record
+        /// </summary>
+        /// <param name="tableName">table name</param>
+        /// <param name="primaryKey">primary key of record</param>
+        /// <returns>Log id</returns>
+        public static int GetLastAuditLogId(ITrackerContext context, string tableName, object primaryKey)
+        {
+            string key = primaryKey.ToString();
+            return context.AuditLog.Where(x => x.TableName == tableName && x.RecordId == key).OrderByDescending(x => x.AuditLogId).Select(x => x.AuditLogId).FirstOrDefault();
+        }
     }
 }
