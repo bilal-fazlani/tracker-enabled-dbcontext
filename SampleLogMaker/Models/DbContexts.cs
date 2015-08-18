@@ -5,23 +5,28 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using TrackerEnabledDbContext;
+using TrackerEnabledDbContext.Common.Fluent;
+using TrackerEnabledDbContext.Identity;
 
 namespace SampleLogMaker.Models
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : TrackerIdentityContext<ApplicationUser>
     {
         public ApplicationDbContext()
             : base("DefaultConnection")
         {
         }
-    }
 
-    public class MyDbContext : TrackerContext
-    {
-        public MyDbContext() : base("DefaultConnection") 
+        static ApplicationDbContext()
         {
+            TrackerConfiguration<Comment>
+                .EnableTableTracking()
+                .SkipTrackingForColumn(x => x.Id)
+                .SkipTrackingForColumn(x => x.ParentBlogId);
         }
 
         public DbSet<Blog> Blogs { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
     }
 }

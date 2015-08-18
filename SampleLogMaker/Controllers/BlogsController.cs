@@ -7,27 +7,29 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SampleLogMaker.Models;
+using System.Threading.Tasks;
 
 namespace SampleLogMaker.Controllers
 {
-    public class BlogsController : Controller
+    public class BlogsController : AsyncController
     {
-        private MyDbContext db = new MyDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: /Blogs/
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(db.Blogs.ToList());
+            return View(await db.Blogs.ToListAsync());
         }
 
         // GET: /Blogs/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Blog blog = db.Blogs.Find(id);
+            Blog blog = await db.Blogs.FindAsync(id);
+
             if (blog == null)
             {
                 return HttpNotFound();
@@ -46,12 +48,12 @@ namespace SampleLogMaker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Description,Title")] Blog blog)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Description,Title")] Blog blog)
         {
             if (ModelState.IsValid)
             {
                 db.Blogs.Add(blog);
-                db.SaveChanges(User.Identity.Name);
+                await db.SaveChangesAsync(User.Identity.Name);
                 return RedirectToAction("Index");
             }
 
@@ -59,13 +61,13 @@ namespace SampleLogMaker.Controllers
         }
 
         // GET: /Blogs/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Blog blog = db.Blogs.Find(id);
+            Blog blog = await db.Blogs.FindAsync(id);
             if (blog == null)
             {
                 return HttpNotFound();
@@ -78,26 +80,26 @@ namespace SampleLogMaker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Description,Title")] Blog blog)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Description,Title")] Blog blog)
         {
             if (ModelState.IsValid)
             {
                 db.Blogs.Find(blog.Id).Title = blog.Title;
                 db.Blogs.Find(blog.Id).Description = blog.Description;
-                db.SaveChanges(User.Identity.Name);
+                await db.SaveChangesAsync(User.Identity.Name);
                 return RedirectToAction("Index");
             }
             return View(blog);
         }
 
         // GET: /Blogs/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Blog blog = db.Blogs.Find(id);
+            Blog blog = await db.Blogs.FindAsync(id);
             if (blog == null)
             {
                 return HttpNotFound();
@@ -108,11 +110,11 @@ namespace SampleLogMaker.Controllers
         // POST: /Blogs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Blog blog = db.Blogs.Find(id);
             db.Blogs.Remove(blog);
-            db.SaveChanges(User.Identity.Name);
+            await db.SaveChangesAsync(User.Identity.Name);
             return RedirectToAction("Index");
         }
 

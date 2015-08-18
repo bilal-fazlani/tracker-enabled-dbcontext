@@ -1,0 +1,13 @@
+﻿@using SampleLogMaker.ViewModels
+@model IEnumerable<BaseHistoryVM>
+
+<div class="history-block">
+    <h4>
+        History for @ViewBag.EntityType (@ViewBag.EntityId)
+    </h4>
+
+
+    <div id="historyList">
+        @Html.DisplayForModel()
+    </div>
+</div>

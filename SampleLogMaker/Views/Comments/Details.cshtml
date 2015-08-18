@@ -1,0 +1,20 @@
+﻿@model SampleLogMaker.Models.Comment
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Comment Details</h2>
+
+<div>
+    @Html.DisplayFor(x=>x.Id)
+    @Html.DisplayFor(x => x.Text)
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+
+@{Html.RenderAction("EntityHistory", "History", new { entity = "Comments", entityId = Model.Id });}

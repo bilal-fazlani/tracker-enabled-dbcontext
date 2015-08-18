@@ -7,74 +7,34 @@ namespace SampleLogMaker.ViewModels
 {
     public class BaseHistoryVM
     {
-        public string DateFormat = "dd-MMM-yyyy  hh:mm tt";
-
         public int LogId { get; set; }
         
-        public int RecordId { get; set; }
+        /// <summary>
+        /// This is a strign now as it can be a composite key. This may be changed to array/collection later.
+        /// </summary>
+        public string RecordId { get; set; }
 
         public DateTime Date { get; set; }
 
         public string UserName { get; set; }
 
-        public string TableName { get; set; }
+        public string TypeFullName { get; set; }
 
-        public virtual string Message { get; set; }
+        public IEnumerable<LogDetail> Details = new List<LogDetail>();
     }
 
     public class ChangedHistoryVM : BaseHistoryVM
     {
-        public string ColumnName { get; set; }
-
-        public string NewValue { get; set; }
-
-        public string OldValue { get; set; }
-
-        public new string Message
-        {
-            get
-            {
-                return string.Format("{0} in {1} was changed by {2} from {3} to {4} at {5}.",
-                    ColumnName,
-                    TableName,
-                    UserName,
-                    OldValue,
-                    NewValue,
-                    Date.ToString(DateFormat)
-                    );
-            }
-        }
+        
     }
 
     public class DeletedHistoryVM : BaseHistoryVM
     {
-        public new string Message
-        {
-            get
-            {
-                return string.Format("record #: {0} in {1} was deleted by {2} at {3}.",
-                    RecordId,
-                    TableName,
-                    UserName,
-                    Date.ToString(DateFormat)
-                    );
-            }
-        }
+        
     }
 
     public class AddedHistoryVM : BaseHistoryVM
     {
-        public new string Message
-        {
-            get
-            {
-                return string.Format("record #: {0} in {1} was added by {2} at {3}",
-                    RecordId,
-                    TableName,
-                    UserName,
-                    Date.ToString(DateFormat)
-                    );
-            }
-        }
+        
     }
 }

@@ -5,16 +5,16 @@ namespace SampleLogMaker.MyMigrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<SampleLogMaker.Models.MyDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<SampleLogMaker.Models.ApplicationDbContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             MigrationsDirectory = @"MyMigrations";
-            ContextKey = "SampleLogMaker.Models.MyDbContext";
+            ContextKey = "SampleLogMaker.Models.ApplicationDbContext";
         }
 
-        protected override void Seed(SampleLogMaker.Models.MyDbContext context)
+        protected override void Seed(SampleLogMaker.Models.ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

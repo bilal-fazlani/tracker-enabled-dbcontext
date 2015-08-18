@@ -7,3 +7,5 @@ who changed it, when did it get changed, etc.
 It comes with an Affero General Public License.
 
 If you have any queries please reach me at bilal.m.fazlani@gmail.com
+
+Also check the guide here : http://bilal-fazlani.blogspot.in/2013/09/adding-log-audit-feature-to-entity.html

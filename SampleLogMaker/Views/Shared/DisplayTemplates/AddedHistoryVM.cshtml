@@ -2,11 +2,20 @@
 @model AddedHistoryVM
 
 <div class="added">
-    @Model.UserName added
+    @Model.UserName added 
     
-    <span class=" historySpan addedHistoySpan tooltipper" title="added" logid="@Model.LogId">
-        @Model.TableName @Model.RecordId
+    <span class="historySpan addedHistoySpan tooltipper" title="<div>
+        @foreach (var item in Model.Details) {
+            <div>
+                @item.PropertyName : @item.NewValue
+            </div>
+        }
+    </div>" 
+    logid="@Model.LogId">
+
+         @Model.TableName # @Model.RecordId
+
     </span>
     
-    on @(Model.Date.ToString(Model.DateFormat)).
+    on @(Model.Date.ToString(Constants.DateFormat)).
 </div>

@@ -28,7 +28,9 @@ namespace SampleLogMaker
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/ToolTipster/css/tooltipster.css",
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/HistoryStyles.css"
+                      ));
         }
     }
 }

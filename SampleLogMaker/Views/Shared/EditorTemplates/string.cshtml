@@ -1,0 +1,9 @@
+﻿@model string
+
+<div class="form-group">
+    @Html.LabelForModel()
+    <span>:</span>
+    @Html.TextBoxFor(x => x)
+    <br />
+    @Html.ValidationMessageFor(x => x)
+</div>

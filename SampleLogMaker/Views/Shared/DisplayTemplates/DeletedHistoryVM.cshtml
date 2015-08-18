@@ -3,8 +3,16 @@
 
 <div class="deleted">
     @Model.UserName deleted
-    <span class="historySpan deletedHistoySpan tooltipper" title="deleted">
-        @Model.TableName @Model.RecordId
+
+    <span class="historySpan deletedHistoySpan tooltipper" title="<div>
+        @foreach (var item in Model.Details)
+        {
+            <div>
+                @item.PropertyName : @item.OldValue
+            </div>
+        }
+    </div>">
+        @Model.TableName # @Model.RecordId
     </span>
-     on @(Model.Date.ToString(Model.DateFormat)).
+     on @(Model.Date.ToString(Constants.DateFormat)).
 </div>
