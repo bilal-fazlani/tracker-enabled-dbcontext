@@ -11,7 +11,11 @@ using TrackerEnabledDbContext.Common.Models;
 
 namespace TrackerEnabledDbContext.Identity
 {
-    public class TrackerIdentityContext<TUser> : IdentityDbContext<TUser>, ITrackerContext where TUser : IdentityUser
+    using System.Data.Common;
+
+    public class TrackerIdentityContext<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim> :
+        IdentityDbContext<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim>, ITrackerContext
+        where TUser : IdentityUser<TKey, TUserLogin, TUserRole, TUserClaim> where TRole : IdentityRole<TKey, TUserRole> where TUserLogin : IdentityUserLogin<TKey> where TUserRole : IdentityUserRole<TKey> where TUserClaim : IdentityUserClaim<TKey>
     {
         public TrackerIdentityContext()
         {
@@ -21,16 +25,8 @@ namespace TrackerEnabledDbContext.Identity
         {
         }
 
-        // Summary:
-        //     Constructor which takes the connection string to use
-        //
-        // Parameters:
-        //   nameOrConnectionString:
-        //
-        //   throwIfV1Schema:
-        //     Will throw an exception if the schema matches that of Identity 1.0.0
-        public TrackerIdentityContext(string nameOrConnectionString, bool throwIfV1Schema)
-            : base(nameOrConnectionString, throwIfV1Schema)
+        public TrackerIdentityContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
+            : base(existingConnection, model, contextOwnsConnection)
         {
         }
 
@@ -211,5 +207,23 @@ namespace TrackerEnabledDbContext.Identity
         }
 
         #endregion --
+    }
+
+    public class TrackerIdentityContext<TUser> : TrackerIdentityContext<TUser, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
+        where TUser : IdentityUser
+    {
+        public TrackerIdentityContext()
+        {
+        }
+
+        public TrackerIdentityContext(string connectionString)
+            : base(connectionString)
+        {
+        }
+
+        public TrackerIdentityContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
+            : base(existingConnection, model, contextOwnsConnection)
+        {
+        }
     }
 }
