@@ -118,7 +118,7 @@ namespace TrackerEnabledDbContext.Common
         public static int GetLastAuditLogId(ITrackerContext context, string tableName, object primaryKey)
         {
             string key = primaryKey.ToString();
-            return context.AuditLog.Where(x => x.TableName == tableName && x.RecordId == key).OrderByDescending(x => x.AuditLogId).Select(x => x.AuditLogId).FirstOrDefault();
+            return context.AuditLog.Where(x => x.TypeFullName == tableName && x.RecordId == key).OrderByDescending(x => x.AuditLogId).Select(x => x.AuditLogId).FirstOrDefault();
         }
     }
 }
