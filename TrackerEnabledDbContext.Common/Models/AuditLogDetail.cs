@@ -3,10 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TrackerEnabledDbContext.Common.Models
 {
+    using System;
+
     public class AuditLogDetail
     {
         [Key]
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
 
         [Required]
         [MaxLength(256)]
@@ -16,7 +19,7 @@ namespace TrackerEnabledDbContext.Common.Models
 
         public string NewValue { get; set; }
 
-        public virtual int AuditLogId { get; set; }
+        public virtual long AuditLogId { get; set; }
 
         [ForeignKey("AuditLogId")]
         public virtual AuditLog Log { get; set; }
