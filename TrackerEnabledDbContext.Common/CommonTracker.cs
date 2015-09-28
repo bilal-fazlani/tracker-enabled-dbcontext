@@ -115,7 +115,7 @@ namespace TrackerEnabledDbContext.Common
         /// <param name="tableName">table name</param>
         /// <param name="primaryKey">primary key of record</param>
         /// <returns>Log id</returns>
-        public static int GetLastAuditLogId(ITrackerContext context, string tableName, object primaryKey)
+        public static long GetLastAuditLogId(ITrackerContext context, string tableName, object primaryKey)
         {
             string key = primaryKey.ToString();
             return context.AuditLog.Where(x => x.TypeFullName == tableName && x.RecordId == key).OrderByDescending(x => x.AuditLogId).Select(x => x.AuditLogId).FirstOrDefault();

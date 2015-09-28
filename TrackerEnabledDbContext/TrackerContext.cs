@@ -112,7 +112,7 @@ namespace TrackerEnabledDbContext
         /// <param name="tableName">table name</param>
         /// <param name="primaryKey">primary key of record</param>
         /// <returns>Log id</returns>
-        public int GetLastAuditLogId(string tableName, object primaryKey)
+        public long GetLastAuditLogId(string tableName, object primaryKey)
         {
             return CommonTracker.GetLastAuditLogId(this, tableName, primaryKey);
         }

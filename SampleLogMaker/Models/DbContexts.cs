@@ -17,13 +17,13 @@ namespace SampleLogMaker.Models
         {
         }
 
-        static ApplicationDbContext()
-        {
-            TrackerConfiguration<Comment>
-                .EnableTableTracking()
-                .SkipTrackingForColumn(x => x.Id)
-                .SkipTrackingForColumn(x => x.ParentBlogId);
-        }
+        //static ApplicationDbContext()
+        //{
+        //    //TrackerConfiguration<Comment>
+        //    //    .EnableTableTracking()
+        //    //    .SkipTrackingForColumn(x => x.Id)
+        //    //    .SkipTrackingForColumn(x => x.ParentBlogId);
+        //}
 
         public DbSet<Blog> Blogs { get; set; }
 
