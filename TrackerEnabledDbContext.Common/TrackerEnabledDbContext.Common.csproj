@@ -42,6 +42,10 @@
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework.MappingAPI, Version=6.1.0.9, Culture=neutral, PublicKeyToken=7ee2e825d201459e, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.MappingAPI.6.1.0.9\lib\net45\EntityFramework.MappingAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
@@ -56,13 +60,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddedLogDetailsAuditor.cs" />
+    <Compile Include="Configuration\DbMapping.cs" />
+    <Compile Include="Configuration\TrackingConfigurationPriority.cs" />
+    <Compile Include="Configuration\TrackingConfigurationValue.cs" />
+    <Compile Include="Interfaces\IAuditSkippable.cs" />
     <Compile Include="Attributes\SkipTrackingAttribute.cs" />
     <Compile Include="Attributes\TrackChangesAttribute.cs" />
+    <Compile Include="Configuration\GlobalTrackingConfig.cs" />
+    <Compile Include="Configuration\TrackingDataStore.cs" />
+    <Compile Include="Configuration\PropertyTrackingConfiguration.cs" />
+    <Compile Include="Configuration\EntityTrackingConfiguration.cs" />
+    <Compile Include="Configuration\PropertyTrackingConfiguerationKey.cs" />
     <Compile Include="Extensions\DbEntityEntryExtensions.cs" />
     <Compile Include="CommonTracker.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
-    <Compile Include="Fluent\TrackerColumnConfigurator.cs" />
-    <Compile Include="Fluent\TrackerConfiguration.cs" />
     <Compile Include="Interfaces\IDbContext.cs" />
     <Compile Include="Interfaces\ITrackerContext.cs" />
     <Compile Include="LogAuditor.cs" />
@@ -81,6 +92,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

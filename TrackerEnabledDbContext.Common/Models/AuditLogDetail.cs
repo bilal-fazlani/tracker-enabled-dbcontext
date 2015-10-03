@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TrackerEnabledDbContext.Common.Interfaces;
 
 namespace TrackerEnabledDbContext.Common.Models
 {
-    using System;
-
-    public class AuditLogDetail
+    public class AuditLogDetail : IAuditSkippable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
