@@ -1,14 +1,14 @@
 ﻿namespace TrackerEnabledDbContext.Common.Configuration
 {
-    public class TrackingConfigurationValue
+    internal class TrackingConfigurationValue
     {
-        public TrackingConfigurationValue(bool value = false, TrackingConfigurationPriority priority = TrackingConfigurationPriority.Default)
+        internal TrackingConfigurationValue(bool value = false, TrackingConfigurationPriority priority = TrackingConfigurationPriority.Default)
         {
             Value = value;
             Priority = priority;
         }
 
-        public bool Value { get;  private set; }
-        public TrackingConfigurationPriority Priority { get; private set; }
+        internal bool Value { get;  private set; }
+        internal TrackingConfigurationPriority Priority { get; private set; }
     }
 }

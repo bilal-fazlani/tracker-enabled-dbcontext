@@ -2,7 +2,7 @@
 {
     public static class GlobalTrackingConfig
     {
-        //todo:use this value
+        //todo:unit test global config
         public static bool Enabled { get; set; }
     }
 }

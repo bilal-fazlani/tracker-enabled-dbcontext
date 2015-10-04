@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using TrackerEnabledDbContext.Common.Auditors;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
 
@@ -51,7 +52,6 @@ namespace TrackerEnabledDbContext.Common
                 }
             }
         }
-
 
         private static IEnumerable<string> EntityTypeNames<TEntity>()
         {

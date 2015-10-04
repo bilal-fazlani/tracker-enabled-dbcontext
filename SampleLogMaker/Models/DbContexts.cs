@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
-using TrackerEnabledDbContext;
+﻿using System.Data.Entity;
 using TrackerEnabledDbContext.Identity;
 
 namespace SampleLogMaker.Models
@@ -16,9 +10,10 @@ namespace SampleLogMaker.Models
         {
         }
 
-
         public DbSet<Blog> Blogs { get; set; }
 
         public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<BlogUser> BlogUsers { get; set; }
     }
 }

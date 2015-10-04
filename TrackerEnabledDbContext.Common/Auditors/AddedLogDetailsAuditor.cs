@@ -2,14 +2,14 @@
 using System.Data.Entity.Infrastructure;
 using TrackerEnabledDbContext.Common.Models;
 
-namespace TrackerEnabledDbContext.Common
+namespace TrackerEnabledDbContext.Common.Auditors
 {
     /// <summary>
     /// Creates AuditLogDetails for entries added in a previous call to SaveChanges.
     /// </summary>
-    public class AddedLogDetailsAuditor : LogDetailsAuditor
+    internal class AdditionLogDetailsAuditor : ChangeLogDetailsAuditor
     {
-        public AddedLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log) : base(dbEntry, log)
+        internal AdditionLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log) : base(dbEntry, log)
         {
         }
 
@@ -18,7 +18,7 @@ namespace TrackerEnabledDbContext.Common
         /// </summary>
         /// <param name="dbEntry"></param>
         /// <returns></returns>
-        protected override EntityState StateOf(DbEntityEntry dbEntry)
+        protected internal override EntityState StateOf(DbEntityEntry dbEntry)
         {
             if (dbEntry.State == EntityState.Unchanged)
             {

@@ -2,7 +2,7 @@
 
 namespace TrackerEnabledDbContext.Common.Configuration
 {
-    public static class TrackingDataStore
+    internal static class TrackingDataStore
     {
         ////////////////////////// STORE /////////////////////////////
 

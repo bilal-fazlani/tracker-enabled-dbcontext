@@ -9,11 +9,6 @@ namespace System.ComponentModel.DataAnnotations
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     public class SkipTrackingAttribute : Attribute
     {
-        public SkipTrackingAttribute(bool skipTracking = true)
-        {
-            Enabled = skipTracking;
-        }
-
-        public bool Enabled { get; set; }
+        
     }
 }

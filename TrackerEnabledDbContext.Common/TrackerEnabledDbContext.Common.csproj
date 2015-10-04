@@ -59,11 +59,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddedLogDetailsAuditor.cs" />
+    <Compile Include="Auditors\AddedLogDetailsAuditor.cs" />
     <Compile Include="Configuration\DbMapping.cs" />
     <Compile Include="Configuration\TrackingConfigurationPriority.cs" />
     <Compile Include="Configuration\TrackingConfigurationValue.cs" />
-    <Compile Include="Interfaces\IAuditSkippable.cs" />
+    <Compile Include="Interfaces\IUnTrackable.cs" />
     <Compile Include="Attributes\SkipTrackingAttribute.cs" />
     <Compile Include="Attributes\TrackChangesAttribute.cs" />
     <Compile Include="Configuration\GlobalTrackingConfig.cs" />
@@ -71,13 +71,12 @@
     <Compile Include="Configuration\PropertyTrackingConfiguration.cs" />
     <Compile Include="Configuration\EntityTrackingConfiguration.cs" />
     <Compile Include="Configuration\PropertyTrackingConfiguerationKey.cs" />
-    <Compile Include="Extensions\DbEntityEntryExtensions.cs" />
     <Compile Include="CommonTracker.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Interfaces\IDbContext.cs" />
     <Compile Include="Interfaces\ITrackerContext.cs" />
-    <Compile Include="LogAuditor.cs" />
-    <Compile Include="LogDetailsAuditor.cs" />
+    <Compile Include="Auditors\LogAuditor.cs" />
+    <Compile Include="Auditors\ChangeLogDetailsAuditor.cs" />
     <Compile Include="Models\AuditLog.cs" />
     <Compile Include="Models\AuditLogDetail.cs" />
     <Compile Include="Models\EventType.cs" />

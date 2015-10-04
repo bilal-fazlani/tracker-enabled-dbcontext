@@ -7,13 +7,13 @@ using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
 
-namespace TrackerEnabledDbContext.Common
+namespace TrackerEnabledDbContext.Common.Auditors
 {
-    public class LogAuditor : IDisposable
+    internal class LogAuditor : IDisposable
     {
         private readonly DbEntityEntry _dbEntry;
 
-        public LogAuditor(DbEntityEntry dbEntry)
+        internal LogAuditor(DbEntityEntry dbEntry)
         {
             _dbEntry = dbEntry;
         }
@@ -22,17 +22,16 @@ namespace TrackerEnabledDbContext.Common
         {
         }
 
-        public AuditLog CreateLogRecord(object userName, EventType eventType, ITrackerContext context)
+        internal AuditLog CreateLogRecord(object userName, EventType eventType, ITrackerContext context)
         {
             Type entityType = _dbEntry.Entity.GetType().GetEntityType();
-            if (typeof (IAuditSkippable).IsAssignableFrom(entityType)) return null;
-
-            DateTime changeTime = DateTime.UtcNow;
 
             if (!EntityTrackingConfiguration.IsTrackingEnabled(entityType))
             {
                 return null;
             }
+
+            DateTime changeTime = DateTime.UtcNow;
 
             //todo: make this a static class
             var mapping = new DbMapping(context, entityType);
@@ -45,17 +44,38 @@ namespace TrackerEnabledDbContext.Common
                 EventDateUTC = changeTime,
                 EventType = eventType,
                 TypeFullName = entityType.FullName,
-                RecordId = _dbEntry.GetPrimaryKeyValues(keyNames).ToString()
+                RecordId = GetPrimaryKeyValuesOf(_dbEntry, keyNames).ToString()
             };
 
             using (var detailsAuditor = (eventType == EventType.Added)
-                ? new AddedLogDetailsAuditor(_dbEntry, newlog)
-                : new LogDetailsAuditor(_dbEntry, newlog))
+                ? new AdditionLogDetailsAuditor(_dbEntry, newlog)
+                : new ChangeLogDetailsAuditor(_dbEntry, newlog))
             {
                 newlog.LogDetails = detailsAuditor.CreateLogDetails().ToList();
             }
 
             return newlog;
+        }
+
+        private static object GetPrimaryKeyValuesOf(
+            DbEntityEntry dbEntry,
+            List<PropertyConfiguerationKey> properties)
+        {
+            if (properties.Count == 1)
+            {
+                return dbEntry.GetDatabaseValues().GetValue<object>(properties.Select(x => x.PropertyName).First());
+            }
+            if (properties.Count > 1)
+            {
+                string output = "[";
+
+                output += string.Join(",",
+                    properties.Select(colName => dbEntry.GetDatabaseValues().GetValue<object>(colName.PropertyName)));
+
+                output += "]";
+                return output;
+            }
+            throw new KeyNotFoundException("key not found for " + dbEntry.Entity.GetType().FullName);
         }
     }
 }

@@ -8,12 +8,12 @@ using TrackerEnabledDbContext.Common.Interfaces;
 
 namespace TrackerEnabledDbContext.Common.Configuration
 {
-    public class DbMapping
+    internal class DbMapping
     {
         private readonly IEntityMap _entityMap;
         private readonly Type _entityType;
-        
-        public DbMapping(ITrackerContext context, Type entityType)
+
+        internal DbMapping(ITrackerContext context, Type entityType)
         {
             _entityType = entityType;
             _entityMap = (context as DbContext).Db(_entityType);
@@ -31,7 +31,7 @@ namespace TrackerEnabledDbContext.Common.Configuration
         //        .ColumnName;
         //}
 
-        public IEnumerable<PropertyConfiguerationKey> PrimaryKeys()
+        internal IEnumerable<PropertyConfiguerationKey> PrimaryKeys()
         {
             return _entityMap.Pks
                 .Select(x => new PropertyConfiguerationKey(

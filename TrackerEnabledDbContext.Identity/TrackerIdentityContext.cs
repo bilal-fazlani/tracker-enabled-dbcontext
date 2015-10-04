@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using TrackerEnabledDbContext.Common;
+using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
 
@@ -43,6 +44,11 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual int SaveChanges(object userName)
         {
+            if (!GlobalTrackingConfig.Enabled)
+            {
+                return base.SaveChanges();
+            }
+
             CommonTracker.AuditChanges(this, userName);
 
             IEnumerable<DbEntityEntry> addedEntries = CommonTracker.GetAdditions(this);
@@ -65,6 +71,11 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public override int SaveChanges()
         {
+            if (!GlobalTrackingConfig.Enabled)
+            {
+                return base.SaveChanges();
+            }
+
             return SaveChanges(null);
         }
 
@@ -135,6 +146,11 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public async Task<int> SaveChangesAsync(object userName, CancellationToken cancellationToken)
         {
+            if (!GlobalTrackingConfig.Enabled)
+            {
+                return await base.SaveChangesAsync(cancellationToken);
+            }
+
             if (cancellationToken.IsCancellationRequested)
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -162,6 +178,11 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual async Task<int> SaveChangesAsync(int userId)
         {
+            if (!GlobalTrackingConfig.Enabled)
+            {
+                return await base.SaveChangesAsync(CancellationToken.None);
+            }
+
             return await SaveChangesAsync(userId, CancellationToken.None);
         }
 
@@ -173,6 +194,11 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual async Task<int> SaveChangesAsync(string userName)
         {
+            if (!GlobalTrackingConfig.Enabled)
+            {
+                return await base.SaveChangesAsync(CancellationToken.None);
+            }
+
             return await SaveChangesAsync(userName, CancellationToken.None);
         }
 
@@ -186,6 +212,11 @@ namespace TrackerEnabledDbContext.Identity
         /// </returns>
         public override async Task<int> SaveChangesAsync()
         {
+            if (!GlobalTrackingConfig.Enabled)
+            {
+                return await base.SaveChangesAsync(CancellationToken.None);
+            }
+
             return await SaveChangesAsync(null, CancellationToken.None);
         }
 
@@ -203,6 +234,11 @@ namespace TrackerEnabledDbContext.Identity
         /// </returns>
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
+            if (!GlobalTrackingConfig.Enabled)
+            {
+                return await base.SaveChangesAsync(cancellationToken);
+            }
+
             return await SaveChangesAsync(null, cancellationToken);
         }
 

@@ -2,16 +2,16 @@
 
 namespace TrackerEnabledDbContext.Common.Configuration
 {
-    public class PropertyConfiguerationKey
+    internal class PropertyConfiguerationKey
     {
-        public PropertyConfiguerationKey(string propertyName, string typeFullName)
+        internal PropertyConfiguerationKey(string propertyName, string typeFullName)
         {
             PropertyName = propertyName;
             TypeFullName = typeFullName;
         }
 
-        public string PropertyName { get; }
-        public string TypeFullName { get; }
+        internal string PropertyName { get; }
+        internal string TypeFullName { get; }
 
         public override bool Equals(object obj)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using TrackerEnabledDbContext.Common.Extensions;
+using TrackerEnabledDbContext.Common.Interfaces;
 
 namespace TrackerEnabledDbContext.Common.Configuration
 {
@@ -36,24 +37,18 @@ namespace TrackerEnabledDbContext.Common.Configuration
 
         public static bool IsTrackingEnabled(Expression<Func<T, object>> property)
         {
-            var key = new PropertyConfiguerationKey(property.GetPropertyInfo().Name,
-                property.GetPropertyInfo().DeclaringType.FullName);
-
-            string propertyName = property.GetPropertyInfo().Name;
-
-            var result = TrackingDataStore.PropertyConfigStore
-                .GetOrAdd(key, 
-                (x) =>
-                PropertyTrackingConfiguration.PropertyConfigValueFactory(propertyName, typeof(T)));
-
-            return result.Value;
+            var propertyInfo = property.GetPropertyInfo();
+            return PropertyTrackingConfiguration.IsTrackingEnabled(
+                new PropertyConfiguerationKey(propertyInfo.Name, propertyInfo.DeclaringType.FullName), typeof (T));
         }
     }
 
-    public static class PropertyTrackingConfiguration
+    internal static class PropertyTrackingConfiguration
     {
-        public static bool IsTrackingEnabled(PropertyConfiguerationKey property, Type entityType)
+        internal static bool IsTrackingEnabled(PropertyConfiguerationKey property, Type entityType)
         {
+            if (typeof(IUnTrackable).IsAssignableFrom(entityType)) return false;
+
             var result = TrackingDataStore.PropertyConfigStore
                 .GetOrAdd(property,
                 (x) =>
@@ -71,7 +66,7 @@ namespace TrackerEnabledDbContext.Common.Configuration
                     .OfType<SkipTrackingAttribute>()
                     .SingleOrDefault();
 
-            bool trackValue = skipTrackingAttribute == null || !skipTrackingAttribute.Enabled;
+            bool trackValue = skipTrackingAttribute == null;
 
             return new TrackingConfigurationValue(trackValue);
         }

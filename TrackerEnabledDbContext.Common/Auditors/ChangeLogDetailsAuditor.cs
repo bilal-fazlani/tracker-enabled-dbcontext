@@ -6,14 +6,14 @@ using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Models;
 
-namespace TrackerEnabledDbContext.Common
+namespace TrackerEnabledDbContext.Common.Auditors
 {
-    public class LogDetailsAuditor : IDisposable
+    public class ChangeLogDetailsAuditor : IDisposable
     {
         private readonly DbEntityEntry _dbEntry;
         private readonly AuditLog _log;
 
-        public LogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log)
+        public ChangeLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log)
         {
             _dbEntry = dbEntry;
             _log = log;
@@ -42,7 +42,7 @@ namespace TrackerEnabledDbContext.Common
             }
         }
 
-        protected virtual EntityState StateOf(DbEntityEntry dbEntry)
+        protected internal virtual EntityState StateOf(DbEntityEntry dbEntry)
         {
             return dbEntry.State;
         }

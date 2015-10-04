@@ -1,6 +1,6 @@
 ﻿namespace TrackerEnabledDbContext.Common.Configuration
 {
-    public enum TrackingConfigurationPriority
+    internal enum TrackingConfigurationPriority
     {
         Default = 0,
         High = 1
