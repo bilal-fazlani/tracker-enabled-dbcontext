@@ -29,7 +29,9 @@ namespace TrackerEnabledDbContext.Common.Auditors
 
             foreach (string propertyName in PropertyNamesOf(_dbEntry))
             {
-                if (PropertyTrackingConfiguration.IsTrackingEnabled(new PropertyConfiguerationKey(propertyName, entityType.FullName), entityType ) && IsValueChanged(propertyName))
+                if (PropertyTrackingConfiguration.IsTrackingEnabled(
+                    new PropertyConfiguerationKey(propertyName, entityType.FullName), entityType ) 
+                    && IsValueChanged(propertyName))
                 {
                     yield return new AuditLogDetail
                     {
@@ -58,7 +60,8 @@ namespace TrackerEnabledDbContext.Common.Auditors
         private bool IsValueChanged(string propertyName)
         {
             var prop = _dbEntry.Property(propertyName);
-            var changed = (StateOf(_dbEntry) == EntityState.Added && prop.CurrentValue != null) ||
+
+            var changed = (StateOf(_dbEntry) == EntityState.Added && prop.CurrentValue != null) ||  
                           (StateOf(_dbEntry) == EntityState.Deleted && prop.OriginalValue != null) ||
                           (StateOf(_dbEntry) == EntityState.Modified && prop.IsModified);
             return changed;

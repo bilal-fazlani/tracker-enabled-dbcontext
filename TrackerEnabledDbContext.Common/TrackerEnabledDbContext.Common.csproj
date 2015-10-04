@@ -59,7 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auditors\AddedLogDetailsAuditor.cs" />
+    <Compile Include="Auditors\AdditionLogDetailsAuditor.cs" />
     <Compile Include="Configuration\DbMapping.cs" />
     <Compile Include="Configuration\TrackingConfigurationPriority.cs" />
     <Compile Include="Configuration\TrackingConfigurationValue.cs" />

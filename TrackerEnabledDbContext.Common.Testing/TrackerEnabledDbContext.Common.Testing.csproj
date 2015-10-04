@@ -79,9 +79,11 @@
     <Compile Include="Models\ChildModel.cs" />
     <Compile Include="Models\ModelWithCompositeKey.cs" />
     <Compile Include="Models\ModelWithConventionalKey.cs" />
+    <Compile Include="Models\TrackedModelWithMultipleProperties.cs" />
     <Compile Include="Models\ModelWithSkipTracking.cs" />
     <Compile Include="Models\NormalModel.cs" />
     <Compile Include="Models\ParentModel.cs" />
+    <Compile Include="Models\POCO.cs" />
     <Compile Include="PersistanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

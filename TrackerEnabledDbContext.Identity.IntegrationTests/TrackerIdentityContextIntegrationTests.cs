@@ -337,14 +337,18 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             await db.SaveChangesAsync(RandomText);
             model.Id.AssertIsNotZero();
 
-            IEnumerable<AuditLog> logs = db.GetLogs("TrackerEnabledDbContext.Common.Testing.Models.NormalModel")
-                .AssertCountIsNotZero("logs not found");
+            IEnumerable<AuditLog> logs = db
+                .GetLogs("TrackerEnabledDbContext.Common.Testing.Models.NormalModel")
+                .ToList();
+
+            logs.AssertCountIsNotZero("logs not found");
 
             AuditLog lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
 
             IEnumerable<AuditLogDetail> details = lastLog.LogDetails
-                .AssertIsNotNull("log details is null")
-                .AssertCountIsNotZero("no log details found");
+                .AssertIsNotNull("log details is null");
+
+            details.AssertCountIsNotZero("no log details found");
         }
 
         [TestMethod]

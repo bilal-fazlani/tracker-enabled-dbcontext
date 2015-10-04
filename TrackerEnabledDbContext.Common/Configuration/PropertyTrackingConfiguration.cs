@@ -10,6 +10,13 @@ namespace TrackerEnabledDbContext.Common.Configuration
 {
     public class PropertyTrackingConfiguration<T>
     {
+        private EntityTrackingConfiguration<T> _entityConfiguration;
+
+        internal PropertyTrackingConfiguration(EntityTrackingConfiguration<T> entityConfiguration)
+        {
+            _entityConfiguration = entityConfiguration;
+        }
+
         public PropertyTrackingConfiguration<T> SkipProperty(Expression<Func<T, object>> property)
         {
             PropertyInfo info = property.GetPropertyInfo();
@@ -41,6 +48,8 @@ namespace TrackerEnabledDbContext.Common.Configuration
             return PropertyTrackingConfiguration.IsTrackingEnabled(
                 new PropertyConfiguerationKey(propertyInfo.Name, propertyInfo.DeclaringType.FullName), typeof (T));
         }
+
+        public EntityTrackingConfiguration<T> EntityConfiguration => _entityConfiguration;
     }
 
     internal static class PropertyTrackingConfiguration
