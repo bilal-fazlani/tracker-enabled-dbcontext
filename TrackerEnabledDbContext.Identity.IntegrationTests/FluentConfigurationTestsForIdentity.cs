@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;
@@ -9,10 +11,10 @@ using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Extensions;
 using TrackerEnabledDbContext.Common.Testing.Models;
 
-namespace TrackerEnabledDbContext.IntegrationTests
+namespace TrackerEnabledDbContext.Identity.IntegrationTests
 {
     [TestClass]
-    public class FluentConfigurationTests : PersistanceTests<TestTrackerContext>
+    public class FluentConfigurationTestsForIdentity : PersistanceTests<TestTrackerIdentityContext>
     {
         [TestMethod]
         public void Can_recognise_global_tracking_indicator_when_disabled()
@@ -48,7 +50,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 new KeyValuePair<string, string>("Color", model.Color),
                 new KeyValuePair<string, string>("Id", model.Id.ToString()),
                 new KeyValuePair<string, string>("Height", model.Height.ToString(CultureInfo.InvariantCulture)),
-                new KeyValuePair<string,string>("StartTime", model.StartTime.ToString()));
+                new KeyValuePair<string, string>("StartTime", model.StartTime.ToString()));
         }
 
         [TestMethod]
@@ -64,7 +66,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.NormalModels.Add(model);
             await db.SaveChangesAsync(userName);
 
-            model.AssertNoLogs(db,model.Id);
+            model.AssertNoLogs(db, model.Id);
         }
 
         [TestMethod]
@@ -87,7 +89,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 .TrackProperty(x => x.Value)
                 //disable for isSpecial
                 .SkipProperty(x => x.IsSpecial)
-                .SkipProperty(x=>x.Category);
+                .SkipProperty(x => x.Category);
 
             db.TrackedModelsWithMultipleProperties.Add(model);
 
@@ -95,10 +97,10 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
             db.SaveChanges(userName);
 
-            model.AssertAuditForAddition(db, model.Id, userName, 
-                model.GetKeyValuePair(x=>x.Id), 
-                model.GetKeyValuePair(x=>x.Name), 
-                model.GetKeyValuePair(x=>x.Value));
+            model.AssertAuditForAddition(db, model.Id, userName,
+                model.GetKeyValuePair(x => x.Id),
+                model.GetKeyValuePair(x => x.Name),
+                model.GetKeyValuePair(x => x.Value));
         }
 
         //TODO: can track CHAR properties ? NO

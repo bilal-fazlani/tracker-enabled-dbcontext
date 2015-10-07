@@ -18,5 +18,6 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public DbSet<ModelWithConventionalKey> ModelsWithConventionalKey { get; set; }
         public DbSet<ModelWithSkipTracking> ModelsWithSkipTracking { get; set; }
         public DbSet<POCO> POCOs { get; set; }
+        public DbSet<TrackedModelWithMultipleProperties> TrackedModelsWithMultipleProperties { get; set; }
     }
 }

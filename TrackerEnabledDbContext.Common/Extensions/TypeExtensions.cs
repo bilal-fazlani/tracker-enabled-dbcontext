@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -25,30 +26,47 @@ namespace TrackerEnabledDbContext.Common.Extensions
             return entityType;
         }
 
+        public static KeyValuePair<string, string> GetKeyValuePair<TEntity>(this TEntity entity, Expression<Func<TEntity, object>> property)
+        {
+            return new KeyValuePair<string, string>(property.GetPropertyInfo().Name, GetPropertyValue(property, entity).ToString());
+        }
+
+        private static TValue GetPropertyValue<TEntity, TValue>(Expression<Func<TEntity, TValue>> property, TEntity entity)
+        {
+            return property.Compile()(entity);
+        }
+
         public static PropertyInfo GetPropertyInfo<TSource>(this Expression<Func<TSource, object>> propertyLambda)
         {
             Type type = typeof(TSource);
 
-            var member = propertyLambda.Body as MemberExpression;
-            if (member == null)
-                throw new ArgumentException(string.Format(
-                    "Expression '{0}' refers to a method, not a property.",
-                    propertyLambda));
-
+            MemberExpression member = GetMember(propertyLambda);
+            
             var propInfo = member.Member as PropertyInfo;
             if (propInfo == null)
-                throw new ArgumentException(string.Format(
-                    "Expression '{0}' refers to a field, not a property.",
-                    propertyLambda));
+                throw new ArgumentException($"Expression '{propertyLambda}' refers to a field, not a property.");
 
             if (type != propInfo.ReflectedType &&
                 !type.IsSubclassOf(propInfo.ReflectedType))
-                throw new ArgumentException(string.Format(
-                    "Expresion '{0}' refers to a property that is not from type {1}.",
-                    propertyLambda,
-                    type));
+                throw new ArgumentException(
+                    $"Expresion '{propertyLambda}' refers to a property that is not from type {type}.");
 
             return propInfo;
+        }
+
+        private static MemberExpression GetMember<TSource, TProperty>(Expression<Func<TSource, TProperty>> propertyLambda)
+        {
+            if (propertyLambda.Body is MemberExpression)
+            {
+                return (MemberExpression) propertyLambda.Body;
+            }
+
+            if (propertyLambda.Body is UnaryExpression)
+            {
+                return (MemberExpression)(((UnaryExpression)propertyLambda.Body).Operand);
+            }
+
+            throw new ArgumentException( $"Expression '{propertyLambda.Name}' refers is not a member expression or unary expression.");
         }
 
         #endregion

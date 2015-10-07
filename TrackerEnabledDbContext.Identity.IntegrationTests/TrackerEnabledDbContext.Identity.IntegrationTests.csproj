@@ -71,6 +71,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="FluentConfigurationTestsForIdentity.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTrackerIdentityContext .cs" />
