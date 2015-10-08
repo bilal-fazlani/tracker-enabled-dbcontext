@@ -21,7 +21,21 @@ namespace TrackerEnabledDbContext.Identity
         {
         }
 
-        public TrackerIdentityContext(string connectionString) : base(connectionString)
+        public TrackerIdentityContext(DbCompiledModel model) : base(model)
+        {
+        }
+
+        public TrackerIdentityContext(string nameOrConnectionString) : base(nameOrConnectionString)
+        {
+        }
+
+        public TrackerIdentityContext(string nameOrConnectionString, DbCompiledModel model)
+            : base(nameOrConnectionString, model)
+        {
+        }
+
+        public TrackerIdentityContext(DbConnection existingConnection, bool contextOwnsConnection)
+            : base(existingConnection, contextOwnsConnection)
         {
         }
 
@@ -216,8 +230,21 @@ namespace TrackerEnabledDbContext.Identity
         {
         }
 
-        public TrackerIdentityContext(string connectionString)
-            : base(connectionString)
+        public TrackerIdentityContext(DbCompiledModel model) : base(model)
+        {
+        }
+
+        public TrackerIdentityContext(string nameOrConnectionString) : base(nameOrConnectionString)
+        {
+        }
+
+        public TrackerIdentityContext(string nameOrConnectionString, DbCompiledModel model)
+            : base(nameOrConnectionString, model)
+        {
+        }
+
+        public TrackerIdentityContext(DbConnection existingConnection, bool contextOwnsConnection)
+            : base(existingConnection, contextOwnsConnection)
         {
         }
 
