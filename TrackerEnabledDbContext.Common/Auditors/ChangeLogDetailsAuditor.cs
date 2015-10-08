@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Models;
 
-namespace TrackerEnabledDbContext.Common
+namespace TrackerEnabledDbContext.Common.Auditors
 {
-    public class LogDetailsAuditor : IDisposable
+    public class ChangeLogDetailsAuditor : IDisposable
     {
         private readonly DbEntityEntry _dbEntry;
         private readonly AuditLog _log;
 
-        public LogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log)
+        public ChangeLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log)
         {
             _dbEntry = dbEntry;
             _log = log;
@@ -24,15 +25,17 @@ namespace TrackerEnabledDbContext.Common
 
         public IEnumerable<AuditLogDetail> CreateLogDetails()
         {
-            Type type = _dbEntry.Entity.GetType().GetEntityType();
+            Type entityType = _dbEntry.Entity.GetType().GetEntityType();
 
             foreach (string propertyName in PropertyNamesOf(_dbEntry))
             {
-                if (type.IsTrackingEnabled(propertyName) && IsValueChanged(propertyName))
+                if (PropertyTrackingConfiguration.IsTrackingEnabled(
+                    new PropertyConfiguerationKey(propertyName, entityType.FullName), entityType ) 
+                    && IsValueChanged(propertyName))
                 {
                     yield return new AuditLogDetail
                     {
-                        PropertyName = type.GetPropertyName(propertyName),
+                        PropertyName = propertyName,
                         OriginalValue = OriginalValue(propertyName),
                         NewValue = CurrentValue(propertyName),
                         Log = _log
@@ -41,7 +44,7 @@ namespace TrackerEnabledDbContext.Common
             }
         }
 
-        protected virtual EntityState StateOf(DbEntityEntry dbEntry)
+        protected internal virtual EntityState StateOf(DbEntityEntry dbEntry)
         {
             return dbEntry.State;
         }
@@ -57,7 +60,8 @@ namespace TrackerEnabledDbContext.Common
         private bool IsValueChanged(string propertyName)
         {
             var prop = _dbEntry.Property(propertyName);
-            var changed = (StateOf(_dbEntry) == EntityState.Added && prop.CurrentValue != null) ||
+
+            var changed = (StateOf(_dbEntry) == EntityState.Added && prop.CurrentValue != null) ||  
                           (StateOf(_dbEntry) == EntityState.Deleted && prop.OriginalValue != null) ||
                           (StateOf(_dbEntry) == EntityState.Modified && prop.IsModified);
             return changed;
@@ -71,7 +75,7 @@ namespace TrackerEnabledDbContext.Common
             }
 
             var value = _dbEntry.Property(propertyName).OriginalValue;
-            return (value != null) ? value.ToString() : null;
+            return value?.ToString();
         }
 
         private string CurrentValue(string propertyName)
@@ -83,7 +87,7 @@ namespace TrackerEnabledDbContext.Common
             }
 
             var value = _dbEntry.Property(propertyName).CurrentValue;
-            return (value != null) ? value.ToString() : null;
+            return value?.ToString();
         }
     }
 }

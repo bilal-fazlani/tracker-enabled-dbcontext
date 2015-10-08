@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common;
+using TrackerEnabledDbContext.Common.Auditors;
 using TrackerEnabledDbContext.Common.Models;
 using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Extensions;
@@ -384,7 +385,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.NormalModels.Add(model);
             db.ChangeTracker.DetectChanges();
             var entry = db.ChangeTracker.Entries().First();
-            var auditor = new LogDetailsAuditor(entry, null);
+            var auditor = new ChangeLogDetailsAuditor(entry, null);
 
             db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
             var auditLogDetails = auditor.CreateLogDetails().ToList();
@@ -400,7 +401,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             model.Description += RandomText;
             db.ChangeTracker.DetectChanges();
             var entry = db.ChangeTracker.Entries().First();
-            var auditor = new LogDetailsAuditor(entry, null);
+            var auditor = new ChangeLogDetailsAuditor(entry, null);
 
             db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
             var auditLogDetails = auditor.CreateLogDetails().ToList();
@@ -416,7 +417,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.NormalModels.Remove(model);
             db.ChangeTracker.DetectChanges();
             var entry = db.ChangeTracker.Entries().First();
-            var auditor = new LogDetailsAuditor(entry, null);
+            var auditor = new ChangeLogDetailsAuditor(entry, null);
 
             db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
             var auditLogDetails = auditor.CreateLogDetails().ToList();

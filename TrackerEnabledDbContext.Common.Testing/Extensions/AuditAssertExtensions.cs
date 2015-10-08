@@ -54,11 +54,11 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
         public static T AssertAuditForModification<T>(this T entity, ITrackerContext db, object entityId,
             object userName = null, params AuditLogDetail[] logdetails)
         {
-            IEnumerable<AuditLog> logs = db.GetLogs<T>(entityId)
-                .AssertCountIsNotZero("log count is zero");
+            IEnumerable<AuditLog> logs = db.GetLogs<T>(entityId).ToList();
+            logs.AssertCountIsNotZero("log count is zero");
 
             AuditLog lastLog = logs.Last(
-                x => x.EventType == EventType.Modified && x.UserName == (userName != null ? userName.ToString() : null))
+                x => x.EventType == EventType.Modified && x.UserName == userName?.ToString())
                 .AssertIsNotNull("log not found");
 
             lastLog.LogDetails
@@ -72,6 +72,14 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
                                                   && x.NewValue == logdetail.NewValue,
                     "could not find an expected auditlog detail");
             }
+
+            return entity;
+        }
+
+        public static T AssertNoLogs<T>(this T entity, ITrackerContext db, object entityId)
+        {
+            var logs = db.GetLogs<T>(entityId);
+            logs.AssertCount(0, "Logs found when logs were not expected");
 
             return entity;
         }

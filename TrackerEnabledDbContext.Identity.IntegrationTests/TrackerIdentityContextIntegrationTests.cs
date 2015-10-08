@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TrackerEnabledDbContext.Common;
+using TrackerEnabledDbContext.Common.Auditors;
 using TrackerEnabledDbContext.Common.Models;
 using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Extensions;
@@ -335,14 +337,18 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             await db.SaveChangesAsync(RandomText);
             model.Id.AssertIsNotZero();
 
-            IEnumerable<AuditLog> logs = db.GetLogs("TrackerEnabledDbContext.Common.Testing.Models.NormalModel")
-                .AssertCountIsNotZero("logs not found");
+            IEnumerable<AuditLog> logs = db
+                .GetLogs("TrackerEnabledDbContext.Common.Testing.Models.NormalModel")
+                .ToList();
+
+            logs.AssertCountIsNotZero("logs not found");
 
             AuditLog lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
 
             IEnumerable<AuditLogDetail> details = lastLog.LogDetails
-                .AssertIsNotNull("log details is null")
-                .AssertCountIsNotZero("no log details found");
+                .AssertIsNotNull("log details is null");
+
+            details.AssertCountIsNotZero("no log details found");
         }
 
         [TestMethod]
@@ -374,6 +380,52 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
 
             //assert
             entity.AssertAuditForModification(db, entity.Id, userId, expectedLog);
+        }
+
+        [TestMethod]
+        public void Can_Create_AuditLogDetail_ForAddedEntity_WithoutQueryingDatabase()
+        {
+            NormalModel model = ObjectFactory<NormalModel>.Create();
+            db.NormalModels.Add(model);
+            db.ChangeTracker.DetectChanges();
+            var entry = db.ChangeTracker.Entries().First();
+            var auditor = new ChangeLogDetailsAuditor(entry, null);
+
+            db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
+            var auditLogDetails = auditor.CreateLogDetails().ToList();
+            db.Database.Log = null;
+        }
+
+        [TestMethod]
+        public void Can_Create_AuditLogDetail_ForModifiedEntity_WithoutQueryingDatabase()
+        {
+            NormalModel model = ObjectFactory<NormalModel>.Create();
+            db.NormalModels.Add(model);
+            db.SaveChanges();
+            model.Description += RandomText;
+            db.ChangeTracker.DetectChanges();
+            var entry = db.ChangeTracker.Entries().First();
+            var auditor = new ChangeLogDetailsAuditor(entry, null);
+
+            db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
+            var auditLogDetails = auditor.CreateLogDetails().ToList();
+            db.Database.Log = null;
+        }
+
+        [TestMethod]
+        public void Can_Create_AuditLogDetail_ForDeletedEntity_WithoutQueryingDatabase()
+        {
+            NormalModel model = ObjectFactory<NormalModel>.Create();
+            db.NormalModels.Add(model);
+            db.SaveChanges();
+            db.NormalModels.Remove(model);
+            db.ChangeTracker.DetectChanges();
+            var entry = db.ChangeTracker.Entries().First();
+            var auditor = new ChangeLogDetailsAuditor(entry, null);
+
+            db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
+            var auditLogDetails = auditor.CreateLogDetails().ToList();
+            db.Database.Log = null;
         }
     }
 }
