@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Models;
 
@@ -6,8 +7,10 @@ namespace TrackerEnabledDbContext.IntegrationTests
 {
     public class TestTrackerContext : TrackerContext, ITestDbContext
     {
+        private static readonly string TestConnectionString = Environment.GetEnvironmentVariable("TestGenericConnectionString") 
+            ?? "DefaultTestConnection";
         public TestTrackerContext()
-            : base("DefaultTestConnection")
+            : base(TestConnectionString)
         {
         }
 
