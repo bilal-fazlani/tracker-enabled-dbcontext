@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;
@@ -19,7 +17,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         {
             GlobalTrackingConfig.Enabled = false;
 
-            EntityTrackingConfiguration
+            EntityTracker
                 .TrackAllProperties<POCO>()
                 .Except(x=>x.StartTime)
                 .And(x=>x.Color);
@@ -34,7 +32,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_recognise_global_tracking_indicator_when_enabled()
         {
-            EntityTrackingConfiguration
+            EntityTracker
                 .TrackAllProperties<POCO>();
 
             POCO model = new POCO
@@ -48,17 +46,17 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.SaveChanges();
 
             model.AssertAuditForAddition(db, model.Id, null,
-                new KeyValuePair<string, string>("Color", model.Color),
-                new KeyValuePair<string, string>("Id", model.Id.ToString()),
-                new KeyValuePair<string, string>("Height", model.Height.ToString(CultureInfo.InvariantCulture)),
-                new KeyValuePair<string,string>("StartTime", model.StartTime.ToString()));
+                x=>x.Color,
+                x=>x.Id,
+                x=>x.Height,
+                x=>x.StartTime);
         }
 
         [TestMethod]
         public async Task Can_Override_annotation_based_configuration_for_entity_skipTracking()
         {
             var model = new NormalModel();
-            EntityTrackingConfiguration
+            EntityTracker
                 .OverrideTracking<NormalModel>()
                 .Disable();
 
@@ -83,7 +81,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 Value = RandomNumber //skipped -> Tracked
             };
 
-            EntityTrackingConfiguration
+            EntityTracker
                 .OverrideTracking<TrackedModelWithMultipleProperties>()
                 //enable vaue
                 .Enable(x => x.Value)
@@ -99,9 +97,9 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.SaveChanges(userName);
 
             model.AssertAuditForAddition(db, model.Id, userName, 
-                model.GetKeyValuePair(x=>x.Id), 
-                model.GetKeyValuePair(x=>x.Name), 
-                model.GetKeyValuePair(x=>x.Value));
+                x=>x.Id, 
+                x=>x.Name, 
+                x=>x.Value);
         }
 
         //TODO: can track CHAR properties ? NO

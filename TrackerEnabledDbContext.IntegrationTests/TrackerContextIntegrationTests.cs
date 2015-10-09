@@ -87,9 +87,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.SaveChanges(userName);
 
             normalModel.AssertAuditForAddition(db, normalModel.Id, userName,
-                new KeyValuePair<string, string>("Description", randomText),
-                new KeyValuePair<string, string>("Id", normalModel.Id.ToString())
-                );
+                x => x.Description,
+                x => x.Id);
         }
 
         [TestMethod]
@@ -103,9 +102,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.SaveChanges();
 
             normalModel.AssertAuditForAddition(db, normalModel.Id, null,
-                new KeyValuePair<string, string>("Description", randomText),
-                new KeyValuePair<string, string>("Id", normalModel.Id.ToString())
-                );
+                x => x.Description,
+                x => x.Id);
         }
 
         [TestMethod]
@@ -120,9 +118,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.SaveChanges(userName);
 
             model.AssertAuditForAddition(db, model.Id, userName,
-                new KeyValuePair<string, string>("Description", randomText),
-                new KeyValuePair<string, string>("Id", model.Id.ToString())
-                );
+                x => x.Description,
+                x => x.Id);
         }
 
         [TestMethod]
@@ -143,9 +140,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.SaveChanges(userName);
 
             normalModel.AssertAuditForDeletion(db, normalModel.Id, userName,
-                new KeyValuePair<string, string>("Description", normalModel.Description),
-                new KeyValuePair<string, string>("Id", normalModel.Id.ToString())
-                );
+                x => x.Description,
+                x => x.Id);
         }
 
         [TestMethod]
@@ -167,9 +163,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
             //assert
             normalModel.AssertAuditForDeletion(db, normalModel.Id, null,
-                new KeyValuePair<string, string>("Description", normalModel.Description),
-                new KeyValuePair<string, string>("Id", normalModel.Id.ToString())
-                );
+                x => x.Description,
+                x => x.Id);
         }
 
         [TestMethod]
@@ -253,9 +248,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
             //assert addtion
             entity.AssertAuditForAddition(db, entity.Id, username,
-                new KeyValuePair<string, string>("TrackedProperty", entity.TrackedProperty.ToString()),
-                new KeyValuePair<string, string>("Id", entity.Id.ToString(CultureInfo.InvariantCulture))
-                );
+                x => x.TrackedProperty,
+                x => x.Id);
         }
 
         [TestMethod]
@@ -275,13 +269,12 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.ModelsWithCompositeKey.Add(entity);
             db.SaveChanges(userName);
 
-            string expectedKey = string.Format("[{0},{1}]", key1, key2);
+            string expectedKey = $"[{key1},{key2}]";
 
             entity.AssertAuditForAddition(db, expectedKey, userName,
-                new KeyValuePair<string, string>("Description", descr),
-                new KeyValuePair<string, string>("Key1", key1),
-                new KeyValuePair<string, string>("Key2", key2)
-                );
+                x => x.Description,
+                x => x.Key1,
+                x=>x.Key2);
         }
 
         [TestMethod]

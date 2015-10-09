@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
 
@@ -8,7 +11,7 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
     public static class AuditAssertExtensions
     {
         public static T AssertAuditForAddition<T>(this T entity, ITrackerContext db, object entityId,
-            string userName = null, params KeyValuePair<string, string>[] newValues)
+            string userName = null, params Expression<Func<T, object>>[] propertyExpressions)
         {
             IEnumerable<AuditLog> logs = db.GetLogs<T>(entityId)
                 .AssertCountIsNotZero("log count is zero");
@@ -18,10 +21,12 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
 
             lastLog.LogDetails
                 .AssertCountIsNotZero("no log details found")
-                .AssertCount(newValues.Count());
+                .AssertCount(propertyExpressions.Count());
 
-            foreach (var keyValuePair in newValues)
+            foreach (var expression in propertyExpressions)
             {
+                var keyValuePair = entity.GetKeyValuePair(expression);
+
                 lastLog.LogDetails.AssertAny(x => x.NewValue == keyValuePair.Value
                                                   && x.PropertyName == keyValuePair.Key);
             }
@@ -30,7 +35,7 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
         }
 
         public static T AssertAuditForDeletion<T>(this T entity, ITrackerContext db, object entityId,
-            string userName = null, params KeyValuePair<string, string>[] oldValues)
+            string userName = null, params Expression<Func<T, object>>[] oldValueProperties)
         {
             IEnumerable<AuditLog> logs = db.GetLogs<T>(entityId)
                 .AssertCountIsNotZero("log count is zero");
@@ -40,10 +45,11 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
 
             lastLog.LogDetails
                 .AssertCountIsNotZero("no log details found")
-                .AssertCount(oldValues.Count());
+                .AssertCount(oldValueProperties.Count());
 
-            foreach (var keyValuePair in oldValues)
+            foreach (var property in oldValueProperties)
             {
+                var keyValuePair = entity.GetKeyValuePair(property);
                 lastLog.LogDetails.AssertAny(x => x.OriginalValue == keyValuePair.Value
                                                   && x.PropertyName == keyValuePair.Key);
             }

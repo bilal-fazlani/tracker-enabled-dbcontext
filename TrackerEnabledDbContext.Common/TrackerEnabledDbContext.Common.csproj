@@ -61,6 +61,10 @@
   <ItemGroup>
     <Compile Include="Auditors\AdditionLogDetailsAuditor.cs" />
     <Compile Include="Configuration\DbMapping.cs" />
+    <Compile Include="Configuration\EntityTracker.cs" />
+    <Compile Include="Configuration\ExceptResponse.cs" />
+    <Compile Include="Configuration\OverrideTrackingResponse.cs" />
+    <Compile Include="Configuration\TrackAllResponse.cs" />
     <Compile Include="Configuration\TrackingConfigurationPriority.cs" />
     <Compile Include="Configuration\TrackingConfigurationValue.cs" />
     <Compile Include="Interfaces\IUnTrackable.cs" />
