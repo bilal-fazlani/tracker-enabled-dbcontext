@@ -18,9 +18,11 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public void Can_recognise_global_tracking_indicator_when_disabled()
         {
             GlobalTrackingConfig.Enabled = false;
+
             EntityTrackingConfiguration
-                .Configure<POCO>()
-                .EnableTracking();
+                .TrackAllProperties<POCO>()
+                .Except(x=>x.StartTime)
+                .And(x=>x.Color);
 
             POCO model = ObjectFactory<POCO>.Create();
             db.POCOs.Add(model);
@@ -32,7 +34,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_recognise_global_tracking_indicator_when_enabled()
         {
-            EntityTrackingConfiguration.Configure<POCO>().EnableTracking();
+            EntityTrackingConfiguration
+                .TrackAllProperties<POCO>();
 
             POCO model = new POCO
             {
@@ -56,8 +59,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
         {
             var model = new NormalModel();
             EntityTrackingConfiguration
-                .Configure<NormalModel>()
-                .DisableTracking();
+                .OverrideTracking<NormalModel>()
+                .Disable();
 
             string userName = RandomText;
 
@@ -81,13 +84,13 @@ namespace TrackerEnabledDbContext.IntegrationTests
             };
 
             EntityTrackingConfiguration
-                .Configure<TrackedModelWithMultipleProperties>()
-                //enable tracking for value
-                .ConfigureProperties()
-                .TrackProperty(x => x.Value)
+                .OverrideTracking<TrackedModelWithMultipleProperties>()
+                //enable vaue
+                .Enable(x => x.Value)
                 //disable for isSpecial
-                .SkipProperty(x => x.IsSpecial)
-                .SkipProperty(x=>x.Category);
+                .Disable(x => x.IsSpecial)
+                //disable category
+                .Disable(x=>x.Category);
 
             db.TrackedModelsWithMultipleProperties.Add(model);
 

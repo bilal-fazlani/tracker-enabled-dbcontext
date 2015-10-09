@@ -21,8 +21,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
         {
             GlobalTrackingConfig.Enabled = false;
             EntityTrackingConfiguration
-                .Configure<POCO>()
-                .EnableTracking();
+                .TrackAllProperties<POCO>();
 
             POCO model = ObjectFactory<POCO>.Create();
             db.POCOs.Add(model);
@@ -34,7 +33,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
         [TestMethod]
         public void Can_recognise_global_tracking_indicator_when_enabled()
         {
-            EntityTrackingConfiguration.Configure<POCO>().EnableTracking();
+            EntityTrackingConfiguration.TrackAllProperties<POCO>();
 
             POCO model = new POCO
             {
@@ -58,8 +57,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
         {
             var model = new NormalModel();
             EntityTrackingConfiguration
-                .Configure<NormalModel>()
-                .DisableTracking();
+                .OverrideTracking<NormalModel>()
+                .Disable();
 
             string userName = RandomText;
 
@@ -83,13 +82,12 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             };
 
             EntityTrackingConfiguration
-                .Configure<TrackedModelWithMultipleProperties>()
+                .OverrideTracking<TrackedModelWithMultipleProperties>()
                 //enable tracking for value
-                .ConfigureProperties()
-                .TrackProperty(x => x.Value)
+                .Enable(x => x.Value)
                 //disable for isSpecial
-                .SkipProperty(x => x.IsSpecial)
-                .SkipProperty(x => x.Category);
+                .Disable(x => x.IsSpecial)
+                .Disable(x => x.Category);
 
             db.TrackedModelsWithMultipleProperties.Add(model);
 
