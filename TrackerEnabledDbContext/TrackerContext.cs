@@ -65,7 +65,7 @@ namespace TrackerEnabledDbContext
         public override int SaveChanges()
         {
             if (!GlobalTrackingConfig.Enabled) return base.SaveChanges();
-
+            //var user = Thread.CurrentPrincipal?.Identity?.Name ?? "Anonymous"; 
             return SaveChanges(null);
         }
 
