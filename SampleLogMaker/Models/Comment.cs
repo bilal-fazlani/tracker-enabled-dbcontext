@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SampleLogMaker.Models
 {
-    [TrackChanges]
+    
     public class Comment
     {
         [Key]
@@ -12,7 +12,6 @@ namespace SampleLogMaker.Models
 
         [Required]
         [UIHint("string")]
-        [SkipTracking]
         public string Text { get; set; }
 
         public virtual int ParentBlogId { get; set; }

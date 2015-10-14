@@ -89,8 +89,8 @@ namespace TrackerEnabledDbContext.Identity
             {
                 return base.SaveChanges();
             }
-
-            return SaveChanges(null);
+            var user = Thread.CurrentPrincipal?.Identity?.Name ?? "Anonymous";
+            return SaveChanges(user);
         }
 
         /// <summary>
