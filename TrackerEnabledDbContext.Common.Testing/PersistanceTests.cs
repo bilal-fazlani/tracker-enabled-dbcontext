@@ -9,11 +9,11 @@ namespace TrackerEnabledDbContext.Common.Testing
     public class PersistanceTests<TContext> where TContext : ITestDbContext, new()
     {
         public TContext db = new TContext();
-        public DbContextTransaction transaction = null;
+        public DbContextTransaction transaction;
 
         protected string RandomText => Guid.NewGuid().ToString();
 
-        protected int RandomNumber => new Random().Next();
+        protected int RandomNumber => new Random().Next(100,200);
 
         protected DateTime RandomDate => DateTime.Now.AddDays(-1*RandomNumber);
 
@@ -38,7 +38,7 @@ namespace TrackerEnabledDbContext.Common.Testing
         [TestCleanup]
         public virtual void CleanUp()
         {
-            transaction.Rollback();
+            transaction?.Rollback();
         }
     }
 }

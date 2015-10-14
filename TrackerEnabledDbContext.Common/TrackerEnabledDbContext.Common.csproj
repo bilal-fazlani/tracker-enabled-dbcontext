@@ -85,6 +85,9 @@
     <Compile Include="Models\AuditLogDetail.cs" />
     <Compile Include="Models\EventType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\LogDataMigration.cs" />
+    <Compile Include="Tools\MigrationJobStatus.cs" />
+    <Compile Include="Tools\NameChangedEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

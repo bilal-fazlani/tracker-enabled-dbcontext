@@ -81,6 +81,7 @@
     <Compile Include="Models\ChildModel.cs" />
     <Compile Include="Models\ModelWithCompositeKey.cs" />
     <Compile Include="Models\ModelWithConventionalKey.cs" />
+    <Compile Include="Models\TrackedModelWithCustomTableAndColumnNames.cs" />
     <Compile Include="Models\TrackedModelWithMultipleProperties.cs" />
     <Compile Include="Models\ModelWithSkipTracking.cs" />
     <Compile Include="Models\NormalModel.cs" />

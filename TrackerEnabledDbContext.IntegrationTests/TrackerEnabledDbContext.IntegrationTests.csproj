@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="FluentConfigurationTests.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="MigrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTrackerContext.cs" />
     <Compile Include="TrackerContextIntegrationTests.cs" />
