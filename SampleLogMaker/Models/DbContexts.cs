@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Identity;
@@ -22,7 +23,13 @@ namespace SampleLogMaker.Models
         {
             base.OnModelCreating(modelBuilder);
             //using the Fluent Configuration API
-            modelBuilder.Entity<Comment>().TrackAllProperties().Except(x => x.Text);
+            var commentEntity = modelBuilder.Entity<Comment>();
+            commentEntity.TrackAllProperties().Except(x => x.Text);
+            commentEntity.HasKey(x => x.Id);
+            commentEntity.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            commentEntity.Property(x => x.Text).IsRequired();
+            commentEntity.HasRequired(x => x.ParentBlog).WithMany(x=>x.Comments).HasForeignKey(x => x.ParentBlogId);
+
             // alternately could call
             // modelBuilder.Configurations.Add(new CommentConfiguration());
         }
@@ -34,6 +41,10 @@ namespace SampleLogMaker.Models
         public CommentConfiguration()
         {
             this.TrackAllProperties().Except(p => p.Text);
+            this.HasKey(x => x.Id);
+            this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(x => x.Text).IsRequired();
+            this.HasRequired(x => x.ParentBlog).WithMany(x => x.Comments).HasForeignKey(x => x.ParentBlogId);
         }
     }
 }
