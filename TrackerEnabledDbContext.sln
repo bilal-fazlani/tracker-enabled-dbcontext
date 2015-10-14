@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleLogMaker", "SampleLogMaker\SampleLogMaker.csproj", "{3EE0FE30-1616-4EBE-9694-B4F4017C3C99}"
 EndProject
@@ -20,6 +20,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E6B24DDD-8A4C-40FD-8281-DC0F2686CA3B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerEnabledDbContext.IntegrationTests", "TrackerEnabledDbContext.IntegrationTests\TrackerEnabledDbContext.IntegrationTests.csproj", "{3EA1B657-CABF-4A33-84D6-28F5E1893743}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{578F0B6A-A461-402F-91F1-ACC7A423E97D}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

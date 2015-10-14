@@ -12,6 +12,7 @@ namespace SampleLogMaker.Models
 
         [Required]
         [UIHint("string")]
+        [SkipTracking]
         public string Text { get; set; }
 
         public virtual int ParentBlogId { get; set; }

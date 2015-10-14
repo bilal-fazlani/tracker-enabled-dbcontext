@@ -36,6 +36,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>MyKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -61,6 +67,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="FluentConfigurationTests.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTrackerContext.cs" />
@@ -84,6 +91,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="MyKey.snk" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

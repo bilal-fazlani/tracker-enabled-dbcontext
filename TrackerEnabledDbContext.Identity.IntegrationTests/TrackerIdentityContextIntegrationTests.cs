@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TrackerEnabledDbContext.Common;
+using TrackerEnabledDbContext.Common.Auditors;
 using TrackerEnabledDbContext.Common.Models;
 using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Extensions;
@@ -85,9 +87,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             db.SaveChanges(userName);
 
             normalModel.AssertAuditForAddition(db, normalModel.Id, userName,
-                new KeyValuePair<string, string>("Description", randomText),
-                new KeyValuePair<string, string>("Id", normalModel.Id.ToString())
-                );
+                x => x.Description,
+                x => x.Id);
         }
 
         [TestMethod]
@@ -101,9 +102,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             db.SaveChanges();
 
             normalModel.AssertAuditForAddition(db, normalModel.Id, null,
-                new KeyValuePair<string, string>("Description", randomText),
-                new KeyValuePair<string, string>("Id", normalModel.Id.ToString())
-                );
+                x => x.Description,
+                x => x.Id);
         }
 
         [TestMethod]
@@ -118,9 +118,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             db.SaveChanges(userName);
 
             model.AssertAuditForAddition(db, model.Id, userName,
-                new KeyValuePair<string, string>("Description", randomText),
-                new KeyValuePair<string, string>("Id", model.Id.ToString())
-                );
+                 x => x.Description,
+                 x => x.Id);
         }
 
         [TestMethod]
@@ -141,9 +140,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             db.SaveChanges(userName);
 
             normalModel.AssertAuditForDeletion(db, normalModel.Id, userName,
-                new KeyValuePair<string, string>("Description", normalModel.Description),
-                new KeyValuePair<string, string>("Id", normalModel.Id.ToString())
-                );
+                 x => x.Description,
+                 x => x.Id);
         }
 
         [TestMethod]
@@ -165,9 +163,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
 
             //assert
             normalModel.AssertAuditForDeletion(db, normalModel.Id, null,
-                new KeyValuePair<string, string>("Description", normalModel.Description),
-                new KeyValuePair<string, string>("Id", normalModel.Id.ToString())
-                );
+                 x => x.Description,
+                x => x.Id);
         }
 
         [TestMethod]
@@ -251,9 +248,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
 
             //assert addtion
             entity.AssertAuditForAddition(db, entity.Id, username,
-                new KeyValuePair<string, string>("TrackedProperty", entity.TrackedProperty.ToString()),
-                new KeyValuePair<string, string>("Id", entity.Id.ToString(CultureInfo.InvariantCulture))
-                );
+                 x => x.TrackedProperty,
+                x => x.Id);
         }
 
         [TestMethod]
@@ -276,9 +272,9 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             string expectedKey = string.Format("[{0},{1}]", key1, key2);
 
             entity.AssertAuditForAddition(db, expectedKey, userName,
-                new KeyValuePair<string, string>("Description", descr),
-                new KeyValuePair<string, string>("Key1", key1),
-                new KeyValuePair<string, string>("Key2", key2)
+                x=>x.Description,
+                x=>x.Key1,
+                x=>x.Key2
                 );
         }
 
@@ -335,14 +331,18 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             await db.SaveChangesAsync(RandomText);
             model.Id.AssertIsNotZero();
 
-            IEnumerable<AuditLog> logs = db.GetLogs("TrackerEnabledDbContext.Common.Testing.Models.NormalModel")
-                .AssertCountIsNotZero("logs not found");
+            IEnumerable<AuditLog> logs = db
+                .GetLogs("TrackerEnabledDbContext.Common.Testing.Models.NormalModel")
+                .ToList();
+
+            logs.AssertCountIsNotZero("logs not found");
 
             AuditLog lastLog = logs.LastOrDefault().AssertIsNotNull("last log is null");
 
             IEnumerable<AuditLogDetail> details = lastLog.LogDetails
-                .AssertIsNotNull("log details is null")
-                .AssertCountIsNotZero("no log details found");
+                .AssertIsNotNull("log details is null");
+
+            details.AssertCountIsNotZero("no log details found");
         }
 
         [TestMethod]
@@ -374,6 +374,52 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
 
             //assert
             entity.AssertAuditForModification(db, entity.Id, userId, expectedLog);
+        }
+
+        [TestMethod]
+        public void Can_Create_AuditLogDetail_ForAddedEntity_WithoutQueryingDatabase()
+        {
+            NormalModel model = ObjectFactory<NormalModel>.Create();
+            db.NormalModels.Add(model);
+            db.ChangeTracker.DetectChanges();
+            var entry = db.ChangeTracker.Entries().First();
+            var auditor = new ChangeLogDetailsAuditor(entry, null);
+
+            db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
+            var auditLogDetails = auditor.CreateLogDetails().ToList();
+            db.Database.Log = null;
+        }
+
+        [TestMethod]
+        public void Can_Create_AuditLogDetail_ForModifiedEntity_WithoutQueryingDatabase()
+        {
+            NormalModel model = ObjectFactory<NormalModel>.Create();
+            db.NormalModels.Add(model);
+            db.SaveChanges();
+            model.Description += RandomText;
+            db.ChangeTracker.DetectChanges();
+            var entry = db.ChangeTracker.Entries().First();
+            var auditor = new ChangeLogDetailsAuditor(entry, null);
+
+            db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
+            var auditLogDetails = auditor.CreateLogDetails().ToList();
+            db.Database.Log = null;
+        }
+
+        [TestMethod]
+        public void Can_Create_AuditLogDetail_ForDeletedEntity_WithoutQueryingDatabase()
+        {
+            NormalModel model = ObjectFactory<NormalModel>.Create();
+            db.NormalModels.Add(model);
+            db.SaveChanges();
+            db.NormalModels.Remove(model);
+            db.ChangeTracker.DetectChanges();
+            var entry = db.ChangeTracker.Entries().First();
+            var auditor = new ChangeLogDetailsAuditor(entry, null);
+
+            db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
+            var auditLogDetails = auditor.CreateLogDetails().ToList();
+            db.Database.Log = null;
         }
     }
 }

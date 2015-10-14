@@ -9,11 +9,6 @@ namespace System.ComponentModel.DataAnnotations
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class TrackChangesAttribute : Attribute
     {
-        public TrackChangesAttribute(bool trackChanges = true)
-        {
-            Enabled = trackChanges;
-        }
-
-        public bool Enabled { get; set; }
+        
     }
 }
