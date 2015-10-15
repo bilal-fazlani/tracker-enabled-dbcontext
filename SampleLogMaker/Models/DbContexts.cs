@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
-using TrackerEnabledDbContext.Common.Configuration;
+using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Identity;
 
 namespace SampleLogMaker.Models

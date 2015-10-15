@@ -67,6 +67,7 @@
     <Compile Include="Configuration\TrackAllResponse.cs" />
     <Compile Include="Configuration\TrackingConfigurationPriority.cs" />
     <Compile Include="Configuration\TrackingConfigurationValue.cs" />
+    <Compile Include="Extensions\EntityTypeConfigurationExtensions.cs" />
     <Compile Include="Interfaces\IUnTrackable.cs" />
     <Compile Include="Attributes\SkipTrackingAttribute.cs" />
     <Compile Include="Attributes\TrackChangesAttribute.cs" />

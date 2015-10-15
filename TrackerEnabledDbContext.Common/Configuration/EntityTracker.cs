@@ -1,5 +1,3 @@
-using System.Data.Entity.ModelConfiguration;
-
 namespace TrackerEnabledDbContext.Common.Configuration
 {
     public static class EntityTracker
@@ -26,17 +24,5 @@ namespace TrackerEnabledDbContext.Common.Configuration
         {
             return new OverrideTrackingResponse<T>();
         }
-
-        public static TrackAllResponse<T> TrackAllProperties<T>(this EntityTypeConfiguration<T> entityTypeConfig) where T: class
-        {
-            return TrackAllProperties<T>();
-        }
-
-        public static OverrideTrackingResponse<T> OverrideTracking<T>(this EntityTypeConfiguration<T> entityTypeConfig)
-            where T : class
-        {
-            return OverrideTracking<T>();
-        }
-
     }
 }
