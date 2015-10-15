@@ -1,78 +1,295 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Tracker-enabled-dbcontext : Tracker-enabled DbContext offers you to implement full auditing in your database">
+    <title>Tracker-enabled-dbcontext by bilal-fazlani</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Tracker-enabled-dbcontext</title>
   </head>
-
   <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/bilal-fazlani/tracker-enabled-dbcontext">View on GitHub</a>
+      <header>
+        <h1>Tracker-enabled-dbcontext</h1>
+        <p>Tracker-enabled DbContext offers you to implement full auditing in your database</p>
+      </header>
 
-          <h1 id="project_title">Tracker-enabled-dbcontext</h1>
-          <h2 id="project_tagline">Tracker-enabled DbContext offers you to implement full auditing in your database</h2>
+      <div id="banner">
+        <span id="logo"></span>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/bilal-fazlani/tracker-enabled-dbcontext/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/bilal-fazlani/tracker-enabled-dbcontext/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+        <a href="https://github.com/bilal-fazlani/tracker-enabled-dbcontext" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/bilal-fazlani/tracker-enabled-dbcontext/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/bilal-fazlani/tracker-enabled-dbcontext/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a id="tracker-enabled-dbcontext" class="anchor" href="#tracker-enabled-dbcontext" aria-hidden="true"><span class="octicon octicon-link"></span></a>tracker-enabled-dbcontext</h1>
-
-<h2>
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h2>
 <a id="what-is-tracker-enabled-dbcontext" class="anchor" href="#what-is-tracker-enabled-dbcontext" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is tracker-enabled-dbcontext?</h2>
 
-<p>tracker-enabled-dbcontext is a .net library based on entity framework. It is created for auditing the changes in database. This library will records new record additions, record changes &amp; record deletions. When recording record modifications, it will audit previous and new values of the fields. It will also audit the time of change and user who changed the record.</p>
+<p>tracker-enabled-dbcontext is a .net library based on entity framework. It is created for tracking the changes in database. This library will records new record additions, record changes &amp; record deletions. When recording record modifications, it will audit previous and new values of the fields. It will also audit the time of change and user who changed/added/deleted the record.</p>
 
 <h2>
 <a id="what-are-the-types-of-tracker-enabled-dbcontext" class="anchor" href="#what-are-the-types-of-tracker-enabled-dbcontext" aria-hidden="true"><span class="octicon octicon-link"></span></a>What are the types of tracker-enabled-dbcontext?</h2>
 
-<p>At present there are two flavors of tracker-enabled-dbcontext. </p>
+<p>At present there are two kinds of tracker-enabled-dbcontext. </p>
 
 <h3>
-<a id="1-trackerenableddbcontext" class="anchor" href="#1-trackerenableddbcontext" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. TrackerEnabledDbcontext</h3>
+<a id="1-trackerenableddbcontext" class="anchor" href="#1-trackerenableddbcontext" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. <a href="https://www.nuget.org/packages/TrackerEnabledDbContext">TrackerEnabledDbcontext</a>
+</h3>
 
 <p>This is the main library. It can be used with any type of .net project. For example, </p>
 
 <ul>
-<li>console application</li>
-<li>winforms application</li>
-<li>web application</li>
-<li>windows store application</li>
-<li>class library</li>
+<li>Console application</li>
+<li>Winforms application</li>
+<li>Web application ( MVC/ Webforms )</li>
+<li>Windows store application</li>
+<li>Class library</li>
 </ul>
 
 <h3>
-<a id="2-trackerenableddbcontextidentity" class="anchor" href="#2-trackerenableddbcontextidentity" aria-hidden="true"><span class="octicon octicon-link"></span></a>2. TrackerEnabledDbcontext.Identity</h3>
+<a id="2-trackerenableddbcontextidentity" class="anchor" href="#2-trackerenableddbcontextidentity" aria-hidden="true"><span class="octicon octicon-link"></span></a>2. <a href="https://www.nuget.org/packages/TrackerEnabledDbContext.identity">TrackerEnabledDbcontext.Identity</a>
+</h3>
 
-<p>This library was later added to support Asp.Net Identity.</p>
+<p>This library was later added to support Asp.Net Identity specifically.</p>
+
+<p>You should install any one of them in one project depending upon the type of project type. You will generally not need both of them installed in project, but you can do it if you want.</p>
+
+<h2>
+<a id="how-to-install-" class="anchor" href="#how-to-install-" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to install ?</h2>
+
+<p>Install the desired nuget package using nuget package manager or package manager console.</p>
+
+<p>You can install using console, like this- </p>
+
+<pre><code>Install-Package TrackerEnabledDbContext
+</code></pre>
+
+<p>OR</p>
+
+<pre><code>Install-Package TrackerEnabledDbContext.Identity
+</code></pre>
+
+<p>If you want to try upcoming beta features, use the following command</p>
+
+<pre><code>Install-Package TrackerEnabledDbContext -Pre
+</code></pre>
+
+<h2>
+<a id="how-do-i-use-it-in-my-project-" class="anchor" href="#how-do-i-use-it-in-my-project-" aria-hidden="true"><span class="octicon octicon-link"></span></a>How do I use it in my project ?</h2>
+
+<p><strong>Important Note: This library only works with code first</strong></p>
+
+<p>For TrackerEnabledDbcontext,</p>
+
+<pre><code>public class Context : TrackerContext
+{
+    public DbSet&lt;Car&gt; Cars { get; set; }
+}
+</code></pre>
+
+<p>For TrackerEnabledDbcontext.Identity,</p>
+
+<pre><code>public class ApplicationDbContext : TrackerIdentityContext&lt;ApplicationUser&gt;
+{
+    public ApplicationDbContext(string connectionString)
+        : base(connectionString)
+    {
+    }
+
+    public DbSet&lt;Blog&gt; Blogs { get; set; }
+}
+</code></pre>
+
+<p>PS: Apart from these, many other of constructors are available for both kinds.</p>
+
+<h2>
+<a id="how-to-configure-tracker-to-track-entities" class="anchor" href="#how-to-configure-tracker-to-track-entities" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to configure tracker to track entities?</h2>
+
+<p>In order to track entities, you will have to specify which entities you want to track. You can further specify which properties to track but it is optional. If you don't specify which properties to track, all properties of that entity will be tracked.</p>
+
+<p>You can specify your tracking requirements in 3 ways.</p>
+
+<ol>
+<li>Annotations</li>
+<li>Fluent API</li>
+<li>Combination of both</li>
+</ol>
+
+<p>With the recent introduction of Fluent API, it gives you more power to change/enable/disable tracking even on runtime.</p>
+
+<h3>
+<a id="annotation-based-configuration" class="anchor" href="#annotation-based-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Annotation based configuration</h3>
+
+<p>The following is an example of Comment class</p>
+
+<pre><code>[TrackChanges]
+public class Comment
+{
+    public int Id { get; set; }
+
+    [SkipTracking]
+    public string Text { get; set; }
+
+    public virtual int ParentBlogId { get; set; }
+
+    public virtual Blog ParentBlog { get; set; }
+}
+</code></pre>
+
+<p>By putting the annotation [TrackChanges], you specify that this entity should be tracked. But if you don't want to track the Text property, just add the annotation [SkipTracking].</p>
+
+<p>This entity will have 3 columns in table. Id, Text and ParentBlogId. Although entity framework works even if you don't have the property 'ParentBlogId', this library will require you to have it if you wish to track foreign keys.</p>
+
+<h3>
+<a id="fluent-api-configuration" class="anchor" href="#fluent-api-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fluent API configuration</h3>
+
+<p>If you don't like to put attributes on your entities, you can use the fluent api to configure tracking as following example.</p>
+
+<pre><code>        EntityTracker
+            .TrackAllProperties&lt;NormalModel&gt;()
+            .Except(x =&gt; x.Description)
+            .And(x =&gt; x.Id);
+</code></pre>
+
+<p><strong>Note that if you use both, annotations and fluent api, and they are conflicting for an entity or property, fluent api configuration will be considered high priority</strong></p>
+
+<p>Let's consider the following example where you have already configured tracking of a model with either annotations or fluent api. However now on runtime you want to override it for a specific property.</p>
+
+<pre><code>        EntityTracker
+            .OverrideTracking&lt;TrackedModelWithMultipleProperties&gt;()
+            .Disable(x =&gt; x.StartDate);
+</code></pre>
+
+<p>This way, all configuration is maintained and only StartDate tracking is disabled. You can enable it again using Enable() method.</p>
+
+<h2>
+<a id="at-what-levels-can-tracking-be-configured-" class="anchor" href="#at-what-levels-can-tracking-be-configured-" aria-hidden="true"><span class="octicon octicon-link"></span></a>At what levels can tracking be configured ?</h2>
+
+<p>You can configure tracking at 3 levels.</p>
+
+<ol>
+<li>Global</li>
+<li>Entity</li>
+<li>Property</li>
+</ol>
+
+<p><strong>Global Level example</strong></p>
+
+<p>Global level tracking is on by default but you can disable it at runtime as follows:</p>
+
+<pre><code>GlobalTrackingConfig.Enabled = false;
+</code></pre>
+
+<p><strong>Entity Level example</strong></p>
+
+<p>Its very similar to Property level configuration -</p>
+
+<p>for overriding entity level configuration,</p>
+
+<pre><code>        EntityTracker
+            .TrackAllProperties&lt;TrackedModelWithMultipleProperties&gt;()
+            .Except(x =&gt; x.Name)
+            .And(x =&gt; x.Description);
+
+        EntityTracker
+            .OverrideTracking&lt;TrackedModelWithMultipleProperties&gt;()
+            .Disable();
+
+        EntityTracker
+            .OverrideTracking&lt;TrackedModelWithMultipleProperties&gt;()
+            .Enable();
+</code></pre>
+
+<p>In the above example,
+you specified tracking configuration for an entity and its properties. Then override the entity level tracking to be disabled <strong>while maintaining the tracking configuration</strong> and then enabled it again.</p>
+
+<p><strong>Note: While working with overrides, if you don't specify property, they work on entity on entity level</strong></p>
+
+<h2>
+<a id="how-is-it-tracked-" class="anchor" href="#how-is-it-tracked-" aria-hidden="true"><span class="octicon octicon-link"></span></a>How is it tracked ?</h2>
+
+<pre><code>context.SaveChanges(loggedInUser.Name);
+</code></pre>
+
+<p>OR</p>
+
+<pre><code>context.SaveChangesAsync(loggedInUser.Id);
+</code></pre>
+
+<p>All you have to do is, specify the username or userId while saving changes. However, maintain consistency in this pattern. Don't provide username at some places and userId at other places.</p>
+
+<pre><code>context.SaveChanges();
+</code></pre>
+
+<p>Even if you don't provide a username or userId, the entity will still be tracked. - Anonymously. This means that tracking data will be stored without a username / userid.</p>
+
+<h2>
+<a id="where-is-my-tracked-data-and-how-do-i-seeget-it-" class="anchor" href="#where-is-my-tracked-data-and-how-do-i-seeget-it-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Where is my tracked data and how do I see/get it ?</h2>
+
+<p>Tracked data is stored in 2 tables</p>
+
+<p><strong>1. AuditLog</strong></p>
+
+<p>Stores entity level tracking information, like when an entity was changed, who changed it, what was the change ( insert /update/ delete ), etc.</p>
+
+<p><strong>2. AuditLogDetails</strong></p>
+
+<p>Stores property level tracking information like, if an entity property was modified what was its old value and what is its new value.</p>
+
+<p>You have the freedom to query this tracking data manually as follows</p>
+
+<p><img src="https://github.com/bilal-fazlani/tracker-enabled-dbcontext/wiki/auditlog.png" width="700"></p>
+
+<p><img src="https://github.com/bilal-fazlani/tracker-enabled-dbcontext/wiki/auditlogdetails.png" width="500"></p>
+
+<p>You can also query the tracking data using built-in API as follows-</p>
+
+<pre><code>        using (Context ctx = new Context())
+        {
+            IQueryable&lt;AuditLog&gt; allCarLogs = ctx.GetLogs&lt;Car&gt;();
+
+            Car myCar = ctx.Cars.Single(x =&gt; x.Number == "JH-876G");
+
+            IQueryable&lt;AuditLog&gt; myCarLogs = ctx.GetLogs&lt;Car&gt;(myCar.Id);
+        }
+</code></pre>
+
+<hr>
+
+<p>Be creative and figure out how you want to present this data on UI depending upon your project requirement. I have done my own DEMO implementation of UI which you can see in this <a href="https://github.com/bilal-fazlani/tracker-enabled-dbcontext/tree/master/SampleLogMaker">sample project.</a> it looks like this. It's pretty much useless implementation - just for demonstration.</p>
+
+<p><img src="https://github.com/bilal-fazlani/tracker-enabled-dbcontext/wiki/logscreen.png" width="500"></p>
+
+<p>With the data in 2 audit tables, much more can be done. For example, </p>
+
+<ol>
+<li>imagine creating a timeline UI that shows events in the life of an entity.</li>
+<li>or an API that takes an old datetime and reconstructs entity of that time using this tracking data and returns that entity.</li>
+</ol>
       </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Tracker-enabled-dbcontext maintained by <a href="https://github.com/bilal-fazlani">bilal-fazlani</a></p>
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/bilal-fazlani">bilal-fazlani</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
       </footer>
     </div>
-
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
     
-
   </body>
 </html>
