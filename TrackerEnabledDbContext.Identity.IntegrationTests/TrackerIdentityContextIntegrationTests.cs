@@ -383,7 +383,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             db.NormalModels.Add(model);
             db.ChangeTracker.DetectChanges();
             var entry = db.ChangeTracker.Entries().First();
-            var auditor = new ChangeLogDetailsAuditor(entry, null);
+            var auditor = new AdditionLogDetailsAuditor(entry, null);
 
             db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
             var auditLogDetails = auditor.CreateLogDetails().ToList();

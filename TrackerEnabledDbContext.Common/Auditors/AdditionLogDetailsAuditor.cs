@@ -7,9 +7,9 @@ namespace TrackerEnabledDbContext.Common.Auditors
     /// <summary>
     /// Creates AuditLogDetails for entries added in a previous call to SaveChanges.
     /// </summary>
-    internal class AdditionLogDetailsAuditor : ChangeLogDetailsAuditor
+    public class AdditionLogDetailsAuditor : ChangeLogDetailsAuditor
     {
-        internal AdditionLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log) : base(dbEntry, log)
+        public AdditionLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log) : base(dbEntry, log)
         {
         }
 
