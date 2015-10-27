@@ -12,7 +12,9 @@ using TrackerEnabledDbContext.Common.Models;
 
 namespace TrackerEnabledDbContext.Identity
 {
+    using System;
     using System.Data.Common;
+    using System.Linq.Expressions;
 
     public class TrackerIdentityContext<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim> :
         IdentityDbContext<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim>, ITrackerContext
@@ -108,9 +110,9 @@ namespace TrackerEnabledDbContext.Identity
         /// </summary>
         /// <param name="tableName">Name of table</param>
         /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs(string tableName)
+        public IQueryable<AuditLog> GetLogs(string tableName, params Expression<Func<AuditLog, object>>[] includeExpressions)
         {
-            return CommonTracker.GetLogs(this, tableName);
+            return CommonTracker.GetLogs(this, tableName, includeExpressions);
         }
 
         /// <summary>

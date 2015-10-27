@@ -12,6 +12,9 @@ using TrackerEnabledDbContext.Common.Models;
 
 namespace TrackerEnabledDbContext
 {
+    using System;
+    using System.Linq.Expressions;
+
     public class TrackerContext : DbContext, ITrackerContext
     {
         public TrackerContext()
@@ -84,9 +87,9 @@ namespace TrackerEnabledDbContext
         /// </summary>
         /// <param name="entityName">full name of entity</param>
         /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs(string entityName)
+        public IQueryable<AuditLog> GetLogs(string entityName, params Expression<Func<AuditLog, object>>[] includeExpressions)
         {
-            return CommonTracker.GetLogs(this, entityName);
+            return CommonTracker.GetLogs(this, entityName, includeExpressions);
         }
 
         /// <summary>
