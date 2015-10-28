@@ -54,7 +54,10 @@ namespace TrackerEnabledDbContext.Common.Auditors
                 newlog.LogDetails = detailsAuditor.CreateLogDetails().ToList();
             }
 
-            return newlog;
+            if (newlog.LogDetails.Any())
+                return newlog;
+            else
+                return null;
         }
 
         private static object GetPrimaryKeyValuesOf(

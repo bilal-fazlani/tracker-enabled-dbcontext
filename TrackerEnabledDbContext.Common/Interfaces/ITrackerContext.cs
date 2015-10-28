@@ -11,10 +11,10 @@ namespace TrackerEnabledDbContext.Common.Interfaces
         DbSet<AuditLog> AuditLog { get; set; }
         DbSet<AuditLogDetail> LogDetails { get; set; }
 
-        IQueryable<AuditLog> GetLogs(string tableName);
-        IQueryable<AuditLog> GetLogs(string tableName, object primaryKey);
-        IQueryable<AuditLog> GetLogs<TTable>();
-        IQueryable<AuditLog> GetLogs<TTable>(object primaryKey);
+        IQueryable<AuditLog> GetLogs(string entityFullName);
+        IQueryable<AuditLog> GetLogs(string entityFullName, object primaryKey);
+        IQueryable<AuditLog> GetLogs<TEntity>();
+        IQueryable<AuditLog> GetLogs<TEntity>(object primaryKey);
         int SaveChanges(object userName);
 
         //async

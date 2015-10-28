@@ -10,12 +10,12 @@ namespace TrackerEnabledDbContext.Common.Auditors
 {
     public class ChangeLogDetailsAuditor : IDisposable
     {
-        private readonly DbEntityEntry _dbEntry;
+        protected readonly DbEntityEntry DbEntry;
         private readonly AuditLog _log;
 
         public ChangeLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log)
         {
-            _dbEntry = dbEntry;
+            DbEntry = dbEntry;
             _log = log;
         }
 
@@ -25,9 +25,9 @@ namespace TrackerEnabledDbContext.Common.Auditors
 
         public IEnumerable<AuditLogDetail> CreateLogDetails()
         {
-            Type entityType = _dbEntry.Entity.GetType().GetEntityType();
+            Type entityType = DbEntry.Entity.GetType().GetEntityType();
 
-            foreach (string propertyName in PropertyNamesOf(_dbEntry))
+            foreach (string propertyName in PropertyNamesOf(DbEntry))
             {
                 if (PropertyTrackingConfiguration.IsTrackingEnabled(
                     new PropertyConfiguerationKey(propertyName, entityType.FullName), entityType ) 
@@ -57,36 +57,36 @@ namespace TrackerEnabledDbContext.Common.Auditors
             return propertyValues.PropertyNames;
         }
 
-        private bool IsValueChanged(string propertyName)
+        protected virtual bool IsValueChanged(string propertyName)
         {
-            var prop = _dbEntry.Property(propertyName);
+            var prop = DbEntry.Property(propertyName);
+            var propertyType = DbEntry.Entity.GetType().GetProperty(propertyName).PropertyType;
 
-            var changed = (StateOf(_dbEntry) == EntityState.Added && prop.CurrentValue != null) ||  
-                          (StateOf(_dbEntry) == EntityState.Deleted && prop.OriginalValue != null) ||
-                          (StateOf(_dbEntry) == EntityState.Modified && prop.IsModified);
+            var changed = (StateOf(DbEntry) == EntityState.Deleted && prop.OriginalValue != null) ||
+                          (StateOf(DbEntry) == EntityState.Modified && prop.IsModified && !propertyType.AreObjectsEqual(prop.CurrentValue, prop.OriginalValue));
             return changed;
         }
 
         private string OriginalValue(string propertyName)
         {
-            if (StateOf(_dbEntry) == EntityState.Added)
+            if (StateOf(DbEntry) == EntityState.Added)
             {
                 return null;
             }
 
-            var value = _dbEntry.Property(propertyName).OriginalValue;
+            var value = DbEntry.Property(propertyName).OriginalValue;
             return value?.ToString();
         }
 
         private string CurrentValue(string propertyName)
         {
-            if (StateOf(_dbEntry) == EntityState.Deleted)
+            if (StateOf(DbEntry) == EntityState.Deleted)
             {
                 // It will be invalid operation when its in deleted state. in that case, new value should be null
                 return null;
             }
 
-            var value = _dbEntry.Property(propertyName).CurrentValue;
+            var value = DbEntry.Property(propertyName).CurrentValue;
             return value?.ToString();
         }
     }

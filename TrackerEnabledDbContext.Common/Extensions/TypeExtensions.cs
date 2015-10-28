@@ -28,7 +28,40 @@ namespace TrackerEnabledDbContext.Common.Extensions
 
         public static KeyValuePair<string, string> GetKeyValuePair<TEntity>(this TEntity entity, Expression<Func<TEntity, object>> property)
         {
-            return new KeyValuePair<string, string>(property.GetPropertyInfo().Name, GetPropertyValue(property, entity).ToString());
+            return new KeyValuePair<string, string>(property.GetPropertyInfo().Name, GetPropertyValue(property, entity)?.ToString());
+        }
+
+        public static object DefaultValue(this Type type)
+        {
+            if (type.IsValueType)
+                return Activator.CreateInstance(type);
+
+            return null;
+        }
+
+        /// <summary>
+        /// Return true if values are same
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="value1"></param>
+        /// <param name="value2"></param>
+        /// <returns></returns>
+        public static bool AreObjectsEqual(this Type type, object value1, object value2)
+        {
+            if (Nullable.GetUnderlyingType(type) != null) // nullable type
+            {
+                if (value1 == null && value2 == null) return true;
+                if (value1 == null && value2 != null) return value2.Equals(value1);
+
+                return value1.Equals(value2);
+            }
+
+            if (type.IsValueType) //value type
+            {
+                return value1.Equals(value2);
+            }
+
+           return value1 == value2;
         }
 
         private static TValue GetPropertyValue<TEntity, TValue>(Expression<Func<TEntity, TValue>> property, TEntity entity)
@@ -68,6 +101,7 @@ namespace TrackerEnabledDbContext.Common.Extensions
 
             throw new ArgumentException( $"Expression '{propertyLambda.Name}' refers is not a member expression or unary expression.");
         }
+
 
         #endregion
     }

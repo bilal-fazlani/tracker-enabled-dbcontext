@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Models;
 
 namespace TrackerEnabledDbContext.Common.Auditors
@@ -26,6 +27,15 @@ namespace TrackerEnabledDbContext.Common.Auditors
             }
 
             return base.StateOf(dbEntry);
+        }
+
+        protected override bool IsValueChanged(string propertyName)
+        {
+            var propertyType = DbEntry.Entity.GetType().GetProperty(propertyName).PropertyType;
+            object defaultValue = propertyType.DefaultValue();
+            object currentValue = DbEntry.Property(propertyName).CurrentValue;
+
+            return !propertyType.AreObjectsEqual(defaultValue, currentValue);
         }
     }
 }
