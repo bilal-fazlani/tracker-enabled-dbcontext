@@ -371,7 +371,6 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
                 }
             }.ToArray();
 
-
             //assert
             entity.AssertAuditForModification(db, entity.Id, userId, expectedLog);
         }

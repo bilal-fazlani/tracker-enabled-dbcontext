@@ -1,4 +1,9 @@
-﻿namespace TrackerEnabledDbContext.Common.Configuration
+﻿using System;
+using System.Linq.Expressions;
+using TrackerEnabledDbContext.Common.Extensions;
+using System.Security.Policy;
+
+namespace TrackerEnabledDbContext.Common.Configuration
 {
     public static class GlobalTrackingConfig
     {
@@ -13,6 +18,16 @@
         {
             TrackingDataStore.EntityConfigStore.Clear();
             TrackingDataStore.PropertyConfigStore.Clear();
+        }
+
+        internal static Type SoftDeletableType;
+        internal static string SoftDeletablePropertyName;
+
+        public static void SetSoftDeletableCriteria<TSoftDeletable>(
+            Expression<Func<TSoftDeletable,bool>> softDeletableProperty)
+        {
+            SoftDeletableType = typeof (TSoftDeletable);
+            SoftDeletablePropertyName = softDeletableProperty.GetPropertyInfo().Name;
         }
     }
 }

@@ -77,10 +77,12 @@
     <Compile Include="Code\ObjectFiller.cs" />
     <Compile Include="Extensions\AssertExtensions.cs" />
     <Compile Include="Extensions\AuditAssertExtensions.cs" />
+    <Compile Include="ISoftDeletable.cs" />
     <Compile Include="ITestDbContext.cs" />
     <Compile Include="Models\ChildModel.cs" />
     <Compile Include="Models\ModelWithCompositeKey.cs" />
     <Compile Include="Models\ModelWithConventionalKey.cs" />
+    <Compile Include="Models\SoftDeletableModel.cs" />
     <Compile Include="Models\TrackedModelWithCustomTableAndColumnNames.cs" />
     <Compile Include="Models\TrackedModelWithMultipleProperties.cs" />
     <Compile Include="Models\ModelWithSkipTracking.cs" />

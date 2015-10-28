@@ -4,6 +4,8 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using TrackerEnabledDbContext.Common.Auditors;
+using TrackerEnabledDbContext.Common.Configuration;
+using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
 
@@ -21,14 +23,37 @@ namespace TrackerEnabledDbContext.Common
             {
                 using (var auditer = new LogAuditor(ent))
                 {
-                    AuditLog record = auditer.CreateLogRecord(userName,
-                        ent.State == EntityState.Modified ? EventType.Modified : EventType.Deleted, dbContext);
+                    var eventType = GetEventType(ent);
+
+                    AuditLog record = auditer.CreateLogRecord(userName, eventType, dbContext);
                     if (record != null)
                     {
                         dbContext.AuditLog.Add(record);
                     }
                 }
             }
+        }
+
+        private static EventType GetEventType(DbEntityEntry entry)
+        {
+            if (GlobalTrackingConfig.SoftDeletableType.IsInstanceOfType(entry.Entity))
+            {
+                var previouslyDeleted = (bool)entry.OriginalValues[GlobalTrackingConfig.SoftDeletablePropertyName];
+                var nowDeleted = (bool)entry.CurrentValues[GlobalTrackingConfig.SoftDeletablePropertyName];
+
+                if (previouslyDeleted && !nowDeleted)
+                {
+                    return EventType.UnDeleted;
+                }
+
+                if (!previouslyDeleted && nowDeleted)
+                {
+                    return EventType.SoftDeleted;
+                }
+            }
+
+            var eventType = entry.State == EntityState.Modified ? EventType.Modified : EventType.Deleted;
+            return eventType;
         }
 
         public static IEnumerable<DbEntityEntry> GetAdditions(ITrackerContext dbContext)
@@ -56,7 +81,8 @@ namespace TrackerEnabledDbContext.Common
         private static IEnumerable<string> EntityTypeNames<TEntity>()
         {
             Type entityType = typeof(TEntity);
-            return typeof(TEntity).Assembly.GetTypes().Where(t => t.IsSubclassOf(entityType) || t.FullName == entityType.FullName).Select(m => m.FullName);
+            return typeof(TEntity).Assembly.GetTypes()
+                .Where(t => t.IsSubclassOf(entityType) || t.FullName == entityType.FullName).Select(m => m.FullName);
         }
 
         /// <summary>
@@ -67,7 +93,6 @@ namespace TrackerEnabledDbContext.Common
         public static IQueryable<AuditLog> GetLogs<TEntity>(ITrackerContext context)
         {
             IEnumerable<string> entityTypeNames = EntityTypeNames<TEntity>();
-            string entityTypeName = typeof(TEntity).Name;
             return context.AuditLog.Where(x => entityTypeNames.Contains(x.TypeFullName));
         }
 
@@ -90,7 +115,6 @@ namespace TrackerEnabledDbContext.Common
         public static IQueryable<AuditLog> GetLogs<TEntity>(ITrackerContext context, object primaryKey)
         {
             string key = primaryKey.ToString();
-            string entityTypeName = typeof(TEntity).Name;
             IEnumerable<string> entityTypeNames = EntityTypeNames<TEntity>();
 
             return context.AuditLog.Where(x => entityTypeNames.Contains(x.TypeFullName) && x.RecordId == key);
@@ -106,18 +130,6 @@ namespace TrackerEnabledDbContext.Common
         {
             string key = primaryKey.ToString();
             return context.AuditLog.Where(x => x.TypeFullName == entityTypeName && x.RecordId == key);
-        }
-
-        /// <summary>
-        ///     Get the id of the most recently created log for the given table name for a specific record
-        /// </summary>
-        /// <param name="tableName">table name</param>
-        /// <param name="primaryKey">primary key of record</param>
-        /// <returns>Log id</returns>
-        public static long GetLastAuditLogId(ITrackerContext context, string tableName, object primaryKey)
-        {
-            string key = primaryKey.ToString();
-            return context.AuditLog.Where(x => x.TypeFullName == tableName && x.RecordId == key).OrderByDescending(x => x.AuditLogId).Select(x => x.AuditLogId).FirstOrDefault();
         }
     }
 }

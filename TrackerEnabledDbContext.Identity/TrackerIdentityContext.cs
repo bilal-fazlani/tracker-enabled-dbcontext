@@ -135,17 +135,6 @@ namespace TrackerEnabledDbContext.Identity
             return CommonTracker.GetLogs(this, tableName, primaryKey);
         }
 
-        /// <summary>
-        ///     Get the id of the most recently created log for the given table name for a specific record
-        /// </summary>
-        /// <param name="tableName">table name</param>
-        /// <param name="primaryKey">primary key of record</param>
-        /// <returns>Log id</returns>
-        public long GetLastAuditLogId(string tableName, object primaryKey)
-        {
-            return CommonTracker.GetLastAuditLogId(this, tableName, primaryKey);
-        }
-
         #region -- Async --
 
         /// <summary>

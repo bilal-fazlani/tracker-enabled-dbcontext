@@ -31,25 +31,31 @@ namespace TrackerEnabledDbContext.Common.Extensions
             return new KeyValuePair<string, string>(property.GetPropertyInfo().Name, GetPropertyValue(property, entity).ToString());
         }
 
+        public static object GetPropertyValue(this object entity, string propertyName)
+        {
+            return entity.GetType().GetPropertyValue(propertyName);
+        }
+
         private static TValue GetPropertyValue<TEntity, TValue>(Expression<Func<TEntity, TValue>> property, TEntity entity)
         {
             return property.Compile()(entity);
         }
 
-        public static PropertyInfo GetPropertyInfo<TSource>(this Expression<Func<TSource, object>> propertyLambda)
+        public static PropertyInfo GetPropertyInfo<TSource, TProperty>(
+            this Expression<Func<TSource, TProperty>> propertyLambda)
         {
             Type type = typeof(TSource);
 
             MemberExpression member = GetMember(propertyLambda);
-            
+
             var propInfo = member.Member as PropertyInfo;
             if (propInfo == null)
-                throw new ArgumentException($"Expression '{propertyLambda}' refers to a field, not a property.");
+                throw new ArgumentException("Expression is not a valid property.");
 
             if (type != propInfo.ReflectedType &&
                 !type.IsSubclassOf(propInfo.ReflectedType))
                 throw new ArgumentException(
-                    $"Expresion '{propertyLambda}' refers to a property that is not from type {type}.");
+                    $"Expresion refers to a property that is not from type {type.Name}.");
 
             return propInfo;
         }
@@ -68,7 +74,6 @@ namespace TrackerEnabledDbContext.Common.Extensions
 
             throw new ArgumentException( $"Expression '{propertyLambda.Name}' refers is not a member expression or unary expression.");
         }
-
         #endregion
     }
 }

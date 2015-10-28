@@ -57,6 +57,34 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
             return entity;
         }
 
+        public static T AssertAuditForSoftDeletion<T>(this T entity, ITrackerContext db, object entityId,
+            string userName = null, params AuditLogDetail[] logdetails)
+        {
+            var logs = db.GetLogs<T>(entityId)
+                .Where(x => x.EventType == EventType.SoftDeleted && x.UserName == userName);
+
+            logs.AssertCountIsNotZero(
+                $"no logs found for {typeof (T).Name} with id {entityId} & username {userName ?? "null"}");
+
+            var lastLog = logs.LastOrDefault().AssertIsNotNull();
+
+            lastLog.LogDetails
+                .AssertCountIsNotZero("no log details found")
+                .AssertCount(logdetails.Count());
+
+            foreach (var auditLogDetail in logdetails)
+            {
+                logdetails.AssertAny(x => x.OriginalValue == auditLogDetail.OriginalValue
+                                          && x.NewValue == auditLogDetail.NewValue
+                                          && x.PropertyName == auditLogDetail.PropertyName, 
+                                          $"cound not find log detail with original value: {auditLogDetail.OriginalValue}, " +
+                                          $"new value: {auditLogDetail.NewValue} " +
+                                          $"and propertyname: {auditLogDetail.PropertyName}");
+            }
+
+            return entity;
+        }
+
         public static T AssertAuditForModification<T>(this T entity, ITrackerContext db, object entityId,
             object userName = null, params AuditLogDetail[] logdetails)
         {
