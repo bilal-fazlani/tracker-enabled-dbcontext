@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Models;
 
@@ -31,11 +32,19 @@ namespace TrackerEnabledDbContext.Common.Auditors
 
         protected override bool IsValueChanged(string propertyName)
         {
+            if (GlobalTrackingConfig.TrackEmptyPropertiesOnAdditionAndDeletion)
+                return true;
+
             var propertyType = DbEntry.Entity.GetType().GetProperty(propertyName).PropertyType;
             object defaultValue = propertyType.DefaultValue();
             object currentValue = DbEntry.Property(propertyName).CurrentValue;
 
             return !propertyType.AreObjectsEqual(defaultValue, currentValue);
+        }
+
+        protected override string OriginalValue(string propertyName)
+        {
+            return null;
         }
     }
 }

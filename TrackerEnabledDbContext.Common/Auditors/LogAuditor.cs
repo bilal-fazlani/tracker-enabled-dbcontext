@@ -47,17 +47,33 @@ namespace TrackerEnabledDbContext.Common.Auditors
                 RecordId = GetPrimaryKeyValuesOf(_dbEntry, keyNames).ToString()
             };
 
-            using (var detailsAuditor = (eventType == EventType.Added)
-                ? new AdditionLogDetailsAuditor(_dbEntry, newlog)
-                : new ChangeLogDetailsAuditor(_dbEntry, newlog))
-            {
-                newlog.LogDetails = detailsAuditor.CreateLogDetails().ToList();
-            }
+            var detailsAuditor = GetDetailsAuditor(eventType, newlog);
+            
+            newlog.LogDetails = detailsAuditor.CreateLogDetails().ToList();
+            
 
             if (newlog.LogDetails.Any())
                 return newlog;
             else
                 return null;
+        }
+
+        private ChangeLogDetailsAuditor GetDetailsAuditor(EventType eventType, AuditLog newlog)
+        {
+            switch (eventType)
+            {
+                case EventType.Added:
+                    return new AdditionLogDetailsAuditor(_dbEntry, newlog);
+
+                case EventType.Deleted:
+                    return new DeletetionLogDetailsAuditor(_dbEntry, newlog);
+
+                case EventType.Modified:
+                    return new ChangeLogDetailsAuditor(_dbEntry, newlog);
+
+                default:
+                    return null;
+            }
         }
 
         private static object GetPrimaryKeyValuesOf(

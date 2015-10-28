@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auditors\AdditionLogDetailsAuditor.cs" />
+    <Compile Include="Auditors\DeletetionLogDetailsAuditor.cs" />
     <Compile Include="Configuration\DbMapping.cs" />
     <Compile Include="Configuration\EntityTracker.cs" />
     <Compile Include="Configuration\ExceptResponse.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Configuration\TrackingConfigurationPriority.cs" />
     <Compile Include="Configuration\TrackingConfigurationValue.cs" />
     <Compile Include="Extensions\EntityTypeConfigurationExtensions.cs" />
+    <Compile Include="Interfaces\ILogDetailsAuditor.cs" />
     <Compile Include="Interfaces\IUnTrackable.cs" />
     <Compile Include="Attributes\SkipTrackingAttribute.cs" />
     <Compile Include="Attributes\TrackChangesAttribute.cs" />

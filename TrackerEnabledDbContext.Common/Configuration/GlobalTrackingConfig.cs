@@ -2,8 +2,9 @@
 {
     public static class GlobalTrackingConfig
     {
-        //todo:unit test global config
         public static bool Enabled { get; set; } = true;
+
+        public static bool TrackEmptyPropertiesOnAdditionAndDeletion { get; set; } = false;
 
         /// <summary>
         /// This will clear all the configuration done by tracking fluent API.
