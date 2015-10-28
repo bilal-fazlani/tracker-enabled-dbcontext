@@ -9,6 +9,8 @@ using TrackerEnabledDbContext.Common.Models;
 
 namespace TrackerEnabledDbContext.Common
 {
+    using System.Linq.Expressions;
+
     public static class CommonTracker
     {
         public static void AuditChanges(ITrackerContext dbContext, object userName)
@@ -75,12 +77,25 @@ namespace TrackerEnabledDbContext.Common
         ///     Get all logs for the enitity type name
         /// </summary>
         /// <param name="entityTypeName">Name of entity type</param>
+        /// <param name="includeExpressions">Expressions designating the sub entities that are to be Included in the return. The main usage for this
+        /// would be to include LogDetails. Here is a sample call <code>GetLogs(this, "MyEntity", entity=> entity.LogDetails)</code>
+        /// </param>
         /// <returns></returns>
-        public static IQueryable<AuditLog> GetLogs(ITrackerContext context, string entityTypeName)
+        public static IQueryable<AuditLog> GetLogs(ITrackerContext context, 
+            string entityTypeName, 
+            params Expression<Func<AuditLog, object>>[] includeExpressions)
         {
-            return context.AuditLog.Where(x => x.TypeFullName == entityTypeName);
-        }
+            var query = context.AuditLog.AsQueryable();
 
+            if (includeExpressions != null && includeExpressions.Length > 0)
+            {
+                query = includeExpressions.Aggregate(query, (current, include) => current.Include(include));
+            }
+
+            return query.Where(x => x.TypeFullName == entityTypeName);
+
+        }
+        
         /// <summary>
         ///     Get all logs for the given model type for a specific record
         /// </summary>

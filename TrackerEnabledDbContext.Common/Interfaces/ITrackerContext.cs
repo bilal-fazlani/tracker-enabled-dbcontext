@@ -6,12 +6,15 @@ using TrackerEnabledDbContext.Common.Models;
 
 namespace TrackerEnabledDbContext.Common.Interfaces
 {
+    using System;
+    using System.Linq.Expressions;
+
     public interface ITrackerContext : IDbContext
     {
         DbSet<AuditLog> AuditLog { get; set; }
         DbSet<AuditLogDetail> LogDetails { get; set; }
 
-        IQueryable<AuditLog> GetLogs(string tableName);
+        IQueryable<AuditLog> GetLogs(string entityName, params Expression<Func<AuditLog, object>>[] includeExpressions);
         IQueryable<AuditLog> GetLogs(string tableName, object primaryKey);
         IQueryable<AuditLog> GetLogs<TTable>();
         IQueryable<AuditLog> GetLogs<TTable>(object primaryKey);
