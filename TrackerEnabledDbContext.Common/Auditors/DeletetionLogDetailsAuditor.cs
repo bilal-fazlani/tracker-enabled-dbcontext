@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity.Infrastructure;
+using TrackerEnabledDbContext.Common.Auditors.Comparators;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Models;
@@ -25,7 +21,9 @@ namespace TrackerEnabledDbContext.Common.Auditors
             object defaultValue = propertyType.DefaultValue();
             object orginalvalue = DbEntry.Property(propertyName).OriginalValue;
 
-            return !propertyType.AreObjectsEqual(defaultValue, orginalvalue);
+            Comparator comparator = ComparatorFactory.GetComparator(propertyType);
+
+            return !comparator.AreEqual(defaultValue, orginalvalue);
         }
 
         protected override object CurrentValue(string propertyName)

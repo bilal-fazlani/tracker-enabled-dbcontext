@@ -39,34 +39,19 @@ namespace TrackerEnabledDbContext.Common.Extensions
             return null;
         }
 
-        /// <summary>
-        /// Return true if values are same
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="value1"></param>
-        /// <param name="value2"></param>
-        /// <returns></returns>
-        public static bool AreObjectsEqual(this Type type, object value1, object value2)
+        public static bool IsNullable(this Type type)
         {
-            if (type == typeof (string))
-            {
-                return String.CompareOrdinal(Convert.ToString(value1), Convert.ToString(value2)) == 0;
-            }
+            return Nullable.GetUnderlyingType(type) != null;
+        }
 
-            if (Nullable.GetUnderlyingType(type) != null) // nullable type
-            {
-                if (value1 == null && value2 == null) return true;
-                if (value1 == null && value2 != null) return value2.Equals(value1);
-
-                return value1.Equals(value2);
-            }
-
-            if (type.IsValueType) //value type
-            {
-                return value1.Equals(value2);
-            }
-
-           return value1 == value2;
+        /// <summary>
+        /// </summary>
+        /// <typeparam name="T">Underlying Type</typeparam>
+        /// <param name="type">Nullable Type</param>
+        /// <returns></returns>
+        public static bool IsNullable<T>(this Type type)
+        {
+            return Nullable.GetUnderlyingType(type) == typeof(T);
         }
 
         private static TValue GetPropertyValue<TEntity, TValue>(Expression<Func<TEntity, TValue>> property, TEntity entity)

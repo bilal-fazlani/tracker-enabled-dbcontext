@@ -29,12 +29,6 @@ namespace TrackerEnabledDbContext
         {
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Properties<DateTime>()
-                .Configure(c => c.HasColumnType("datetime2"));
-        }
 
         public DbSet<AuditLog> AuditLog { get; set; }
 

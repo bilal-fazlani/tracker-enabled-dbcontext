@@ -60,6 +60,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auditors\AdditionLogDetailsAuditor.cs" />
+    <Compile Include="Auditors\Comparators\Comparator.cs" />
+    <Compile Include="Auditors\Comparators\ComparatorFactory.cs" />
+    <Compile Include="Auditors\Comparators\DateComparator.cs" />
+    <Compile Include="Auditors\Comparators\NullableComparator.cs" />
+    <Compile Include="Auditors\Comparators\NullableDateComparator.cs" />
+    <Compile Include="Auditors\Comparators\StringComparator.cs" />
+    <Compile Include="Auditors\Comparators\ValueTypeComparator.cs" />
     <Compile Include="Auditors\DeletetionLogDetailsAuditor.cs" />
     <Compile Include="Configuration\DbMapping.cs" />
     <Compile Include="Configuration\EntityTracker.cs" />

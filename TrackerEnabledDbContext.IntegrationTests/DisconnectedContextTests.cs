@@ -38,6 +38,32 @@ namespace TrackerEnabledDbContext.IntegrationTests
         }
 
         [TestMethod]
+        public void should_update_with_no_logs()
+        {
+            EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
+            GlobalTrackingConfig.DisconnectedContext = true;
+            var entity = GetDisconnectedExistingComplexModel();
+
+            TrackedModelWithMultipleProperties newEntity = new TrackedModelWithMultipleProperties
+            {
+                Id = entity.Id,
+                Description = entity.Description,
+                IsSpecial = entity.IsSpecial,
+                Name = entity.Name,
+                StartDate = entity.StartDate,
+                Value = entity.Value,
+                Category = entity.Category
+            };
+
+            TestTrackerContext newContext2 = GetNewContextInstance();
+            newContext2.TrackedModelsWithMultipleProperties.Attach(newEntity);
+            newContext2.Entry(newEntity).State = EntityState.Modified;
+            newContext2.SaveChanges();
+
+            newEntity.AssertNoLogs(newContext2, newEntity.Id, EventType.Modified);
+        }
+
+        [TestMethod]
         public void Should_Be_able_to_insert()
         {
             GlobalTrackingConfig.DisconnectedContext = true;
@@ -73,42 +99,31 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 null, model => model.Id);
         }
 
-        [TestMethod]
-        public void Should_Not_Log_When_Value_Not_changed_In_Disconnected_Context()
-        {
-            //arrange
-            GlobalTrackingConfig.DisconnectedContext = true;
-            EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
-
-            string oldDescription = RandomText;
-
-            var entity = new TrackedModelWithMultipleProperties()
-            {
-                Description = oldDescription,
-                StartDate = RandomDate,
-            };
-            db.TrackedModelsWithMultipleProperties.Add(entity);
-            db.SaveChanges();
-
-            entity.AssertAuditForAddition(db, entity.Id,
-                null,
-                x => x.Id,
-                x => x.Description,
-                x => x.StartDate);
-
-            //make change to state
-            db.Entry(entity).State = EntityState.Modified;
-            db.SaveChanges();
-
-            //make sure there are no unnecessaary logs
-            entity.AssertNoLogs(db, entity.Id, EventType.Modified);
-        }
-
         private NormalModel GetDisconnectedExistingNormalModel()
         {
             TestTrackerContext newContext1 = GetNewContextInstance();
             NormalModel entity = new NormalModel();
             newContext1.NormalModels.Add(entity);
+            newContext1.SaveChanges();
+
+            entity.Id.AssertIsNotZero("entity was not saved to database");
+
+            return entity;
+        }
+
+        private TrackedModelWithMultipleProperties GetDisconnectedExistingComplexModel()
+        {
+            TestTrackerContext newContext1 = GetNewContextInstance();
+            TrackedModelWithMultipleProperties entity = new TrackedModelWithMultipleProperties
+            {
+                Description = RandomText,
+                IsSpecial = true,
+                Name = RandomText,
+                StartDate = RandomDate,
+                Value = RandomNumber,
+                Category = RandomChar
+            };
+            newContext1.TrackedModelsWithMultipleProperties.Add(entity);
             newContext1.SaveChanges();
 
             entity.Id.AssertIsNotZero("entity was not saved to database");

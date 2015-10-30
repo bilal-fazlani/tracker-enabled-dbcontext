@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using TrackerEnabledDbContext.Common.Auditors.Comparators;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Interfaces;
@@ -24,7 +25,7 @@ namespace TrackerEnabledDbContext.Common.Auditors
         {
             Type entityType = DbEntry.Entity.GetType().GetEntityType();
 
-            foreach (string propertyName in PropertyNamesOf(DbEntry))
+            foreach (string propertyName in PropertyNamesOfEntity())
             {
                 if (PropertyTrackingConfiguration.IsTrackingEnabled(
                     new PropertyConfiguerationKey(propertyName, entityType.FullName), entityType ) 
@@ -41,16 +42,16 @@ namespace TrackerEnabledDbContext.Common.Auditors
             }
         }
 
-        protected internal virtual EntityState StateOf(DbEntityEntry dbEntry)
+        protected internal virtual EntityState StateOfEntity()
         {
-            return dbEntry.State;
+            return DbEntry.State;
         }
 
-        private IEnumerable<string> PropertyNamesOf(DbEntityEntry dbEntry)
+        private IEnumerable<string> PropertyNamesOfEntity()
         {
-            var propertyValues = (StateOf(dbEntry) == EntityState.Added)
-                ? dbEntry.CurrentValues
-                : dbEntry.OriginalValues;
+            var propertyValues = (StateOfEntity() == EntityState.Added)
+                ? DbEntry.CurrentValues
+                : DbEntry.OriginalValues;
             return propertyValues.PropertyNames;
         }
 
@@ -61,8 +62,10 @@ namespace TrackerEnabledDbContext.Common.Auditors
 
             object originalValue = OriginalValue(propertyName);
 
-            var changed = (StateOf(DbEntry) == EntityState.Modified
-                && prop.IsModified && !propertyType.AreObjectsEqual(prop.CurrentValue, originalValue));
+            Comparator comparator = ComparatorFactory.GetComparator(propertyType);
+
+            var changed = (StateOfEntity() == EntityState.Modified
+                && prop.IsModified && !comparator.AreEqual(prop.CurrentValue, originalValue));
             return changed;
         }
 
