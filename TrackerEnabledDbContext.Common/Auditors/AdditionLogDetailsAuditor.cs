@@ -37,7 +37,7 @@ namespace TrackerEnabledDbContext.Common.Auditors
 
             var propertyType = DbEntry.Entity.GetType().GetProperty(propertyName).PropertyType;
             object defaultValue = propertyType.DefaultValue();
-            object currentValue = DbEntry.Property(propertyName).CurrentValue;
+            object currentValue = CurrentValue(propertyName);
 
             Comparator comparator = ComparatorFactory.GetComparator(propertyType);
 

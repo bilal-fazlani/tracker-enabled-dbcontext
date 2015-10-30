@@ -19,7 +19,7 @@ namespace TrackerEnabledDbContext.Common.Auditors
 
             var propertyType = DbEntry.Entity.GetType().GetProperty(propertyName).PropertyType;
             object defaultValue = propertyType.DefaultValue();
-            object orginalvalue = DbEntry.Property(propertyName).OriginalValue;
+            object orginalvalue = OriginalValue(propertyName);
 
             Comparator comparator = ComparatorFactory.GetComparator(propertyType);
 

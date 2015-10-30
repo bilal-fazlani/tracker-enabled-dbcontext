@@ -65,7 +65,7 @@ namespace TrackerEnabledDbContext.Common.Auditors
             Comparator comparator = ComparatorFactory.GetComparator(propertyType);
 
             var changed = (StateOfEntity() == EntityState.Modified
-                && prop.IsModified && !comparator.AreEqual(prop.CurrentValue, originalValue));
+                && prop.IsModified && !comparator.AreEqual(CurrentValue(propertyName), originalValue));
             return changed;
         }
 

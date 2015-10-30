@@ -11,10 +11,15 @@ namespace TrackerEnabledDbContext.IntegrationTests
     [TestClass]
     public class DisconnectedContextTests : PersistanceTests<TestTrackerContext>
     {
+        [TestInitialize]
+        public void InitializeTest()
+        {
+            GlobalTrackingConfig.DisconnectedContext = true;
+        }
+
         [TestMethod]
         public void Should_Be_Able_To_Update()
         {
-            GlobalTrackingConfig.DisconnectedContext = true;
             var entity = GetDisconnectedExistingNormalModel();
 
             NormalModel newEntity = new NormalModel
@@ -41,7 +46,6 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public void should_update_with_no_logs()
         {
             EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
-            GlobalTrackingConfig.DisconnectedContext = true;
             var entity = GetDisconnectedExistingComplexModel();
 
             TrackedModelWithMultipleProperties newEntity = new TrackedModelWithMultipleProperties
@@ -66,8 +70,6 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Should_Be_able_to_insert()
         {
-            GlobalTrackingConfig.DisconnectedContext = true;
-
             var entity = new NormalModel
             {
                 Description = RandomText
@@ -86,17 +88,30 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void should_be_able_to_delete()
         {
-            NormalModel existingNormalModel = GetDisconnectedExistingNormalModel();
+            EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
+            TrackedModelWithMultipleProperties existingModel = GetDisconnectedExistingComplexModel();
 
             TestTrackerContext newContextInstance = GetNewContextInstance();
 
-            newContextInstance.NormalModels.Attach(existingNormalModel);
-            newContextInstance.Entry(existingNormalModel).State = EntityState.Deleted;
+            var newModel = new TrackedModelWithMultipleProperties
+            {
+                Id = existingModel.Id
+            };
+
+            newContextInstance.TrackedModelsWithMultipleProperties.Attach(newModel);
+            newContextInstance.Entry(newModel).State = EntityState.Deleted;
 
             newContextInstance.SaveChanges();
 
-            existingNormalModel.AssertAuditForDeletion(newContextInstance, existingNormalModel.Id,
-                null, model => model.Id);
+            existingModel.AssertAuditForDeletion(newContextInstance, newModel.Id,
+                null, 
+                model => model.Id,
+                model=> model.IsSpecial,
+                model => model.Name,
+                model => model.StartDate,
+                model => model.Value,
+                model => model.Description
+                );
         }
 
         private NormalModel GetDisconnectedExistingNormalModel()
