@@ -33,8 +33,8 @@ namespace TrackerEnabledDbContext.Common.Auditors
                     yield return new AuditLogDetail
                     {
                         PropertyName = propertyName,
-                        OriginalValue = OriginalValue(propertyName),
-                        NewValue = CurrentValue(propertyName),
+                        OriginalValue = OriginalValue(propertyName)?.ToString(),
+                        NewValue = CurrentValue(propertyName)?.ToString(),
                         Log = _log
                     };
                 }
@@ -59,21 +59,33 @@ namespace TrackerEnabledDbContext.Common.Auditors
             var prop = DbEntry.Property(propertyName);
             var propertyType = DbEntry.Entity.GetType().GetProperty(propertyName).PropertyType;
 
+            object originalValue = OriginalValue(propertyName);
+
             var changed = (StateOf(DbEntry) == EntityState.Modified
-                && prop.IsModified && !propertyType.AreObjectsEqual(prop.CurrentValue, prop.OriginalValue));
+                && prop.IsModified && !propertyType.AreObjectsEqual(prop.CurrentValue, originalValue));
             return changed;
         }
 
-        protected virtual string OriginalValue(string propertyName)
+        protected virtual object OriginalValue(string propertyName)
         {
-            var value = DbEntry.Property(propertyName).OriginalValue;
-            return value?.ToString();
+            object originalValue = null;
+
+            if (GlobalTrackingConfig.DisconnectedContext)
+            {
+                originalValue = DbEntry.GetDatabaseValues().GetValue<object>(propertyName);
+            }
+            else
+            {
+                originalValue = DbEntry.Property(propertyName).OriginalValue;
+            }
+
+            return originalValue;
         }
 
-        protected virtual string CurrentValue(string propertyName)
+        protected virtual object CurrentValue(string propertyName)
         {
             var value = DbEntry.Property(propertyName).CurrentValue;
-            return value?.ToString();
+            return value;
         }
     }
 }

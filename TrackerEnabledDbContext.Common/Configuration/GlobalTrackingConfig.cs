@@ -6,6 +6,8 @@
 
         public static bool TrackEmptyPropertiesOnAdditionAndDeletion { get; set; } = false;
 
+        public static bool DisconnectedContext { get; set; } = false;
+
         /// <summary>
         /// This will clear all the configuration done by tracking fluent API.
         /// There is usually no purpose of this method, except for unit testing.

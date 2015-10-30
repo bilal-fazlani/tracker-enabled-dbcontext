@@ -28,7 +28,7 @@ namespace TrackerEnabledDbContext.Common.Auditors
             return !propertyType.AreObjectsEqual(defaultValue, orginalvalue);
         }
 
-        protected override string CurrentValue(string propertyName)
+        protected override object CurrentValue(string propertyName)
         {
             return null;
         }

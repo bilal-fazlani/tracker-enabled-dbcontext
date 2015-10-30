@@ -48,6 +48,11 @@ namespace TrackerEnabledDbContext.Common.Extensions
         /// <returns></returns>
         public static bool AreObjectsEqual(this Type type, object value1, object value2)
         {
+            if (type == typeof (string))
+            {
+                return String.CompareOrdinal(Convert.ToString(value1), Convert.ToString(value2)) == 0;
+            }
+
             if (Nullable.GetUnderlyingType(type) != null) // nullable type
             {
                 if (value1 == null && value2 == null) return true;
