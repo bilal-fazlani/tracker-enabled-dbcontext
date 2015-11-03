@@ -1,5 +1,8 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using TrackerEnabledDbContext.Common.Auditors.Comparators;
+using TrackerEnabledDbContext.Common.Configuration;
+using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Models;
 
 namespace TrackerEnabledDbContext.Common.Auditors
@@ -16,16 +19,34 @@ namespace TrackerEnabledDbContext.Common.Auditors
         /// <summary>
         /// Treat unchanged entries as added entries when creating audit records.
         /// </summary>
-        /// <param name="dbEntry"></param>
         /// <returns></returns>
-        protected internal override EntityState StateOf(DbEntityEntry dbEntry)
+        protected internal override EntityState StateOfEntity()
         {
-            if (dbEntry.State == EntityState.Unchanged)
+            if (DbEntry.State == EntityState.Unchanged)
             {
                 return EntityState.Added;
             }
 
-            return base.StateOf(dbEntry);
+            return base.StateOfEntity();
+        }
+
+        protected override bool IsValueChanged(string propertyName)
+        {
+            if (GlobalTrackingConfig.TrackEmptyPropertiesOnAdditionAndDeletion)
+                return true;
+
+            var propertyType = DbEntry.Entity.GetType().GetProperty(propertyName).PropertyType;
+            object defaultValue = propertyType.DefaultValue();
+            object currentValue = CurrentValue(propertyName);
+
+            Comparator comparator = ComparatorFactory.GetComparator(propertyType);
+
+            return !comparator.AreEqual(defaultValue, currentValue);
+        }
+
+        protected override object OriginalValue(string propertyName)
+        {
+            return null;
         }
     }
 }

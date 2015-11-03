@@ -1,3 +1,6 @@
+using System;
+using System.Reflection;
+
 namespace TrackerEnabledDbContext.Common.Configuration
 {
     public static class EntityTracker
@@ -6,15 +9,19 @@ namespace TrackerEnabledDbContext.Common.Configuration
         {
             OverrideTracking<T>().Enable();
 
-            //remove all skips from propertytable
-            foreach (var trackingConfiguration in TrackingDataStore.PropertyConfigStore)
+            var allPublicInstanceProperties = typeof (T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            //add high priority tracking to all properties
+            foreach (var property in allPublicInstanceProperties)
             {
-                if (trackingConfiguration.Key.TypeFullName == typeof(T).FullName)
-                {
-                    TrackingConfigurationValue removedTrackingConfigValue;
-                    TrackingDataStore.PropertyConfigStore.TryRemove(trackingConfiguration.Key,
-                        out removedTrackingConfigValue);
-                }
+                Func<PropertyConfiguerationKey, TrackingConfigurationValue, TrackingConfigurationValue> factory =
+                    (key,value) => new TrackingConfigurationValue(true, TrackingConfigurationPriority.High);
+
+                TrackingDataStore.PropertyConfigStore.AddOrUpdate(
+                    new PropertyConfiguerationKey(property.Name, typeof (T).FullName),
+                    new TrackingConfigurationValue(true, TrackingConfigurationPriority.High),
+                    factory
+                    );
             }
 
             return new TrackAllResponse<T>();

@@ -361,18 +361,13 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             entity.Description = newDescription;
             await db.SaveChangesAsync(userId);
 
-            AuditLogDetail[] expectedLog = new List<AuditLogDetail>
+            //assert
+            entity.AssertAuditForModification(db, entity.Id, userId.ToString(), new AuditLogDetail
             {
-                new AuditLogDetail
-                {
                     NewValue = newDescription,
                     OriginalValue = oldDescription,
                     PropertyName = "Description"
-                }
-            }.ToArray();
-
-            //assert
-            entity.AssertAuditForModification(db, entity.Id, userId, expectedLog);
+            });
         }
 
         [TestMethod]

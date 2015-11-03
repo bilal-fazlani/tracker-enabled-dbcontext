@@ -28,7 +28,30 @@ namespace TrackerEnabledDbContext.Common.Extensions
 
         public static KeyValuePair<string, string> GetKeyValuePair<TEntity>(this TEntity entity, Expression<Func<TEntity, object>> property)
         {
-            return new KeyValuePair<string, string>(property.GetPropertyInfo().Name, GetPropertyValue(property, entity).ToString());
+            return new KeyValuePair<string, string>(property.GetPropertyInfo().Name, GetPropertyValue(property, entity)?.ToString());
+        }
+
+        public static object DefaultValue(this Type type)
+        {
+            if (type.IsValueType)
+                return Activator.CreateInstance(type);
+
+            return null;
+        }
+
+        public static bool IsNullable(this Type type)
+        {
+            return Nullable.GetUnderlyingType(type) != null;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <typeparam name="T">Underlying Type</typeparam>
+        /// <param name="type">Nullable Type</param>
+        /// <returns></returns>
+        public static bool IsNullable<T>(this Type type)
+        {
+            return Nullable.GetUnderlyingType(type) == typeof(T);
         }
 
         public static object GetPropertyValue(this object entity, string propertyName)
@@ -47,7 +70,7 @@ namespace TrackerEnabledDbContext.Common.Extensions
             Type type = typeof(TSource);
 
             MemberExpression member = GetMember(propertyLambda);
-
+            
             var propInfo = member.Member as PropertyInfo;
             if (propInfo == null)
                 throw new ArgumentException("Expression is not a valid property.");

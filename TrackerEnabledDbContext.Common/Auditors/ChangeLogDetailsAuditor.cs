@@ -2,32 +2,30 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using TrackerEnabledDbContext.Common.Auditors.Comparators;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Extensions;
+using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
 
 namespace TrackerEnabledDbContext.Common.Auditors
 {
-    public class ChangeLogDetailsAuditor : IDisposable
+    public class ChangeLogDetailsAuditor : ILogDetailsAuditor
     {
-        private readonly DbEntityEntry _dbEntry;
+        protected readonly DbEntityEntry DbEntry;
         private readonly AuditLog _log;
 
         public ChangeLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log)
         {
-            _dbEntry = dbEntry;
+            DbEntry = dbEntry;
             _log = log;
-        }
-
-        public void Dispose()
-        {
         }
 
         public IEnumerable<AuditLogDetail> CreateLogDetails()
         {
-            Type entityType = _dbEntry.Entity.GetType().GetEntityType();
+            Type entityType = DbEntry.Entity.GetType().GetEntityType();
 
-            foreach (string propertyName in PropertyNamesOf(_dbEntry))
+            foreach (string propertyName in PropertyNamesOfEntity())
             {
                 if (PropertyTrackingConfiguration.IsTrackingEnabled(
                     new PropertyConfiguerationKey(propertyName, entityType.FullName), entityType ) 
@@ -36,58 +34,61 @@ namespace TrackerEnabledDbContext.Common.Auditors
                     yield return new AuditLogDetail
                     {
                         PropertyName = propertyName,
-                        OriginalValue = OriginalValue(propertyName),
-                        NewValue = CurrentValue(propertyName),
+                        OriginalValue = OriginalValue(propertyName)?.ToString(),
+                        NewValue = CurrentValue(propertyName)?.ToString(),
                         Log = _log
                     };
                 }
             }
         }
 
-        protected internal virtual EntityState StateOf(DbEntityEntry dbEntry)
+        protected internal virtual EntityState StateOfEntity()
         {
-            return dbEntry.State;
+            return DbEntry.State;
         }
 
-        private IEnumerable<string> PropertyNamesOf(DbEntityEntry dbEntry)
+        private IEnumerable<string> PropertyNamesOfEntity()
         {
-            var propertyValues = (StateOf(dbEntry) == EntityState.Added)
-                ? dbEntry.CurrentValues
-                : dbEntry.OriginalValues;
+            var propertyValues = (StateOfEntity() == EntityState.Added)
+                ? DbEntry.CurrentValues
+                : DbEntry.OriginalValues;
             return propertyValues.PropertyNames;
         }
 
-        private bool IsValueChanged(string propertyName)
+        protected virtual bool IsValueChanged(string propertyName)
         {
-            var prop = _dbEntry.Property(propertyName);
+            var prop = DbEntry.Property(propertyName);
+            var propertyType = DbEntry.Entity.GetType().GetProperty(propertyName).PropertyType;
 
-            var changed = (StateOf(_dbEntry) == EntityState.Added && prop.CurrentValue != null) ||  
-                          (StateOf(_dbEntry) == EntityState.Deleted && prop.OriginalValue != null) ||
-                          (StateOf(_dbEntry) == EntityState.Modified && prop.IsModified);
+            object originalValue = OriginalValue(propertyName);
+
+            Comparator comparator = ComparatorFactory.GetComparator(propertyType);
+
+            var changed = (StateOfEntity() == EntityState.Modified
+                && prop.IsModified && !comparator.AreEqual(CurrentValue(propertyName), originalValue));
             return changed;
         }
 
-        private string OriginalValue(string propertyName)
+        protected virtual object OriginalValue(string propertyName)
         {
-            if (StateOf(_dbEntry) == EntityState.Added)
+            object originalValue = null;
+
+            if (GlobalTrackingConfig.DisconnectedContext)
             {
-                return null;
+                originalValue = DbEntry.GetDatabaseValues().GetValue<object>(propertyName);
+            }
+            else
+            {
+                originalValue = DbEntry.Property(propertyName).OriginalValue;
             }
 
-            var value = _dbEntry.Property(propertyName).OriginalValue;
-            return value?.ToString();
+            return originalValue;
         }
 
-        private string CurrentValue(string propertyName)
+        protected virtual object CurrentValue(string propertyName)
         {
-            if (StateOf(_dbEntry) == EntityState.Deleted)
-            {
-                // It will be invalid operation when its in deleted state. in that case, new value should be null
-                return null;
-            }
-
-            var value = _dbEntry.Property(propertyName).CurrentValue;
-            return value?.ToString();
+            var value = DbEntry.Property(propertyName).CurrentValue;
+            return value;
         }
     }
 }

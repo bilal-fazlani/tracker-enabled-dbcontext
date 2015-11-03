@@ -69,6 +69,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DisconnectedContextTests.cs" />
     <Compile Include="FluentConfigurationTests.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MigrationTests.cs" />

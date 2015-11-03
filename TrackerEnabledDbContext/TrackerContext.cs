@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -27,6 +28,7 @@ namespace TrackerEnabledDbContext
             : base(dbconnection, contextOwnsConnection)
         {
         }
+
 
         public DbSet<AuditLog> AuditLog { get; set; }
 

@@ -14,9 +14,10 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
             string userName = null, params Expression<Func<T, object>>[] propertyExpressions)
         {
             IEnumerable<AuditLog> logs = db.GetLogs<T>(entityId)
+                .Where(x => x.EventType == EventType.Added && userName == x.UserName)
                 .AssertCountIsNotZero("log count is zero");
 
-            AuditLog lastLog = logs.Last(x => x.EventType == EventType.Added && x.UserName == userName)
+            AuditLog lastLog = logs.LastOrDefault()
                 .AssertIsNotNull("log not found");
 
             lastLog.LogDetails
@@ -38,9 +39,10 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
             string userName = null, params Expression<Func<T, object>>[] oldValueProperties)
         {
             IEnumerable<AuditLog> logs = db.GetLogs<T>(entityId)
+                .Where(x => x.EventType == EventType.Deleted && x.UserName == userName)
                 .AssertCountIsNotZero("log count is zero");
 
-            AuditLog lastLog = logs.Last(x => x.EventType == EventType.Deleted && x.UserName == userName)
+            AuditLog lastLog = logs.Last()
                 .AssertIsNotNull("log not found");
 
             lastLog.LogDetails
@@ -66,7 +68,9 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
             logs.AssertCountIsNotZero(
                 $"no logs found for {typeof (T).Name} with id {entityId} & username {userName ?? "null"}");
 
-            var lastLog = logs.LastOrDefault().AssertIsNotNull();
+            var lastLog = logs.OrderByDescending(x=>x.AuditLogId)
+                .FirstOrDefault()
+                .AssertIsNotNull();
 
             lastLog.LogDetails
                 .AssertCountIsNotZero("no log details found")
@@ -86,13 +90,14 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
         }
 
         public static T AssertAuditForModification<T>(this T entity, ITrackerContext db, object entityId,
-            object userName = null, params AuditLogDetail[] logdetails)
+            string userName = null, params AuditLogDetail[] logdetails)
         {
-            IEnumerable<AuditLog> logs = db.GetLogs<T>(entityId).ToList();
+            IEnumerable<AuditLog> logs = db.GetLogs<T>(entityId)
+                .Where(x=>x.EventType == EventType.Modified && x.UserName == userName)
+                .ToList();
             logs.AssertCountIsNotZero("log count is zero");
 
-            AuditLog lastLog = logs.Last(
-                x => x.EventType == EventType.Modified && x.UserName == userName?.ToString())
+            AuditLog lastLog = logs.Last()
                 .AssertIsNotNull("log not found");
 
             lastLog.LogDetails
@@ -113,6 +118,16 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
         public static T AssertNoLogs<T>(this T entity, ITrackerContext db, object entityId)
         {
             var logs = db.GetLogs<T>(entityId);
+            logs.AssertCount(0, "Logs found when logs were not expected");
+
+            return entity;
+        }
+
+        public static T AssertNoLogs<T>(this T entity, ITrackerContext db, object entityId, EventType eventType)
+        {
+            var logs = db.GetLogs<T>(entityId)
+                .Where(x=>x.EventType == eventType);
+
             logs.AssertCount(0, "Logs found when logs were not expected");
 
             return entity;

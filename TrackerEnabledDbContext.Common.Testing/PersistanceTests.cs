@@ -11,11 +11,13 @@ namespace TrackerEnabledDbContext.Common.Testing
         public TContext db = new TContext();
         public DbContextTransaction transaction;
 
+        protected bool RollBack = true;
+
         protected string RandomText => Guid.NewGuid().ToString();
 
         protected int RandomNumber => new Random().Next(100,200);
 
-        protected DateTime RandomDate => DateTime.Now.AddDays(-1*RandomNumber);
+        protected DateTime RandomDate => DateTime.Now.AddDays(-RandomNumber);
 
         protected char RandomChar
         {
@@ -32,13 +34,22 @@ namespace TrackerEnabledDbContext.Common.Testing
         {
             transaction = db.Database.BeginTransaction();
             GlobalTrackingConfig.Enabled = true;
+            GlobalTrackingConfig.TrackEmptyPropertiesOnAdditionAndDeletion = false;
+            GlobalTrackingConfig.DisconnectedContext = false;
             GlobalTrackingConfig.ClearFluentConfiguration();
         }
 
         [TestCleanup]
         public virtual void CleanUp()
         {
-            transaction?.Rollback();
+            if (RollBack)
+            {
+                transaction?.Rollback();
+            }
+            else
+            {
+                transaction?.Commit();
+            }
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TrackerEnabledDbContext.Common;
 using TrackerEnabledDbContext.Common.Auditors;
+using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Models;
 using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Extensions;
@@ -368,7 +368,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
 
             //assert
-            entity.AssertAuditForModification(db, entity.Id, userId, expectedLog);
+            entity.AssertAuditForModification(db, entity.Id, userId.ToString(), expectedLog);
         }
 
         [TestMethod]
@@ -415,6 +415,120 @@ namespace TrackerEnabledDbContext.IntegrationTests
             db.Database.Log = sql => Assert.Fail("Expected no database queries but the following query was executed: {0}", sql);
             var auditLogDetails = auditor.CreateLogDetails().ToList();
             db.Database.Log = null;
+        }
+
+        [TestMethod]
+        public void Should_Not_Log_When_Value_Not_changed()
+        {
+            //arrange
+            EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
+
+            string oldDescription = RandomText;
+
+            var entity = new TrackedModelWithMultipleProperties()
+            {
+                Description = oldDescription,
+                StartDate = RandomDate,
+            };
+            db.TrackedModelsWithMultipleProperties.Add(entity);
+            db.SaveChanges();
+
+            entity.AssertAuditForAddition(db, entity.Id,
+                null,
+                x => x.Id,
+                x => x.Description,
+                x => x.StartDate);
+
+            //make change to state
+            db.Entry(entity).State = EntityState.Modified;
+            db.SaveChanges();
+
+            //make sure there are no unnecessaary logs
+            entity.AssertNoLogs(db, entity.Id, EventType.Modified);
+        }
+
+        [TestMethod]
+        public void Shoud_Not_Log_EmptyProperties_OnAddition()
+        {
+            //arrange
+            EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
+            var entity = new TrackedModelWithMultipleProperties();
+
+            db.TrackedModelsWithMultipleProperties.Add(entity);
+
+            //act
+            db.SaveChanges();
+
+            //assert
+            entity.AssertAuditForAddition(db, entity.Id, null,
+                x => x.Id);
+        }
+
+        [TestMethod]
+        public void Shoud_Not_Log_EmptyProperties_On_Deletions()
+        {
+            //arrange
+            EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
+            var entity = new TrackedModelWithMultipleProperties();
+            db.TrackedModelsWithMultipleProperties.Add(entity);
+            db.SaveChanges();
+
+            //act (delete)
+            db.TrackedModelsWithMultipleProperties.Remove(entity);
+            db.SaveChanges();
+
+            //assert
+            entity.AssertAuditForDeletion(db, entity.Id, null,
+                x => x.Id);
+        }
+
+        [TestMethod]
+        public void Should_Log_EmptyProperties_When_Configured_WhileAdding()
+        {
+            //arrange
+            EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
+            GlobalTrackingConfig.TrackEmptyPropertiesOnAdditionAndDeletion = true;
+
+            var entity = new TrackedModelWithMultipleProperties();
+            db.TrackedModelsWithMultipleProperties.Add(entity);
+
+            //act
+            db.SaveChanges();
+
+            //assert
+            entity.AssertAuditForAddition(db, entity.Id, null,
+                x => x.Id,
+                x => x.Description,
+                x => x.IsSpecial,
+                x => x.Name,
+                x => x.StartDate,
+                x => x.Value);
+        }
+
+        [TestMethod]
+        public void Should_Log_EmptyProperties_When_Configured_WhileDeleting()
+        {
+            //arrange
+            EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
+            GlobalTrackingConfig.TrackEmptyPropertiesOnAdditionAndDeletion = true;
+
+            var entity = new TrackedModelWithMultipleProperties();
+            db.TrackedModelsWithMultipleProperties.Add(entity);
+            db.SaveChanges();
+
+
+            //act
+            db.TrackedModelsWithMultipleProperties.Remove(entity);
+            db.SaveChanges();
+
+            //assert
+            entity.AssertAuditForDeletion(db, entity.Id, null,
+                x => x.Id,
+                x => x.Description,
+                x => x.IsSpecial,
+                x => x.Name,
+                x => x.StartDate,
+                x => x.Value);
         }
     }
 }

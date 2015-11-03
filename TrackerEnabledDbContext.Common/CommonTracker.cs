@@ -36,7 +36,9 @@ namespace TrackerEnabledDbContext.Common
 
         private static EventType GetEventType(DbEntityEntry entry)
         {
-            if (GlobalTrackingConfig.SoftDeletableType.IsInstanceOfType(entry.Entity))
+            var isSoftDeletable = GlobalTrackingConfig.SoftDeletableType?.IsInstanceOfType(entry.Entity);
+
+            if (isSoftDeletable != null && isSoftDeletable.Value)
             {
                 var previouslyDeleted = (bool)entry.OriginalValues[GlobalTrackingConfig.SoftDeletablePropertyName];
                 var nowDeleted = (bool)entry.CurrentValues[GlobalTrackingConfig.SoftDeletablePropertyName];
