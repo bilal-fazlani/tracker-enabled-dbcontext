@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;
 
@@ -8,7 +9,20 @@ namespace TrackerEnabledDbContext.Common.Testing
     [TestClass]
     public class PersistanceTests<TContext> where TContext : ITestDbContext, new()
     {
+        private const string TestConnectionString = "DefaultTestConnection";
+
+        [AssemblyInitialize]
+        public static void InitializeAssembly()
+        {
+            bool databaseExists = Database.Exists(TestConnectionString);
+            if (databaseExists)
+            {
+                Database.Delete(TestConnectionString);
+            }
+        }
+
         public TContext db = new TContext();
+
         public DbContextTransaction transaction;
 
         protected bool RollBack = true;

@@ -7,8 +7,9 @@ namespace TrackerEnabledDbContext.IntegrationTests
 {
     public class TestTrackerContext : TrackerContext, ITestDbContext
     {
-        private static readonly string TestConnectionString = Environment.GetEnvironmentVariable("TestGenericConnectionString") 
+        protected static readonly string TestConnectionString = Environment.GetEnvironmentVariable("TestGenericConnectionString") 
             ?? "DefaultTestConnection";
+
         public TestTrackerContext()
             : base(TestConnectionString)
         {

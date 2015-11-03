@@ -20,8 +20,6 @@ namespace TrackerEnabledDbContext.IntegrationTests
             //setup soft deletable config
             GlobalTrackingConfig.SetSoftDeletableCriteria<ISoftDeletable>
                 (entity => entity.IsDeleted);
-
-            RollBack = false;
         }
 
         [TestMethod]
