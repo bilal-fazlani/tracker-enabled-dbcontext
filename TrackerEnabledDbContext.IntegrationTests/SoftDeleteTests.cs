@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Models;
@@ -127,7 +128,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         }
 
         [TestMethod]
-        public void ShouldCreateUnDeletedLogForMultiplePropertiesChanged()
+        public async Task ShouldCreateUnDeletedLogForMultiplePropertiesChanged()
         {
             string oldDescription = RandomText;
             string newDescription = RandomText;
@@ -139,13 +140,13 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
             db.Set<SoftDeletableModel>().Attach(deletable);
             db.Entry(deletable).State = EntityState.Added;
-            db.SaveChanges();
+            await db.SaveChangesAsync();
 
             deletable.AssertAuditForAddition(db, deletable.Id, null,
                 x => x.Id, x => x.Description);
 
             deletable.Delete();
-            db.SaveChanges();
+            await db.SaveChangesAsync();
 
             deletable.AssertAuditForSoftDeletion(db, deletable.Id, null,
                 new AuditLogDetail
@@ -157,7 +158,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
             deletable.IsDeleted = false;
             deletable.Description = newDescription;
-            db.SaveChanges();
+            await db.SaveChangesAsync();
 
             deletable.AssertAuditForUndeletion(db, deletable.Id, null,
                 new AuditLogDetail
