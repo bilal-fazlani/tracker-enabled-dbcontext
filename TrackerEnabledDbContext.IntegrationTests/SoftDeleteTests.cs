@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;
@@ -90,9 +91,87 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void ShouldCreateUnDeletedLog()
         {
-            
+            var deletable = new SoftDeletableModel
+            {
+                Description = RandomText,
+            };
+
+            db.Set<SoftDeletableModel>().Attach(deletable);
+            db.Entry(deletable).State = EntityState.Added;
+            db.SaveChanges();
+
+            deletable.AssertAuditForAddition(db, deletable.Id, null,
+                x => x.Id, x => x.Description);
+
+            deletable.Delete();
+            db.SaveChanges();
+
+            deletable.AssertAuditForSoftDeletion(db, deletable.Id, null,
+                new AuditLogDetail
+                {
+                    PropertyName = nameof(deletable.IsDeleted),
+                    OriginalValue = false.ToString(),
+                    NewValue = true.ToString()
+                });
+
+            deletable.IsDeleted = false;
+            db.SaveChanges();
+
+            deletable.AssertAuditForUndeletion(db, deletable.Id, null,
+                new AuditLogDetail
+                {
+                    PropertyName = nameof(deletable.IsDeleted),
+                    OriginalValue = true.ToString(),
+                    NewValue = false.ToString()
+                });
         }
 
-        //TODO: test for undelete
+        [TestMethod]
+        public void ShouldCreateUnDeletedLogForMultiplePropertiesChanged()
+        {
+            string oldDescription = RandomText;
+            string newDescription = RandomText;
+
+            var deletable = new SoftDeletableModel
+            {
+                Description = oldDescription
+            };
+
+            db.Set<SoftDeletableModel>().Attach(deletable);
+            db.Entry(deletable).State = EntityState.Added;
+            db.SaveChanges();
+
+            deletable.AssertAuditForAddition(db, deletable.Id, null,
+                x => x.Id, x => x.Description);
+
+            deletable.Delete();
+            db.SaveChanges();
+
+            deletable.AssertAuditForSoftDeletion(db, deletable.Id, null,
+                new AuditLogDetail
+                {
+                    PropertyName = nameof(deletable.IsDeleted),
+                    OriginalValue = false.ToString(),
+                    NewValue = true.ToString()
+                });
+
+            deletable.IsDeleted = false;
+            deletable.Description = newDescription;
+            db.SaveChanges();
+
+            deletable.AssertAuditForUndeletion(db, deletable.Id, null,
+                new AuditLogDetail
+                {
+                    PropertyName = nameof(deletable.IsDeleted),
+                    OriginalValue = true.ToString(),
+                    NewValue = false.ToString()
+                },
+                new AuditLogDetail
+                {
+                    PropertyName = nameof(deletable.Description),
+                    OriginalValue = oldDescription,
+                    NewValue = newDescription
+                });
+        }
     }
 }

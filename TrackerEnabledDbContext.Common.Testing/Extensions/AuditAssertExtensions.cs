@@ -62,13 +62,25 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
         public static T AssertAuditForSoftDeletion<T>(this T entity, ITrackerContext db, object entityId,
             string userName = null, params AuditLogDetail[] logdetails)
         {
+            return AssertChange(entity, db, entityId, userName, EventType.SoftDeleted, logdetails);
+        }
+
+        public static T AssertAuditForUndeletion<T>(this T entity, ITrackerContext db, object entityId,
+            string userName = null, params AuditLogDetail[] logdetails)
+        {
+            return AssertChange(entity, db, entityId, userName, EventType.UnDeleted, logdetails);
+        }
+
+        private static T AssertChange<T>(T entity, ITrackerContext db, object entityId, string userName, EventType eventType,
+            AuditLogDetail[] logdetails)
+        {
             var logs = db.GetLogs<T>(entityId)
-                .Where(x => x.EventType == EventType.SoftDeleted && x.UserName == userName);
+                .Where(x => x.EventType == eventType && x.UserName == userName);
 
             logs.AssertCountIsNotZero(
                 $"no logs found for {typeof (T).Name} with id {entityId} & username {userName ?? "null"}");
 
-            var lastLog = logs.OrderByDescending(x=>x.AuditLogId)
+            var lastLog = logs.OrderByDescending(x => x.AuditLogId)
                 .FirstOrDefault()
                 .AssertIsNotNull();
 
@@ -80,10 +92,10 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
             {
                 logdetails.AssertAny(x => x.OriginalValue == auditLogDetail.OriginalValue
                                           && x.NewValue == auditLogDetail.NewValue
-                                          && x.PropertyName == auditLogDetail.PropertyName, 
-                                          $"cound not find log detail with original value: {auditLogDetail.OriginalValue}, " +
-                                          $"new value: {auditLogDetail.NewValue} " +
-                                          $"and propertyname: {auditLogDetail.PropertyName}");
+                                          && x.PropertyName == auditLogDetail.PropertyName,
+                    $"cound not find log detail with original value: {auditLogDetail.OriginalValue}, " +
+                    $"new value: {auditLogDetail.NewValue} " +
+                    $"and propertyname: {auditLogDetail.PropertyName}");
             }
 
             return entity;
@@ -92,27 +104,7 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
         public static T AssertAuditForModification<T>(this T entity, ITrackerContext db, object entityId,
             string userName = null, params AuditLogDetail[] logdetails)
         {
-            IEnumerable<AuditLog> logs = db.GetLogs<T>(entityId)
-                .Where(x=>x.EventType == EventType.Modified && x.UserName == userName)
-                .ToList();
-            logs.AssertCountIsNotZero("log count is zero");
-
-            AuditLog lastLog = logs.Last()
-                .AssertIsNotNull("log not found");
-
-            lastLog.LogDetails
-                .AssertCountIsNotZero("no log details found")
-                .AssertCount(logdetails.Count());
-
-            foreach (AuditLogDetail logdetail in logdetails)
-            {
-                lastLog.LogDetails.AssertAny(x => x.OriginalValue == logdetail.OriginalValue
-                                                  && x.PropertyName == logdetail.PropertyName
-                                                  && x.NewValue == logdetail.NewValue,
-                    "could not find an expected auditlog detail");
-            }
-
-            return entity;
+            return AssertChange(entity, db, entityId, userName, EventType.Modified, logdetails);
         }
 
         public static T AssertNoLogs<T>(this T entity, ITrackerContext db, object entityId)
