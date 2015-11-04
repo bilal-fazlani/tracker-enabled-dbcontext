@@ -12,5 +12,9 @@ namespace TrackerEnabledDbContext.Common.Testing
         DbSet<ModelWithCompositeKey> ModelsWithCompositeKey { get; set; }
         DbSet<ModelWithConventionalKey> ModelsWithConventionalKey { get; set; }
         DbSet<ModelWithSkipTracking> ModelsWithSkipTracking { get; set; }
+        DbSet<POCO> POCOs { get; set; }
+        DbSet<TrackedModelWithMultipleProperties> TrackedModelsWithMultipleProperties { get; set; }
+        DbSet<TrackedModelWithCustomTableAndColumnNames> TrackedModelsWithCustomTableAndColumnNames { get; set; }
+        DbSet<SoftDeletableModel> SoftDeletableModels { get; set; }
     }
 }
