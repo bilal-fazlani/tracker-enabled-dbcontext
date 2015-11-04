@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data.Entity;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Data.Entity;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;

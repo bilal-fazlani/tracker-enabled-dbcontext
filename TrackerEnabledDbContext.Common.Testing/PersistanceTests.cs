@@ -11,16 +11,6 @@ namespace TrackerEnabledDbContext.Common.Testing
     {
         private const string TestConnectionString = "DefaultTestConnection";
 
-        [AssemblyInitialize]
-        public static void InitializeAssembly()
-        {
-            bool databaseExists = Database.Exists(TestConnectionString);
-            if (databaseExists)
-            {
-                Database.Delete(TestConnectionString);
-            }
-        }
-
         public TContext db = new TContext();
 
         public DbContextTransaction transaction;
