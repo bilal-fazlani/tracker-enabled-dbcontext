@@ -1,4 +1,5 @@
-﻿@model SampleLogMaker.Models.Comment
+﻿@using SampleLogMaker.Models
+@model SampleLogMaker.Models.Comment
 
 @{
     ViewBag.Title = "Details";
@@ -17,4 +18,4 @@
 </p>
 
 
-@{Html.RenderAction("EntityHistory", "History", new { entity = "Comments", entityId = Model.Id });}
+@{Html.RenderAction("EntityHistory", "History", new { typeFullName = typeof(Comment).FullName, entityId = Model.Id });}

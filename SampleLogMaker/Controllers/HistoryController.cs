@@ -73,14 +73,14 @@ namespace SampleLogMaker.Controllers
             return vm;
         }
 
-        public PartialViewResult EntityHistory(string entity, object entityId)
+        public PartialViewResult EntityHistory(string typeFullName, object entityId)
         {
             var db = new ApplicationDbContext();
-            var auditLogs = db.GetLogs(entity, entityId)
+            var auditLogs = db.GetLogs(typeFullName, entityId)
                 .OrderByDescending(x=>x.EventDateUTC);
             var viewModels = ConvertToHistoryViewModel(auditLogs);
 
-            ViewBag.EntityType = entity;
+            ViewBag.EntityType = typeFullName;
             ViewBag.EntityId = entityId;
 
             return PartialView("_EntityHistory", viewModels);

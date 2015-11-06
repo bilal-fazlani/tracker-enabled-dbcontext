@@ -24,7 +24,7 @@ namespace SampleLogMaker.Models
             base.OnModelCreating(modelBuilder);
             //using the Fluent Configuration API
             var commentEntity = modelBuilder.Entity<Comment>();
-            commentEntity.TrackAllProperties().Except(x => x.Text);
+            commentEntity.TrackAllProperties().Except(x => x.Id);
             commentEntity.HasKey(x => x.Id);
             commentEntity.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             commentEntity.Property(x => x.Text).IsRequired();

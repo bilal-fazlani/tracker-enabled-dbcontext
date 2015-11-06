@@ -1,4 +1,5 @@
-﻿@model SampleLogMaker.Models.Blog
+﻿@using SampleLogMaker.Models
+@model SampleLogMaker.Models.Blog
 
 @{
     ViewBag.Title = "Details";
@@ -16,4 +17,4 @@
 </p>
 
 
-@{Html.RenderAction("EntityHistory", "History", new { entity = "Blogs", entityId = Model.Id });}
+@{Html.RenderAction("EntityHistory", "History", new { typeFullName = typeof(Blog).FullName, entityId = Model.Id });}
