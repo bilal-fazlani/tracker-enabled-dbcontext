@@ -98,11 +98,11 @@ namespace TrackerEnabledDbContext.Identity
         /// <summary>
         ///     Get all logs for the given model type
         /// </summary>
-        /// <typeparam name="TTable">Type of domain model</typeparam>
+        /// <typeparam name="TEntity">Type of domain model</typeparam>
         /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs<TTable>()
+        public IQueryable<AuditLog> GetLogs<TEntity>()
         {
-            return CommonTracker.GetLogs<TTable>(this);
+            return CommonTracker.GetLogs<TEntity>(this);
         }
 
         /// <summary>
@@ -118,12 +118,12 @@ namespace TrackerEnabledDbContext.Identity
         /// <summary>
         ///     Get all logs for the given model type for a specific record
         /// </summary>
-        /// <typeparam name="TTable">Type of domain model</typeparam>
+        /// <typeparam name="TEntity">Type of domain model</typeparam>
         /// <param name="primaryKey">primary key of record</param>
         /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs<TTable>(object primaryKey)
+        public IQueryable<AuditLog> GetLogs<TEntity>(object primaryKey)
         {
-            return CommonTracker.GetLogs<TTable>(this, primaryKey);
+            return CommonTracker.GetLogs<TEntity>(this, primaryKey);
         }
 
         /// <summary>
