@@ -13,8 +13,8 @@ namespace TrackerEnabledDbContext.Common.Interfaces
 
         IQueryable<AuditLog> GetLogs(string entityFullName);
         IQueryable<AuditLog> GetLogs(string entityFullName, object primaryKey);
-        IQueryable<AuditLog> GetLogs<TEntity>();
-        IQueryable<AuditLog> GetLogs<TEntity>(object primaryKey);
+        IQueryable<AuditLog> GetLogs<TTable>();
+        IQueryable<AuditLog> GetLogs<TTable>(object primaryKey);
         int SaveChanges(object userName);
 
         //async
