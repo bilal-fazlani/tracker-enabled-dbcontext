@@ -28,6 +28,14 @@ namespace TrackerEnabledDbContext.Common
                     AuditLog record = auditer.CreateLogRecord(userName, eventType, dbContext);
                     if (record != null)
                     {
+                        if (ent.Entity is ISoftDelete && ent.State == EntityState.Deleted)
+                        {
+                            ent.State = EntityState.Unchanged;
+                            var entity = (ISoftDelete)ent.Entity;
+                            entity.IsDeleted = true;
+                            ent.State = EntityState.Modified;
+                        }
+
                         dbContext.AuditLog.Add(record);
                     }
                 }

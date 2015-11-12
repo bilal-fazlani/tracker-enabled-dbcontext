@@ -90,6 +90,7 @@
     <Compile Include="CommonTracker.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Interfaces\IDbContext.cs" />
+    <Compile Include="Interfaces\ISoftDelete.cs" />
     <Compile Include="Interfaces\ITrackerContext.cs" />
     <Compile Include="Auditors\LogAuditor.cs" />
     <Compile Include="Auditors\ChangeLogDetailsAuditor.cs" />
