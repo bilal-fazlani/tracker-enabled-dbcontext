@@ -77,6 +77,7 @@
     <Compile Include="Configuration\TrackAllResponse.cs" />
     <Compile Include="Configuration\TrackingConfigurationPriority.cs" />
     <Compile Include="Configuration\TrackingConfigurationValue.cs" />
+    <Compile Include="EventArgs\AuditLogGeneratedEventArgs.cs" />
     <Compile Include="Extensions\EntityTypeConfigurationExtensions.cs" />
     <Compile Include="Interfaces\ILogDetailsAuditor.cs" />
     <Compile Include="Interfaces\IUnTrackable.cs" />
@@ -87,7 +88,7 @@
     <Compile Include="Configuration\PropertyTrackingConfiguration.cs" />
     <Compile Include="Configuration\EntityTrackingConfiguration.cs" />
     <Compile Include="Configuration\PropertyTrackingConfiguerationKey.cs" />
-    <Compile Include="CommonTracker.cs" />
+    <Compile Include="CoreTracker.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Interfaces\IDbContext.cs" />
     <Compile Include="Interfaces\ITrackerContext.cs" />

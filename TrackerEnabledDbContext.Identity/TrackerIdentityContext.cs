@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using TrackerEnabledDbContext.Common;
 using TrackerEnabledDbContext.Common.Configuration;
+using TrackerEnabledDbContext.Common.EventArgs;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
 
@@ -19,37 +20,46 @@ namespace TrackerEnabledDbContext.Identity
         IdentityDbContext<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim>, ITrackerContext
         where TUser : IdentityUser<TKey, TUserLogin, TUserRole, TUserClaim> where TRole : IdentityRole<TKey, TUserRole> where TUserLogin : IdentityUserLogin<TKey> where TUserRole : IdentityUserRole<TKey> where TUserClaim : IdentityUserClaim<TKey>
     {
+        private readonly CoreTracker _coreTracker;
+
         public TrackerIdentityContext()
         {
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerIdentityContext(DbCompiledModel model) : base(model)
         {
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerIdentityContext(string nameOrConnectionString) : base(nameOrConnectionString)
         {
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerIdentityContext(string nameOrConnectionString, DbCompiledModel model)
             : base(nameOrConnectionString, model)
         {
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerIdentityContext(DbConnection existingConnection, bool contextOwnsConnection)
             : base(existingConnection, contextOwnsConnection)
         {
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerIdentityContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
             : base(existingConnection, model, contextOwnsConnection)
         {
+            _coreTracker = new CoreTracker(this);
         }
-
 
         public DbSet<AuditLog> AuditLog { get; set; }
 
         public DbSet<AuditLogDetail> LogDetails { get; set; }
+
+        public event EventHandler<AuditLogGeneratedEventArgs> AuditLogGenerated;
 
         /// <summary>
         ///     This method saves the model changes to the database.
@@ -65,14 +75,14 @@ namespace TrackerEnabledDbContext.Identity
                 return base.SaveChanges();
             }
 
-            CommonTracker.AuditChanges(this, userName);
+            _coreTracker.AuditChanges( userName);
 
-            IEnumerable<DbEntityEntry> addedEntries = CommonTracker.GetAdditions(this);
+            IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
             // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
             int result = base.SaveChanges();
             //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
 
-            CommonTracker.AuditAdditions(this, userName, addedEntries);
+            _coreTracker.AuditAdditions(userName, addedEntries);
 
             //save changes to audit of added entries
             base.SaveChanges();
@@ -102,7 +112,7 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns></returns>
         public IQueryable<AuditLog> GetLogs<TEntity>()
         {
-            return CommonTracker.GetLogs<TEntity>(this);
+            return _coreTracker.GetLogs<TEntity>();
         }
 
         /// <summary>
@@ -112,7 +122,7 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns></returns>
         public IQueryable<AuditLog> GetLogs(string tableName)
         {
-            return CommonTracker.GetLogs(this, tableName);
+            return _coreTracker.GetLogs(tableName);
         }
 
         /// <summary>
@@ -123,7 +133,7 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns></returns>
         public IQueryable<AuditLog> GetLogs<TEntity>(object primaryKey)
         {
-            return CommonTracker.GetLogs<TEntity>(this, primaryKey);
+            return _coreTracker.GetLogs<TEntity>(primaryKey);
         }
 
         /// <summary>
@@ -134,7 +144,7 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns></returns>
         public IQueryable<AuditLog> GetLogs(string tableName, object primaryKey)
         {
-            return CommonTracker.GetLogs(this, tableName, primaryKey);
+            return _coreTracker.GetLogs(tableName, primaryKey);
         }
 
         #region -- Async --
@@ -159,15 +169,15 @@ namespace TrackerEnabledDbContext.Identity
             if (cancellationToken.IsCancellationRequested)
                 cancellationToken.ThrowIfCancellationRequested();
 
-            CommonTracker.AuditChanges(this, userName);
+            _coreTracker.AuditChanges(userName);
 
-            IEnumerable<DbEntityEntry> addedEntries = CommonTracker.GetAdditions(this);
+            IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
 
             // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
             int result = await base.SaveChangesAsync(cancellationToken);
 
             //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
-            CommonTracker.AuditAdditions(this, userName, addedEntries);
+            _coreTracker.AuditAdditions(userName, addedEntries);
 
             //save changes to audit of added entries
             await base.SaveChangesAsync(cancellationToken);
@@ -248,6 +258,28 @@ namespace TrackerEnabledDbContext.Identity
         }
 
         #endregion --
+
+        protected virtual void OnAuditLogGenerated(AuditLogGeneratedEventArgs e)
+        {
+            AuditLogGenerated?.Invoke(this, e);
+        }
+
+        public new void Dispose()
+        {
+            ReleaseEventHandlers();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void ReleaseEventHandlers()
+        {
+            _coreTracker.OnAuditLogGenerated -= OnAuditLogGenerated;
+        }
+
+        private void OnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)
+        {
+            AuditLogGenerated?.Invoke(sender, e);
+        }
     }
 
     public class TrackerIdentityContext<TUser> : TrackerIdentityContext<TUser, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>

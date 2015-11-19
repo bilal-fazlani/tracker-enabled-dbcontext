@@ -50,7 +50,6 @@ namespace TrackerEnabledDbContext.Common.Auditors
             var detailsAuditor = GetDetailsAuditor(eventType, newlog);
             
             newlog.LogDetails = detailsAuditor.CreateLogDetails().ToList();
-            
 
             if (newlog.LogDetails.Any())
                 return newlog;

@@ -13,11 +13,6 @@ namespace TrackerEnabledDbContext.Common.Models
     /// </summary>
     public class AuditLog: IUnTrackable
     {
-        public AuditLog()
-        {
-            LogDetails = new List<AuditLogDetail>();
-        }
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long AuditLogId { get; set; }
@@ -38,6 +33,6 @@ namespace TrackerEnabledDbContext.Common.Models
         [MaxLength(256)]
         public string RecordId { get; set; }
 
-        public virtual ICollection<AuditLogDetail> LogDetails { get; set; }
+        public virtual ICollection<AuditLogDetail> LogDetails { get; set; } = new List<AuditLogDetail>();
     }
 }

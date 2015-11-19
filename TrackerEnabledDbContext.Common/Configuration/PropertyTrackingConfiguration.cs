@@ -1,9 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Interfaces;
 
 namespace TrackerEnabledDbContext.Common.Configuration

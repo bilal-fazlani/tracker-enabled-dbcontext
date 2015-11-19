@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
@@ -124,5 +125,17 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
 
             return entity;
         }
+
+        public static IEnumerable<AuditLogDetail> AssertContainsLogDetail(
+            this IEnumerable<AuditLogDetail> logDetails,
+            AuditLogDetail logDetail)
+        {
+            LogDetailsEqualityComparer comparer = new LogDetailsEqualityComparer();
+
+            logDetails.SingleOrDefault(currentLogDetail => comparer.Equals(currentLogDetail, logDetail))
+                .AssertIsNotNull("collection doesn't contain expected object");
+
+            return logDetails;
+        } 
     }
 }

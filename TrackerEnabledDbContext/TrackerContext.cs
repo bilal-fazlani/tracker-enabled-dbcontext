@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TrackerEnabledDbContext.Common;
 using TrackerEnabledDbContext.Common.Configuration;
+using TrackerEnabledDbContext.Common.EventArgs;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
 
@@ -15,20 +16,32 @@ namespace TrackerEnabledDbContext
 {
     public class TrackerContext : DbContext, ITrackerContext
     {
+        private CoreTracker _coreTracker;
+
         public TrackerContext()
         {
+            InitializeCoreTracker();
         }
 
         public TrackerContext(string connectinString)
             : base(connectinString)
         {
+            InitializeCoreTracker();
         }
 
         public TrackerContext(DbConnection dbconnection, bool contextOwnsConnection)
             : base(dbconnection, contextOwnsConnection)
         {
+            InitializeCoreTracker();
         }
 
+        private void InitializeCoreTracker()
+        {
+            _coreTracker = new CoreTracker(this);
+            _coreTracker.OnAuditLogGenerated += OnAuditLogGenerated;
+        }
+
+        public event EventHandler<AuditLogGeneratedEventArgs> AuditLogGenerated;
 
         public DbSet<AuditLog> AuditLog { get; set; }
 
@@ -45,14 +58,14 @@ namespace TrackerEnabledDbContext
         {
             if (!GlobalTrackingConfig.Enabled) return base.SaveChanges();
 
-            CommonTracker.AuditChanges(this, userName);
+            _coreTracker.AuditChanges(userName);
 
-            IEnumerable<DbEntityEntry> addedEntries = CommonTracker.GetAdditions(this);
+            IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
             // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
             int result = base.SaveChanges();
             //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
 
-            CommonTracker.AuditAdditions(this, userName, addedEntries);
+            _coreTracker.AuditAdditions(userName, addedEntries);
 
             //save changes to audit of added entries
             base.SaveChanges();
@@ -78,7 +91,7 @@ namespace TrackerEnabledDbContext
         /// <returns></returns>
         public IQueryable<AuditLog> GetLogs<TEntity>()
         {
-            return CommonTracker.GetLogs<TEntity>(this);
+            return _coreTracker.GetLogs<TEntity>();
         }
 
         /// <summary>
@@ -88,7 +101,7 @@ namespace TrackerEnabledDbContext
         /// <returns></returns>
         public IQueryable<AuditLog> GetLogs(string entityName)
         {
-            return CommonTracker.GetLogs(this, entityName);
+            return _coreTracker.GetLogs(entityName);
         }
 
         /// <summary>
@@ -99,7 +112,7 @@ namespace TrackerEnabledDbContext
         /// <returns></returns>
         public IQueryable<AuditLog> GetLogs<TEntity>(object primaryKey)
         {
-            return CommonTracker.GetLogs<TEntity>(this, primaryKey);
+            return _coreTracker.GetLogs<TEntity>( primaryKey);
         }
 
         /// <summary>
@@ -110,7 +123,7 @@ namespace TrackerEnabledDbContext
         /// <returns></returns>
         public IQueryable<AuditLog> GetLogs(string entityName, object primaryKey)
         {
-            return CommonTracker.GetLogs(this, entityName, primaryKey);
+            return _coreTracker.GetLogs(entityName, primaryKey);
         }
 
         #region -- Async --
@@ -132,15 +145,15 @@ namespace TrackerEnabledDbContext
             if (cancellationToken.IsCancellationRequested)
                 cancellationToken.ThrowIfCancellationRequested();
 
-            CommonTracker.AuditChanges(this, userName);
+            _coreTracker.AuditChanges(userName);
 
-            IEnumerable<DbEntityEntry> addedEntries = CommonTracker.GetAdditions(this);
+            IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
 
             // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
             int result = await base.SaveChangesAsync(cancellationToken);
 
             //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
-            CommonTracker.AuditAdditions(this, userName, addedEntries);
+            _coreTracker.AuditAdditions(userName, addedEntries);
 
             //save changes to audit of added entries
             await base.SaveChangesAsync(cancellationToken);
@@ -209,5 +222,22 @@ namespace TrackerEnabledDbContext
         }
 
         #endregion
+
+        private void OnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)
+        {
+            AuditLogGenerated?.Invoke(sender, e);
+        }
+
+        public new void Dispose()
+        {
+            ReleaseEventHandlers();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void ReleaseEventHandlers()
+        {
+            _coreTracker.OnAuditLogGenerated -= OnAuditLogGenerated;
+        }
     }
 }

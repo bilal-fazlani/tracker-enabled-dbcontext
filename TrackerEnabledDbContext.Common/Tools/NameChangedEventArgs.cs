@@ -2,7 +2,7 @@
 
 namespace TrackerEnabledDbContext.Common.Tools
 {
-    public class NameChangedEventArgs : EventArgs
+    public class NameChangedEventArgs : System.EventArgs
     {
         public string OldName { get; set; }
         public string NewName { get; set; }
