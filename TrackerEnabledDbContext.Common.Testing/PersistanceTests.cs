@@ -55,11 +55,5 @@ namespace TrackerEnabledDbContext.Common.Testing
                 _transaction?.Commit();
             }
         }
-
-        [TestMethod]
-        public void TestTest()
-        {
-            Assert.IsTrue(GetType().Name == "TestTrackerContext");
-        }
     }
 }
