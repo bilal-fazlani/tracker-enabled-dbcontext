@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -24,121 +25,140 @@ namespace TrackerEnabledDbContext.IntegrationTests
             {
                 EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
 
-                List<AuditLog> logsCollected = new List<AuditLog>();
+                bool eventRaised = false;
 
                 context.AuditLogGenerated += (sender, args) =>
                 {
-                    logsCollected.Add(args.Log);
+                    if (args.Log.EventType == EventType.Added &&
+                        args.Log.TypeFullName == typeof (TrackedModelWithMultipleProperties).FullName)
+                    {
+                        eventRaised = true;
+                    }
                 };
 
-                var entity = ObjectFactory<TrackedModelWithMultipleProperties>.Create(false);
+                var entity = GetObjectFactory<TrackedModelWithMultipleProperties>().Create(false);
 
                 entity.Description = RandomText;
-                entity.Name = RandomText;
 
                 context.TrackedModelsWithMultipleProperties.Add(entity);
 
                 context.SaveChanges();
 
                 //assert
-                logsCollected.AssertCount(1);
+                Assert.IsTrue(eventRaised);
 
-                logsCollected.AssertAny(log =>
-                {
-                    bool result =
-                        log.TypeFullName == entity.GetType().FullName &&
-                        log.EventType == EventType.Added &&
-                        log.RecordId == entity.Id.ToString() &&
-                        log.UserName == null;
-
-
-                    log.LogDetails.AssertCount(3);
-
-                    log.LogDetails.AssertContainsLogDetail(new AuditLogDetail
-                    {
-                        PropertyName = nameof(entity.Description),
-                        NewValue = entity.Description
-                    });
-
-                    log.LogDetails.AssertContainsLogDetail(new AuditLogDetail
-                    {
-                        PropertyName = nameof(entity.Name),
-                        NewValue = entity.Name
-                    });
-
-                    log.LogDetails.AssertContainsLogDetail(new AuditLogDetail
-                    {
-                        PropertyName = nameof(entity.Id),
-                        NewValue = entity.Id.ToString()
-                    });
-
-                    return result;
-                });
+                //make sure log is saved in database
+                entity.AssertAuditForAddition(context, entity.Id, null,
+                    x => x.Id,
+                    x => x.Description);
             }
         }
 
         [TestMethod]
         public void CanRaiseModifyEvent()
         {
+            //TODO: modify test tracker context and identity test tracker context so that on disposal they revert the changes
             using (var context = GetNewContextInstance())
             {
                 EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
 
-                List<AuditLog> logsCollected = new List<AuditLog>();
+                bool modifyEventRaised = false;
 
                 context.AuditLogGenerated += (sender, args) =>
                 {
-                    logsCollected.Add(args.Log);
+                    if (args.Log.EventType == EventType.Modified &&
+                        args.Log.TypeFullName == typeof(TrackedModelWithMultipleProperties).FullName)
+                    {
+                        modifyEventRaised = true;
+                    }
                 };
 
-                var entity = ObjectFactory<TrackedModelWithMultipleProperties>.Create(false);
+                var existingEntity = GetObjectFactory<TrackedModelWithMultipleProperties>()
+                    .Create(save: true, testDbContext:context);
 
-                entity.Description = RandomText;
-                entity.Name = RandomText;
-
-                string originalValue = entity.Name;
-
-                context.TrackedModelsWithMultipleProperties.Add(entity);
-
-                context.SaveChanges();
-
-                entity.Name = RandomText;
+                string originalValue = existingEntity.Name;
+                existingEntity.Name = RandomText;
 
                 context.SaveChanges();
 
                 //assert
-                logsCollected.AssertCount(2); // 1 for add and 2nd for modify
+                Assert.IsTrue(modifyEventRaised);
 
-                var modificationLog = logsCollected[1];
-
-                Assert.IsTrue(modificationLog.TypeFullName == entity.GetType().FullName &&
-                        modificationLog.EventType == EventType.Modified &&
-                        modificationLog.RecordId == entity.Id.ToString() &&
-                        modificationLog.UserName == null);
-
-                modificationLog.LogDetails.AssertCount(1);
-
-                modificationLog.LogDetails.AssertContainsLogDetail(new AuditLogDetail
-                {
-                    PropertyName = nameof(entity.Name),
-                    NewValue = entity.Name,
-                    OriginalValue = originalValue
-                });
+                existingEntity.AssertAuditForModification(context, existingEntity.Id, null,
+                    new AuditLogDetail
+                    {
+                        PropertyName = nameof(existingEntity.Name),
+                        OriginalValue = originalValue,
+                        NewValue = existingEntity.Name
+                    });
             }
         }
 
         [TestMethod]
-        [Ignore]
         public void CanRaiseDeleteEvent()
         {
-            throw new NotImplementedException();
+            using (var context = GetNewContextInstance())
+            {
+                EntityTracker.TrackAllProperties<NormalModel>();
+
+                bool eventRaised = false;
+
+                context.AuditLogGenerated += (sender, args) =>
+                {
+                    if (args.Log.EventType == EventType.Deleted &&
+                        args.Log.TypeFullName == typeof(NormalModel).FullName)
+                    {
+                        eventRaised = true;
+                    }
+                };
+
+                var existingEntity = GetObjectFactory<NormalModel>()
+                    .Create(save: true, testDbContext: context);
+
+                context.NormalModels.Remove(existingEntity);
+                context.SaveChanges();
+
+                //assert
+                Assert.IsTrue(eventRaised);
+
+                existingEntity.AssertAuditForDeletion(context, existingEntity.Id, null,
+                    x => x.Description,
+                    x => x.Id);
+            }
         }
 
         [TestMethod]
         [Ignore]
         public void CanRaiseSoftDeleteEvent()
         {
-            throw new NotImplementedException();
+            using (var context = GetNewContextInstance())
+            {
+                EntityTracker.TrackAllProperties<NormalModel>();
+
+                bool eventRaised = false;
+
+                context.AuditLogGenerated += (sender, args) =>
+                {
+                    if (args.Log.EventType == EventType.Deleted &&
+                        args.Log.TypeFullName == typeof(NormalModel).FullName)
+                    {
+                        eventRaised = true;
+                    }
+                };
+
+                var existingEntity = GetObjectFactory<NormalModel>()
+                    .Create(save: true, testDbContext: context);
+
+                context.NormalModels.Remove(existingEntity);
+                context.SaveChanges();
+
+                //assert
+                Assert.IsTrue(eventRaised);
+
+                existingEntity.AssertAuditForDeletion(context, existingEntity.Id, null,
+                    x => x.Description,
+                    x => x.Id);
+            }
         }
 
         [TestMethod]
@@ -149,11 +169,39 @@ namespace TrackerEnabledDbContext.IntegrationTests
         }
 
         [TestMethod]
-        [Ignore]
         public void CanSkipTrackingUsingEvent()
         {
-            throw new NotImplementedException();
-        } 
+            using (var context = GetNewContextInstance())
+            {
+                EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
+
+                bool eventRaised = false;
+
+                context.AuditLogGenerated += (sender, args) =>
+                {
+                    if (args.Log.EventType == EventType.Added &&
+                        args.Log.TypeFullName == typeof(TrackedModelWithMultipleProperties).FullName)
+                    {
+                        eventRaised = true;
+                        args.SkipSaving = true;
+                    }
+                };
+
+                var entity = GetObjectFactory<TrackedModelWithMultipleProperties>().Create(false);
+
+                entity.Description = RandomText;
+
+                context.TrackedModelsWithMultipleProperties.Add(entity);
+
+                context.SaveChanges();
+
+                //assert
+                Assert.IsTrue(eventRaised);
+
+                //make sure log is saved in database
+                entity.AssertNoLogs(context, entity.Id, EventType.Added);
+            }
+        }
 
         private TestTrackerContext GetNewContextInstance()
         {

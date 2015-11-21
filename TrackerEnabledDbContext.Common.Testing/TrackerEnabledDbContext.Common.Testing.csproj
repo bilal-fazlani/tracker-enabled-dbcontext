@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="Code\ObjectFactory.cs" />
     <Compile Include="Code\ObjectFiller.cs" />
+    <Compile Include="Code\RandomDataGenerator.cs" />
     <Compile Include="Extensions\AssertExtensions.cs" />
     <Compile Include="Extensions\AuditAssertExtensions.cs" />
     <Compile Include="ISoftDeletable.cs" />

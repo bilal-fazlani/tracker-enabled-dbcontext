@@ -1,21 +1,42 @@
 ﻿using System;
 
-namespace TrackerEnabledDbContext.Common.Testing
+namespace TrackerEnabledDbContext.Common.Testing.Code
 {
-    public static class ObjectFactory<ObjectType> where ObjectType : class
+    public class ObjectFactory<TEntity, TContext>
+        where TEntity : class 
+        where TContext : ITestDbContext, new()
     {
-        static ObjectFactory()
+        readonly ObjectFiller<TEntity> _filler= new ObjectFiller<TEntity>();
+
+        public ObjectFactory()
         {
-            ObjectFiller<ObjectType>.IgnorePropertiesWhen(propName => propName == "Id");
+            _filler.IgnorePropertiesWhen(propName => propName.EndsWith("Id"));
         }
 
-        public static ObjectType Create(bool fill = true)
+        public TEntity Create(bool fill = true, bool save = false, ITestDbContext testDbContext = null)
         {
-            var instance = Activator.CreateInstance<ObjectType>();
+            var instance = Activator.CreateInstance<TEntity>();
 
             if (fill)
             {
-                ObjectFiller<ObjectType>.Fill(instance);
+                _filler.Fill(instance);
+            }
+
+            if (save)
+            {
+                if (testDbContext == null)
+                {
+                    using (var db = new TContext())
+                    {
+                        db.Set<TEntity>().Add(instance);
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    testDbContext.Set<TEntity>().Add(instance);
+                    testDbContext.SaveChanges();
+                }
             }
 
             return instance;

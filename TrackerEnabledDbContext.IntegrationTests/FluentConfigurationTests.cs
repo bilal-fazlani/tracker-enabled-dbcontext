@@ -22,7 +22,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 .Except(x=>x.StartTime)
                 .And(x=>x.Color);
 
-            POCO model = ObjectFactory<POCO>.Create();
+            POCO model = GetObjectFactory<POCO>().Create();
             db.POCOs.Add(model);
             db.SaveChanges();
 

@@ -1,27 +1,32 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 
-namespace TrackerEnabledDbContext.Common.Testing
+namespace TrackerEnabledDbContext.Common.Testing.Code
 {
-    public static class ObjectFiller<ObjectType> where ObjectType : class
+    public class ObjectFiller<TEntity> where TEntity : class
     {
-        private static Predicate<string> _propertyNameIgnoreRule;
+        private Predicate<string> _propertyNameIgnoreRule;
+        readonly RandomDataGenerator _randomDataGenerator = new RandomDataGenerator();
 
-        public static void IgnorePropertiesWhen(Predicate<string> propertyNameIgnoreRule)
+        public void IgnorePropertiesWhen(Predicate<string> propertyNameIgnoreRule)
         {
             _propertyNameIgnoreRule = propertyNameIgnoreRule;
         }
 
-        public static void Fill(ObjectType obj)
+        public void Fill(TEntity obj)
         {
-            //TODO: implement code
-            /*
-            check _propertyNameIgnoreRule != null
-            foreach property in obj.properties
-            if(!_propertyNameIgnoreRule(property)
+            var properties = typeof (TEntity)
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .ToList();
+
+            foreach (var propertyInfo in properties)
             {
-                obj.property = randomValue();
+                if (!_propertyNameIgnoreRule(propertyInfo.Name))
+                {
+                    propertyInfo.SetValue(obj, _randomDataGenerator.Get(propertyInfo.PropertyType));
+                }
             }
-            */
         }
     }
 }

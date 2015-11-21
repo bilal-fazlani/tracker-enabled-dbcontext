@@ -23,9 +23,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             EntityTracker
                 .TrackAllProperties<POCO>();
 
-            POCO model = ObjectFactory<POCO>.Create();
-            db.POCOs.Add(model);
-            db.SaveChanges();
+            POCO model = GetObjectFactory<POCO>().Create(false, true, db);
 
             model.AssertNoLogs(db, model.Id);
         }
