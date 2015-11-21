@@ -20,6 +20,9 @@ namespace TrackerEnabledDbContext.Common.Configuration
         {
             TrackingDataStore.EntityConfigStore.Clear();
             TrackingDataStore.PropertyConfigStore.Clear();
+
+            SoftDeletableType = null;
+            SoftDeletablePropertyName = null;
         }
 
         internal static Type SoftDeletableType;

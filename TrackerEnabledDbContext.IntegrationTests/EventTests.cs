@@ -128,44 +128,89 @@ namespace TrackerEnabledDbContext.IntegrationTests
         }
 
         [TestMethod]
-        [Ignore]
         public void CanRaiseSoftDeleteEvent()
         {
+            GlobalTrackingConfig.SetSoftDeletableCriteria<ISoftDeletable>
+                (x=>x.IsDeleted);
+
             using (var context = GetNewContextInstance())
             {
-                EntityTracker.TrackAllProperties<NormalModel>();
+                EntityTracker.TrackAllProperties<SoftDeletableModel>();
 
                 bool eventRaised = false;
 
                 context.AuditLogGenerated += (sender, args) =>
                 {
-                    if (args.Log.EventType == EventType.Deleted &&
-                        args.Log.TypeFullName == typeof(NormalModel).FullName)
+                    if (args.Log.EventType == EventType.SoftDeleted &&
+                        args.Log.TypeFullName == typeof(SoftDeletableModel).FullName)
                     {
                         eventRaised = true;
                     }
                 };
 
-                var existingEntity = GetObjectFactory<NormalModel>()
+                var existingEntity = GetObjectFactory<SoftDeletableModel>()
                     .Create(save: true, testDbContext: context);
 
-                context.NormalModels.Remove(existingEntity);
+                existingEntity.Delete();
+
                 context.SaveChanges();
 
                 //assert
                 Assert.IsTrue(eventRaised);
 
-                existingEntity.AssertAuditForDeletion(context, existingEntity.Id, null,
-                    x => x.Description,
-                    x => x.Id);
+                existingEntity.AssertAuditForSoftDeletion(context, existingEntity.Id, null,
+                    new AuditLogDetail
+                    {
+                        PropertyName = nameof(existingEntity.IsDeleted),
+                        OriginalValue = false.ToString(),
+                        NewValue = true.ToString()
+                    });
             }
         }
 
         [TestMethod]
-        [Ignore]
         public void CanRaiseUnDeleteEvent()
         {
-            throw new NotImplementedException();
+            GlobalTrackingConfig.SetSoftDeletableCriteria<ISoftDeletable>
+                (x => x.IsDeleted);
+
+            using (var context = GetNewContextInstance())
+            {
+                EntityTracker.TrackAllProperties<SoftDeletableModel>();
+
+                bool eventRaised = false;
+
+                context.AuditLogGenerated += (sender, args) =>
+                {
+                    if (args.Log.EventType == EventType.UnDeleted &&
+                        args.Log.TypeFullName == typeof(SoftDeletableModel).FullName)
+                    {
+                        eventRaised = true;
+                    }
+                };
+
+                var existingEntity = GetObjectFactory<SoftDeletableModel>()
+                    .Create(save: true, testDbContext: context);
+                
+                existingEntity.Delete();
+
+                context.SaveChanges();
+
+                //now undelete
+                existingEntity.IsDeleted = false;
+                context.SaveChanges();
+
+                //assert
+                Assert.IsTrue(eventRaised);
+
+                existingEntity.AssertAuditForUndeletion(context, existingEntity.Id, null,
+                    new AuditLogDetail
+                    {
+                        PropertyName = nameof(existingEntity.IsDeleted),
+                        OriginalValue = true.ToString(),
+                        NewValue = false.ToString()
+                    });
+            }
         }
 
         [TestMethod]

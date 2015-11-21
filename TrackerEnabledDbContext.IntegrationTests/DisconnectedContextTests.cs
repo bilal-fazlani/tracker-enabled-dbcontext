@@ -89,13 +89,12 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void should_be_able_to_delete()
         {
-            EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
+            EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>()
+                .Except(x=>x.IsSpecial);
 
             TrackedModelWithMultipleProperties existingModel = 
                 GetObjectFactory<TrackedModelWithMultipleProperties>()
                 .Create(save: true);
-
-            existingModel.IsSpecial = true; //always make true
 
             var newModel = new TrackedModelWithMultipleProperties
             {
@@ -112,7 +111,6 @@ namespace TrackerEnabledDbContext.IntegrationTests
             existingModel.AssertAuditForDeletion(newContextInstance, newModel.Id,
                 null, 
                 model => model.Id,
-                model => model.IsSpecial,
                 model => model.Name,
                 model => model.StartDate,
                 model => model.Value,

@@ -28,21 +28,6 @@ namespace TrackerEnabledDbContext.Common.Testing
 
         protected char RandomChar => _randomDataGenerator.Get<char>();
 
-        //protected T GetSavedModel<T>(ITrackerContext context = null) where T : class
-        //{
-        //    context = context ?? db;
-
-        //    var model = ObjectFactory<T>.Create();
-        //    context.Set<T>().Add(model);
-        //    context.SaveChanges();
-        //    return model;
-        //}
-
-        //protected TContext GetNewContextInstance()
-        //{
-        //    return new TContext();
-        //}
-
         protected ObjectFactory<T, TContext> GetObjectFactory<T>() where T:class
         {
             return new ObjectFactory<T, TContext>();

@@ -10,7 +10,9 @@ namespace TrackerEnabledDbContext.Common.Testing.Code
 
         public ObjectFactory()
         {
-            _filler.IgnorePropertiesWhen(propName => propName.EndsWith("Id"));
+            _filler.IgnorePropertiesWhen(propName => 
+                propName.EndsWith("Id") || 
+                propName == "IsDeleted");
         }
 
         public TEntity Create(bool fill = true, bool save = false, ITestDbContext testDbContext = null)
