@@ -76,12 +76,12 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 Description = RandomText
             };
 
-            db.NormalModels.Attach(entity);
-            db.Entry(entity).State = EntityState.Added;
+            Db.NormalModels.Attach(entity);
+            Db.Entry(entity).State = EntityState.Added;
 
-            db.SaveChanges();
+            Db.SaveChanges();
 
-            entity.AssertAuditForAddition(db, entity.Id, null,
+            entity.AssertAuditForAddition(Db, entity.Id, null,
                 x => x.Id,
                 x => x.Description);
         }

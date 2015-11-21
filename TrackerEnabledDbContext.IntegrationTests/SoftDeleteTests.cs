@@ -26,22 +26,22 @@ namespace TrackerEnabledDbContext.IntegrationTests
             //create a softdeletable entity and soft delete it
             var deletable = new SoftDeletableModel();
 
-            db.SoftDeletableModels.Add(deletable);
+            Db.SoftDeletableModels.Add(deletable);
 
             //save it to database
-            db.SaveChanges();
+            Db.SaveChanges();
 
-            deletable.AssertAuditForAddition(db, deletable.Id,
+            deletable.AssertAuditForAddition(Db, deletable.Id,
                 null, x=>x.Id);
             
             //soft delete entity
             deletable.Delete();
 
             //save changes
-            db.SaveChanges();
+            Db.SaveChanges();
 
             //assert for soft deletion
-            deletable.AssertAuditForSoftDeletion(db, deletable.Id, null, new AuditLogDetail
+            deletable.AssertAuditForSoftDeletion(Db, deletable.Id, null, new AuditLogDetail
             {
                 NewValue = true.ToString(),
                 OriginalValue = false.ToString(),
@@ -55,12 +55,12 @@ namespace TrackerEnabledDbContext.IntegrationTests
             //create a softdeletable entity and soft delete it
             var deletable = new SoftDeletableModel();
 
-            db.SoftDeletableModels.Add(deletable);
+            Db.SoftDeletableModels.Add(deletable);
 
             //save it to database
-            db.SaveChanges();
+            Db.SaveChanges();
 
-            deletable.AssertAuditForAddition(db, deletable.Id,
+            deletable.AssertAuditForAddition(Db, deletable.Id,
                 null, x => x.Id);
 
             //soft delete entity
@@ -68,10 +68,10 @@ namespace TrackerEnabledDbContext.IntegrationTests
             deletable.Description = RandomText;
 
             //save changes
-            db.SaveChanges();
+            Db.SaveChanges();
 
             //assert for soft deletion
-            deletable.AssertAuditForSoftDeletion(db, deletable.Id, null, new AuditLogDetail
+            deletable.AssertAuditForSoftDeletion(Db, deletable.Id, null, new AuditLogDetail
             {
                 NewValue = true.ToString(),
                 OriginalValue = false.ToString(),
@@ -93,17 +93,17 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 Description = RandomText,
             };
 
-            db.Set<SoftDeletableModel>().Attach(deletable);
-            db.Entry(deletable).State = EntityState.Added;
-            db.SaveChanges();
+            Db.Set<SoftDeletableModel>().Attach(deletable);
+            Db.Entry(deletable).State = EntityState.Added;
+            Db.SaveChanges();
 
-            deletable.AssertAuditForAddition(db, deletable.Id, null,
+            deletable.AssertAuditForAddition(Db, deletable.Id, null,
                 x => x.Id, x => x.Description);
 
             deletable.Delete();
-            db.SaveChanges();
+            Db.SaveChanges();
 
-            deletable.AssertAuditForSoftDeletion(db, deletable.Id, null,
+            deletable.AssertAuditForSoftDeletion(Db, deletable.Id, null,
                 new AuditLogDetail
                 {
                     PropertyName = nameof(deletable.IsDeleted),
@@ -112,9 +112,9 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 });
 
             deletable.IsDeleted = false;
-            db.SaveChanges();
+            Db.SaveChanges();
 
-            deletable.AssertAuditForUndeletion(db, deletable.Id, null,
+            deletable.AssertAuditForUndeletion(Db, deletable.Id, null,
                 new AuditLogDetail
                 {
                     PropertyName = nameof(deletable.IsDeleted),
@@ -134,17 +134,17 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 Description = oldDescription
             };
 
-            db.Set<SoftDeletableModel>().Attach(deletable);
-            db.Entry(deletable).State = EntityState.Added;
-            await db.SaveChangesAsync();
+            Db.Set<SoftDeletableModel>().Attach(deletable);
+            Db.Entry(deletable).State = EntityState.Added;
+            await Db.SaveChangesAsync();
 
-            deletable.AssertAuditForAddition(db, deletable.Id, null,
+            deletable.AssertAuditForAddition(Db, deletable.Id, null,
                 x => x.Id, x => x.Description);
 
             deletable.Delete();
-            await db.SaveChangesAsync();
+            await Db.SaveChangesAsync();
 
-            deletable.AssertAuditForSoftDeletion(db, deletable.Id, null,
+            deletable.AssertAuditForSoftDeletion(Db, deletable.Id, null,
                 new AuditLogDetail
                 {
                     PropertyName = nameof(deletable.IsDeleted),
@@ -154,9 +154,9 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
             deletable.IsDeleted = false;
             deletable.Description = newDescription;
-            await db.SaveChangesAsync();
+            await Db.SaveChangesAsync();
 
-            deletable.AssertAuditForUndeletion(db, deletable.Id, null,
+            deletable.AssertAuditForUndeletion(Db, deletable.Id, null,
                 new AuditLogDetail
                 {
                     PropertyName = nameof(deletable.IsDeleted),

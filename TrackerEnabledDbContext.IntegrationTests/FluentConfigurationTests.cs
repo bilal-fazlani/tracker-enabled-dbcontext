@@ -23,10 +23,10 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 .And(x=>x.Color);
 
             POCO model = GetObjectFactory<POCO>().Create();
-            db.POCOs.Add(model);
-            db.SaveChanges();
+            Db.POCOs.Add(model);
+            Db.SaveChanges();
 
-            model.AssertNoLogs(db, model.Id);
+            model.AssertNoLogs(Db, model.Id);
         }
 
         [TestMethod]
@@ -42,10 +42,10 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 StartTime = new DateTime(2015, 5, 5)
             };
 
-            db.POCOs.Add(model);
-            db.SaveChanges();
+            Db.POCOs.Add(model);
+            Db.SaveChanges();
 
-            model.AssertAuditForAddition(db, model.Id, null,
+            model.AssertAuditForAddition(Db, model.Id, null,
                 x=>x.Color,
                 x=>x.Id,
                 x=>x.Height,
@@ -62,10 +62,10 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
             string userName = RandomText;
 
-            db.NormalModels.Add(model);
-            await db.SaveChangesAsync(userName);
+            Db.NormalModels.Add(model);
+            await Db.SaveChangesAsync(userName);
 
-            model.AssertNoLogs(db,model.Id);
+            model.AssertNoLogs(Db,model.Id);
         }
 
         [TestMethod]
@@ -90,13 +90,13 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 //disable category
                 .Disable(x=>x.Category);
 
-            db.TrackedModelsWithMultipleProperties.Add(model);
+            Db.TrackedModelsWithMultipleProperties.Add(model);
 
             string userName = RandomText;
 
-            db.SaveChanges(userName);
+            Db.SaveChanges(userName);
 
-            model.AssertAuditForAddition(db, model.Id, userName, 
+            model.AssertAuditForAddition(Db, model.Id, userName, 
                 x=>x.Id, 
                 x=>x.Name, 
                 x=>x.Value);

@@ -13,7 +13,7 @@ namespace TrackerEnabledDbContext.Common.Interfaces
         DbSet<AuditLog> AuditLog { get; set; }
         DbSet<AuditLogDetail> LogDetails { get; set; }
 
-        event EventHandler<AuditLogGeneratedEventArgs> AuditLogGenerated;
+        event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;
 
         IQueryable<AuditLog> GetLogs(string entityFullName);
         IQueryable<AuditLog> GetLogs(string entityFullName, object primaryKey);

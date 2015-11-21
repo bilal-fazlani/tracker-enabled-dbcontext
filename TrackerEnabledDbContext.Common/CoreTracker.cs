@@ -39,7 +39,7 @@ namespace TrackerEnabledDbContext.Common
                     if (record != null)
                     {
                         var arg = new AuditLogGeneratedEventArgs(record);
-                        RaiseOnAuditLogGenerated(arg);
+                        RaiseOnAuditLogGenerated(this, arg);
                         if (!arg.SkipSaving)
                         {
                             _context.AuditLog.Add(record);
@@ -89,7 +89,7 @@ namespace TrackerEnabledDbContext.Common
                     if (record != null)
                     {
                         var arg = new AuditLogGeneratedEventArgs(record);
-                        RaiseOnAuditLogGenerated(arg);
+                        RaiseOnAuditLogGenerated(this, arg);
                         if (!arg.SkipSaving)
                         {
                             _context.AuditLog.Add(record);
@@ -156,9 +156,9 @@ namespace TrackerEnabledDbContext.Common
             return _context.AuditLog.Where(x => x.TypeFullName == entityTypeName && x.RecordId == key);
         }
 
-        protected virtual void RaiseOnAuditLogGenerated(AuditLogGeneratedEventArgs e)
+        protected virtual void RaiseOnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)
         {
-            OnAuditLogGenerated?.Invoke(this, e);
+            OnAuditLogGenerated?.Invoke(sender, e);
         }
     }
 }

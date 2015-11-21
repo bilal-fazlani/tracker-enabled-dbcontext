@@ -5,10 +5,10 @@ using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Extensions;
 using TrackerEnabledDbContext.Common.Testing.Models;
 
-namespace TrackerEnabledDbContext.IntegrationTests
+namespace TrackerEnabledDbContext.Identity.IntegrationTests
 {
     [TestClass]
-    public class EventTests : PersistanceTests<TestTrackerContext>
+    public class EventTestsForIdentity : PersistanceTests<TestTrackerIdentityContext>
     {
         [TestMethod]
         public void CanRaiseAddEvent()
@@ -234,9 +234,9 @@ namespace TrackerEnabledDbContext.IntegrationTests
             }
         }
 
-        private TestTrackerContext GetNewContextInstance()
+        private ITestDbContext GetNewContextInstance()
         {
-            return new TestTrackerContext();
+            return new TestTrackerIdentityContext();
         }
     }
 }

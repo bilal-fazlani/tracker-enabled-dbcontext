@@ -38,10 +38,10 @@ namespace TrackerEnabledDbContext
         private void InitializeCoreTracker()
         {
             _coreTracker = new CoreTracker(this);
-            _coreTracker.OnAuditLogGenerated += OnAuditLogGenerated;
+            _coreTracker.OnAuditLogGenerated += RaiseOnAuditLogGenerated;
         }
 
-        public event EventHandler<AuditLogGeneratedEventArgs> AuditLogGenerated;
+        public event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;
 
         public DbSet<AuditLog> AuditLog { get; set; }
 
@@ -223,9 +223,9 @@ namespace TrackerEnabledDbContext
 
         #endregion
 
-        private void OnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)
+        private void RaiseOnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)
         {
-            AuditLogGenerated?.Invoke(sender, e);
+            OnAuditLogGenerated?.Invoke(sender, e);
         }
 
         public new void Dispose()

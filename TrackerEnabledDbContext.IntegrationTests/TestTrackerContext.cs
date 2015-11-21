@@ -24,6 +24,6 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public DbSet<POCO> POCOs { get; set; }
         public DbSet<TrackedModelWithMultipleProperties> TrackedModelsWithMultipleProperties { get; set; }
         public DbSet<TrackedModelWithCustomTableAndColumnNames> TrackedModelsWithCustomTableAndColumnNames { get; set; }
-        public DbSet<SoftDeletableModel> SoftDeletableModels { get; set; } 
+        public DbSet<SoftDeletableModel> SoftDeletableModels { get; set; }
     }
 }

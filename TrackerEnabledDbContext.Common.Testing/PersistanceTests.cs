@@ -14,9 +14,9 @@ namespace TrackerEnabledDbContext.Common.Testing
         private const string TestConnectionString = "DefaultTestConnection";
         private readonly RandomDataGenerator _randomDataGenerator = new RandomDataGenerator();
 
-        public TContext db = new TContext();
+        protected TContext Db = new TContext();
 
-        public DbContextTransaction transaction;
+        private DbContextTransaction _transaction;
 
         protected bool RollBack = true;
 
@@ -36,7 +36,7 @@ namespace TrackerEnabledDbContext.Common.Testing
         [TestInitialize]
         public virtual void Initialize()
         {
-            transaction = db.Database.BeginTransaction();
+            _transaction = Db.Database.BeginTransaction();
             GlobalTrackingConfig.Enabled = true;
             GlobalTrackingConfig.TrackEmptyPropertiesOnAdditionAndDeletion = false;
             GlobalTrackingConfig.DisconnectedContext = false;
@@ -48,12 +48,18 @@ namespace TrackerEnabledDbContext.Common.Testing
         {
             if (RollBack)
             {
-                transaction?.Rollback();
+                _transaction?.Rollback();
             }
             else
             {
-                transaction?.Commit();
+                _transaction?.Commit();
             }
+        }
+
+        [TestMethod]
+        public void TestTest()
+        {
+            Assert.IsTrue(GetType().Name == "TestTrackerContext");
         }
     }
 }

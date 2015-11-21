@@ -18,7 +18,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestInitialize]
         public void InitializeTest()
         {
-            _migration = new LogDataMigration(db);
+            _migration = new LogDataMigration(Db);
 
             _migration.AuditLogUpdated += (sender, args) =>
             {
@@ -171,12 +171,12 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 PropertyName = "Subject"
             };
 
-            db.AuditLog.Add(log);
-            db.LogDetails.Add(magnitudeLogDetail);
-            db.LogDetails.Add(directionLogDetail);
-            db.LogDetails.Add(subjectLogDetail);
+            Db.AuditLog.Add(log);
+            Db.LogDetails.Add(magnitudeLogDetail);
+            Db.LogDetails.Add(directionLogDetail);
+            Db.LogDetails.Add(subjectLogDetail);
 
-            db.SaveChanges();
+            Db.SaveChanges();
         }
     }
 }

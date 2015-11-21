@@ -18,48 +18,59 @@ namespace TrackerEnabledDbContext.Identity
 
     public class TrackerIdentityContext<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim> :
         IdentityDbContext<TUser, TRole, TKey, TUserLogin, TUserRole, TUserClaim>, ITrackerContext
-        where TUser : IdentityUser<TKey, TUserLogin, TUserRole, TUserClaim> where TRole : IdentityRole<TKey, TUserRole> where TUserLogin : IdentityUserLogin<TKey> where TUserRole : IdentityUserRole<TKey> where TUserClaim : IdentityUserClaim<TKey>
+        
+        where TUser : IdentityUser<TKey, TUserLogin, TUserRole, TUserClaim> 
+        where TRole : IdentityRole<TKey, TUserRole> 
+        where TUserLogin : IdentityUserLogin<TKey> 
+        where TUserRole : IdentityUserRole<TKey> 
+        where TUserClaim : IdentityUserClaim<TKey>
     {
-        private readonly CoreTracker _coreTracker;
+        private CoreTracker _coreTracker;
 
         public TrackerIdentityContext()
         {
-            _coreTracker = new CoreTracker(this);
+            InitializeCoreTracker();
         }
 
         public TrackerIdentityContext(DbCompiledModel model) : base(model)
         {
-            _coreTracker = new CoreTracker(this);
+            InitializeCoreTracker();
         }
 
         public TrackerIdentityContext(string nameOrConnectionString) : base(nameOrConnectionString)
         {
-            _coreTracker = new CoreTracker(this);
+            InitializeCoreTracker();
         }
 
         public TrackerIdentityContext(string nameOrConnectionString, DbCompiledModel model)
             : base(nameOrConnectionString, model)
         {
-            _coreTracker = new CoreTracker(this);
+            InitializeCoreTracker();
         }
 
         public TrackerIdentityContext(DbConnection existingConnection, bool contextOwnsConnection)
             : base(existingConnection, contextOwnsConnection)
         {
-            _coreTracker = new CoreTracker(this);
+            InitializeCoreTracker();
         }
 
         public TrackerIdentityContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
             : base(existingConnection, model, contextOwnsConnection)
         {
+            InitializeCoreTracker();
+        }
+
+        private void InitializeCoreTracker()
+        {
             _coreTracker = new CoreTracker(this);
+            _coreTracker.OnAuditLogGenerated += RaiseOnAuditLogGenerated;
         }
 
         public DbSet<AuditLog> AuditLog { get; set; }
 
         public DbSet<AuditLogDetail> LogDetails { get; set; }
 
-        public event EventHandler<AuditLogGeneratedEventArgs> AuditLogGenerated;
+        public event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;
 
         /// <summary>
         ///     This method saves the model changes to the database.
@@ -259,11 +270,6 @@ namespace TrackerEnabledDbContext.Identity
 
         #endregion --
 
-        protected virtual void OnAuditLogGenerated(AuditLogGeneratedEventArgs e)
-        {
-            AuditLogGenerated?.Invoke(this, e);
-        }
-
         public new void Dispose()
         {
             ReleaseEventHandlers();
@@ -276,13 +282,14 @@ namespace TrackerEnabledDbContext.Identity
             _coreTracker.OnAuditLogGenerated -= OnAuditLogGenerated;
         }
 
-        private void OnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)
+        private void RaiseOnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)
         {
-            AuditLogGenerated?.Invoke(sender, e);
+            OnAuditLogGenerated?.Invoke(sender, e);
         }
     }
 
-    public class TrackerIdentityContext<TUser> : TrackerIdentityContext<TUser, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
+    public class TrackerIdentityContext<TUser> : 
+        TrackerIdentityContext<TUser, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
         where TUser : IdentityUser
     {
         public TrackerIdentityContext()
