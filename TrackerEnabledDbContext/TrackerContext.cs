@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading;
@@ -23,14 +24,38 @@ namespace TrackerEnabledDbContext
             InitializeCoreTracker();
         }
 
-        public TrackerContext(string connectinString)
-            : base(connectinString)
+        public TrackerContext(DbCompiledModel model)
+            : base(model)
         {
             InitializeCoreTracker();
         }
 
-        public TrackerContext(DbConnection dbconnection, bool contextOwnsConnection)
-            : base(dbconnection, contextOwnsConnection)
+        public TrackerContext(string nameOrConnectionString)
+            : base(nameOrConnectionString)
+        {
+            InitializeCoreTracker();
+        }
+
+        public TrackerContext(string nameOrConnectionString, DbCompiledModel model)
+            : base(nameOrConnectionString, model)
+        {
+            InitializeCoreTracker();
+        }
+
+        public TrackerContext(DbConnection existingConnection, bool contextOwnsConnection)
+            : base(existingConnection, contextOwnsConnection)
+        {
+            InitializeCoreTracker();
+        }
+
+        public TrackerContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
+            : base(existingConnection, model, contextOwnsConnection)
+        {
+            InitializeCoreTracker();
+        }
+
+        public TrackerContext(ObjectContext objectContext, bool dbContextOwnsObjectContext)
+            : base(objectContext, dbContextOwnsObjectContext)
         {
             InitializeCoreTracker();
         }
