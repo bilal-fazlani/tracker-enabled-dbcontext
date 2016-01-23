@@ -21,8 +21,11 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
                 context.OnAuditLogGenerated += (sender, args) =>
                 {
+                    var eventEntity = args.Entity as TrackedModelWithMultipleProperties;
+
                     if (args.Log.EventType == EventType.Added &&
-                        args.Log.TypeFullName == typeof (TrackedModelWithMultipleProperties).FullName)
+                        args.Log.TypeFullName == typeof (TrackedModelWithMultipleProperties).FullName &&
+                        eventEntity != null)
                     {
                         eventRaised = true;
                     }
@@ -58,8 +61,11 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
                 context.OnAuditLogGenerated += (sender, args) =>
                 {
+                    var eventEntity = args.Entity as TrackedModelWithMultipleProperties;
+
                     if (args.Log.EventType == EventType.Modified &&
-                        args.Log.TypeFullName == typeof(TrackedModelWithMultipleProperties).FullName)
+                        args.Log.TypeFullName == typeof(TrackedModelWithMultipleProperties).FullName &&
+                        eventEntity != null)
                     {
                         modifyEventRaised = true;
                     }
@@ -97,8 +103,11 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
                 context.OnAuditLogGenerated += (sender, args) =>
                 {
+                    var eventEntity = args.Entity as NormalModel;
+
                     if (args.Log.EventType == EventType.Deleted &&
-                        args.Log.TypeFullName == typeof(NormalModel).FullName)
+                        args.Log.TypeFullName == typeof(NormalModel).FullName &&
+                        eventEntity != null)
                     {
                         eventRaised = true;
                     }
@@ -133,8 +142,11 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
                 context.OnAuditLogGenerated += (sender, args) =>
                 {
+                    var eventEntity = args.Entity as SoftDeletableModel;
+
                     if (args.Log.EventType == EventType.SoftDeleted &&
-                        args.Log.TypeFullName == typeof(SoftDeletableModel).FullName)
+                        args.Log.TypeFullName == typeof(SoftDeletableModel).FullName &&
+                        eventEntity != null)
                     {
                         eventRaised = true;
                     }
@@ -174,8 +186,11 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
                 context.OnAuditLogGenerated += (sender, args) =>
                 {
+                    var eventEntity = args.Entity as SoftDeletableModel;
+
                     if (args.Log.EventType == EventType.UnDeleted &&
-                        args.Log.TypeFullName == typeof(SoftDeletableModel).FullName)
+                        args.Log.TypeFullName == typeof(SoftDeletableModel).FullName &&
+                        eventEntity != null)
                     {
                         eventRaised = true;
                     }
@@ -216,8 +231,11 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
                 context.OnAuditLogGenerated += (sender, args) =>
                 {
+                    var eventEntity = args.Entity as TrackedModelWithMultipleProperties;
+
                     if (args.Log.EventType == EventType.Added &&
-                        args.Log.TypeFullName == typeof(TrackedModelWithMultipleProperties).FullName)
+                        args.Log.TypeFullName == typeof(TrackedModelWithMultipleProperties).FullName &&
+                        eventEntity != null)
                     {
                         eventRaised = true;
                         args.SkipSaving = true;
@@ -231,6 +249,55 @@ namespace TrackerEnabledDbContext.IntegrationTests
 
                 //make sure log is saved in database
                 entity.AssertNoLogs(context, entity.Id, EventType.Added);
+            }
+        }
+
+        [TestMethod]
+        public void CanChangeEntityInEvent()
+        {
+            using (var context = GetNewContextInstance())
+            {
+                EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
+
+                bool eventRaised = false;
+
+                string modifiedValue = RandomText;
+
+                context.OnAuditLogGenerated += (sender, args) =>
+                {
+                    var eventEntity = args.Entity as TrackedModelWithMultipleProperties;
+
+                    if (args.Log.EventType == EventType.Modified &&
+                        args.Log.TypeFullName == typeof(TrackedModelWithMultipleProperties).FullName &&
+                        eventEntity != null)
+                    {
+                        eventEntity.Name = modifiedValue;
+                        eventRaised = true;
+                    }
+                };
+
+                var existingEntity = GetObjectFactory<TrackedModelWithMultipleProperties>()
+                    .Create(save: true, testDbContext: context);
+
+                string originalValue = existingEntity.Name;
+                string newValue = RandomText;
+                existingEntity.Name = newValue;
+
+                context.SaveChanges();
+
+                //assert
+                Assert.IsTrue(eventRaised);
+
+                existingEntity.AssertAuditForModification(context, existingEntity.Id, null,
+                    new AuditLogDetail
+                    {
+                        PropertyName = nameof(existingEntity.Name),
+                        OriginalValue = originalValue,
+                        NewValue = newValue
+                    });
+
+                context.Entry(existingEntity).Reload();
+                Assert.AreEqual(existingEntity.Name, modifiedValue);
             }
         }
 

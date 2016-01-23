@@ -38,7 +38,7 @@ namespace TrackerEnabledDbContext.Common
 
                     if (record != null)
                     {
-                        var arg = new AuditLogGeneratedEventArgs(record);
+                        var arg = new AuditLogGeneratedEventArgs(record, ent.Entity);
                         RaiseOnAuditLogGenerated(this, arg);
                         if (!arg.SkipSaving)
                         {
@@ -88,7 +88,7 @@ namespace TrackerEnabledDbContext.Common
                     AuditLog record = auditer.CreateLogRecord(userName, EventType.Added, _context);
                     if (record != null)
                     {
-                        var arg = new AuditLogGeneratedEventArgs(record);
+                        var arg = new AuditLogGeneratedEventArgs(record, ent.Entity);
                         RaiseOnAuditLogGenerated(this, arg);
                         if (!arg.SkipSaving)
                         {
