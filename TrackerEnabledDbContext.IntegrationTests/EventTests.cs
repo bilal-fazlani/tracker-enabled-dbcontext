@@ -252,6 +252,55 @@ namespace TrackerEnabledDbContext.IntegrationTests
             }
         }
 
+        [TestMethod]
+        public void CanChangeEntityInEvent()
+        {
+            using (var context = GetNewContextInstance())
+            {
+                EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
+
+                bool eventRaised = false;
+
+                string modifiedValue = RandomText;
+
+                context.OnAuditLogGenerated += (sender, args) =>
+                {
+                    var eventEntity = args.Entity as TrackedModelWithMultipleProperties;
+
+                    if (args.Log.EventType == EventType.Modified &&
+                        args.Log.TypeFullName == typeof(TrackedModelWithMultipleProperties).FullName &&
+                        eventEntity != null)
+                    {
+                        eventEntity.Name = modifiedValue;
+                        eventRaised = true;
+                    }
+                };
+
+                var existingEntity = GetObjectFactory<TrackedModelWithMultipleProperties>()
+                    .Create(save: true, testDbContext: context);
+
+                string originalValue = existingEntity.Name;
+                string newValue = RandomText;
+                existingEntity.Name = newValue;
+
+                context.SaveChanges();
+
+                //assert
+                Assert.IsTrue(eventRaised);
+
+                existingEntity.AssertAuditForModification(context, existingEntity.Id, null,
+                    new AuditLogDetail
+                    {
+                        PropertyName = nameof(existingEntity.Name),
+                        OriginalValue = originalValue,
+                        NewValue = newValue
+                    });
+
+                context.Entry(existingEntity).Reload();
+                Assert.AreEqual(existingEntity.Name, modifiedValue);
+            }
+        }
+
         private TestTrackerContext GetNewContextInstance()
         {
             return new TestTrackerContext();
