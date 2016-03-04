@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Globalization;
 using TrackerEnabledDbContext.Common.Auditors.Comparators;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Extensions;
@@ -34,8 +35,8 @@ namespace TrackerEnabledDbContext.Common.Auditors
                     yield return new AuditLogDetail
                     {
                         PropertyName = propertyName,
-                        OriginalValue = OriginalValue(propertyName)?.ToString(),
-                        NewValue = CurrentValue(propertyName)?.ToString(),
+                        OriginalValue = OriginalValue(propertyName)?.ToString(GlobalTrackingConfig.LogCulture),
+                        NewValue = CurrentValue(propertyName)?.ToString(GlobalTrackingConfig.LogCulture),
                         Log = _log
                     };
                 }

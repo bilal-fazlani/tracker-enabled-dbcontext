@@ -44,7 +44,7 @@ namespace TrackerEnabledDbContext.Common.Auditors
                 EventDateUTC = changeTime,
                 EventType = eventType,
                 TypeFullName = entityType.FullName,
-                RecordId = GetPrimaryKeyValuesOf(_dbEntry, keyNames).ToString()
+                RecordId = GetPrimaryKeyValuesOf(_dbEntry, keyNames).ToString(GlobalTrackingConfig.LogCulture)
             };
 
             var detailsAuditor = GetDetailsAuditor(eventType, newlog);
@@ -94,7 +94,7 @@ namespace TrackerEnabledDbContext.Common.Auditors
                 string output = "[";
 
                 output += string.Join(",",
-                    properties.Select(colName => dbEntry.GetDatabaseValues().GetValue<object>(colName.PropertyName)));
+                    properties.Select(colName => dbEntry.GetDatabaseValues().GetValue<object>(colName.PropertyName).ToString(GlobalTrackingConfig.LogCulture)));
 
                 output += "]";
                 return output;
