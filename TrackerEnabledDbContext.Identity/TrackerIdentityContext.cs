@@ -25,52 +25,50 @@ namespace TrackerEnabledDbContext.Identity
         where TUserRole : IdentityUserRole<TKey> 
         where TUserClaim : IdentityUserClaim<TKey>
     {
-        private CoreTracker _coreTracker;
+        private readonly CoreTracker _coreTracker;
 
         public TrackerIdentityContext()
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerIdentityContext(DbCompiledModel model) : base(model)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerIdentityContext(string nameOrConnectionString) : base(nameOrConnectionString)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerIdentityContext(string nameOrConnectionString, DbCompiledModel model)
             : base(nameOrConnectionString, model)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerIdentityContext(DbConnection existingConnection, bool contextOwnsConnection)
             : base(existingConnection, contextOwnsConnection)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerIdentityContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
             : base(existingConnection, model, contextOwnsConnection)
         {
-            InitializeCoreTracker();
-        }
-
-        private void InitializeCoreTracker()
-        {
             _coreTracker = new CoreTracker(this);
-            _coreTracker.OnAuditLogGenerated += RaiseOnAuditLogGenerated;
         }
 
         public DbSet<AuditLog> AuditLog { get; set; }
 
         public DbSet<AuditLogDetail> LogDetails { get; set; }
 
-        public event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;
+        public event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated
+        {
+            add { _coreTracker.OnAuditLogGenerated += value; }
+            remove { _coreTracker.OnAuditLogGenerated -= value; }
+        }
 
         /// <summary>
         ///     This method saves the model changes to the database.
@@ -269,23 +267,6 @@ namespace TrackerEnabledDbContext.Identity
         }
 
         #endregion --
-
-        public new void Dispose()
-        {
-            ReleaseEventHandlers();
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void ReleaseEventHandlers()
-        {
-            _coreTracker.OnAuditLogGenerated -= OnAuditLogGenerated;
-        }
-
-        private void RaiseOnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)
-        {
-            OnAuditLogGenerated?.Invoke(sender, e);
-        }
     }
 
     public class TrackerIdentityContext<TUser> : 

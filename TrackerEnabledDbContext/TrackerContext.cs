@@ -17,56 +17,54 @@ namespace TrackerEnabledDbContext
 {
     public class TrackerContext : DbContext, ITrackerContext
     {
-        private CoreTracker _coreTracker;
+        private readonly CoreTracker _coreTracker;
 
         public TrackerContext()
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerContext(DbCompiledModel model)
             : base(model)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerContext(string nameOrConnectionString, DbCompiledModel model)
             : base(nameOrConnectionString, model)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerContext(DbConnection existingConnection, bool contextOwnsConnection)
             : base(existingConnection, contextOwnsConnection)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
             : base(existingConnection, model, contextOwnsConnection)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerContext(ObjectContext objectContext, bool dbContextOwnsObjectContext)
             : base(objectContext, dbContextOwnsObjectContext)
         {
-            InitializeCoreTracker();
-        }
-
-        private void InitializeCoreTracker()
-        {
             _coreTracker = new CoreTracker(this);
-            _coreTracker.OnAuditLogGenerated += RaiseOnAuditLogGenerated;
         }
 
-        public event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;
+        public event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated
+        {
+            add { _coreTracker.OnAuditLogGenerated += value; }
+            remove { _coreTracker.OnAuditLogGenerated -= value; }
+        }
 
         public DbSet<AuditLog> AuditLog { get; set; }
 
@@ -247,22 +245,5 @@ namespace TrackerEnabledDbContext
         }
 
         #endregion
-
-        private void RaiseOnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)
-        {
-            OnAuditLogGenerated?.Invoke(sender, e);
-        }
-
-        public new void Dispose()
-        {
-            ReleaseEventHandlers();
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void ReleaseEventHandlers()
-        {
-            _coreTracker.OnAuditLogGenerated -= OnAuditLogGenerated;
-        }
     }
 }
