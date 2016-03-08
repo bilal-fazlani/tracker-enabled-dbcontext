@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,58 +16,58 @@ using TrackerEnabledDbContext.Common.Models;
 
 namespace TrackerEnabledDbContext
 {
+    [SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly",
+        Justification = "False positive.  IDisposable is inherited via DbContext.  See http://stackoverflow.com/questions/8925925/code-analysis-ca1063-fires-when-deriving-from-idisposable-and-providing-implemen for details.")]
     public class TrackerContext : DbContext, ITrackerContext
     {
-        private CoreTracker _coreTracker;
+        private readonly CoreTracker _coreTracker;
 
         public TrackerContext()
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerContext(DbCompiledModel model)
             : base(model)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerContext(string nameOrConnectionString, DbCompiledModel model)
             : base(nameOrConnectionString, model)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerContext(DbConnection existingConnection, bool contextOwnsConnection)
             : base(existingConnection, contextOwnsConnection)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
             : base(existingConnection, model, contextOwnsConnection)
         {
-            InitializeCoreTracker();
+            _coreTracker = new CoreTracker(this);
         }
 
         public TrackerContext(ObjectContext objectContext, bool dbContextOwnsObjectContext)
             : base(objectContext, dbContextOwnsObjectContext)
         {
-            InitializeCoreTracker();
-        }
-
-        private void InitializeCoreTracker()
-        {
             _coreTracker = new CoreTracker(this);
-            _coreTracker.OnAuditLogGenerated += RaiseOnAuditLogGenerated;
         }
 
-        public event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;
+        public event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated
+        {
+            add { _coreTracker.OnAuditLogGenerated += value; }
+            remove { _coreTracker.OnAuditLogGenerated -= value; }
+        }
 
         public DbSet<AuditLog> AuditLog { get; set; }
 
@@ -247,22 +248,5 @@ namespace TrackerEnabledDbContext
         }
 
         #endregion
-
-        private void RaiseOnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)
-        {
-            OnAuditLogGenerated?.Invoke(sender, e);
-        }
-
-        public new void Dispose()
-        {
-            ReleaseEventHandlers();
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void ReleaseEventHandlers()
-        {
-            _coreTracker.OnAuditLogGenerated -= OnAuditLogGenerated;
-        }
     }
 }
