@@ -15,5 +15,7 @@ namespace TrackerEnabledDbContext.Common.EventArgs
         public object Entity { get; internal set; }
 
         public bool SkipSaving { get; set; } = false;
+
+        public bool SkipSavingToSerilog { get; set; } = false;
     }
 }

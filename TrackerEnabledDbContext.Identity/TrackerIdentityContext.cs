@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Serilog;
 using TrackerEnabledDbContext.Common;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.EventArgs;
@@ -124,6 +125,18 @@ namespace TrackerEnabledDbContext.Identity
         public IQueryable<AuditLog> GetLogs<TEntity>()
         {
             return _coreTracker.GetLogs<TEntity>();
+        }
+
+        public void AddLogger(ILogger logger)
+        {
+            _coreTracker.AddLogger(logger);
+        }
+
+        public void AddLogger(ILogger logger,
+            string messageTemplate,
+            Func<LogInfo, object[]> parameters)
+        {
+            _coreTracker.AddLogger(logger, messageTemplate, parameters);
         }
 
         /// <summary>

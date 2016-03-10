@@ -6,6 +6,10 @@
 *.user
 *.sln.docstates
 
+#nuget
+*.nupkg
+*.nuspec
+
 # Build results
 
 [Dd]ebug/
@@ -58,6 +62,7 @@ ipch/
 *.psess
 *.vsp
 *.vspx
+.vs/
 
 # Guidance Automation Toolkit
 *.gpState

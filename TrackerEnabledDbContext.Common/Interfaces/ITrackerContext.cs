@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Serilog;
 using TrackerEnabledDbContext.Common.EventArgs;
 using TrackerEnabledDbContext.Common.Models;
 
@@ -14,6 +15,12 @@ namespace TrackerEnabledDbContext.Common.Interfaces
         DbSet<AuditLogDetail> LogDetails { get; set; }
 
         event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;
+
+        void AddLogger(ILogger logger);
+
+        void AddLogger(ILogger logger,
+            string messageTemplate,
+            Func<LogInfo, object[]> parameters);
 
         IQueryable<AuditLog> GetLogs(string entityFullName);
         IQueryable<AuditLog> GetLogs(string entityFullName, object primaryKey);
