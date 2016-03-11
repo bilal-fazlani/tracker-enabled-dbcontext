@@ -1,4 +1,5 @@
-﻿using TrackerEnabledDbContext.Common.Models;
+﻿using System;
+using TrackerEnabledDbContext.Common.Models;
 
 namespace TrackerEnabledDbContext.Common.EventArgs
 {
@@ -14,8 +15,16 @@ namespace TrackerEnabledDbContext.Common.EventArgs
 
         public object Entity { get; internal set; }
 
-        public bool SkipSaving { get; set; } = false;
 
-        public bool SkipSavingToSerilog { get; set; } = false;
+        [Obsolete("This property is Obsolete. Please use `SkipSavingLogToApplicationDatabase`. This property will be removed in future versions")]
+        public bool SkipSaving
+        {
+            get { return SkipSavingLogToApplicationDatabase; }
+            set { SkipSavingLogToApplicationDatabase = value; }
+        }
+
+        public bool SkipSavingLogToApplicationDatabase { get; set; } = false;
+
+        public bool SkipSavingLogToSerilog { get; set; } = false;
     }
 }

@@ -51,7 +51,7 @@ namespace TrackerEnabledDbContext.Common
                             _context.AuditLog.Add(record);
                         }
 
-                        if (!arg.SkipSavingToSerilog)
+                        if (!arg.SkipSavingLogToSerilog)
                         {
                             LogToLogger(arg.Log);
                         }
@@ -107,7 +107,7 @@ namespace TrackerEnabledDbContext.Common
                             _context.AuditLog.Add(record);
                         }
 
-                        if (!arg.SkipSavingToSerilog)
+                        if (!arg.SkipSavingLogToSerilog)
                         {
                             LogToLogger(arg.Log);
                         }

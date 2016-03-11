@@ -26,7 +26,14 @@ namespace SampleLogMaker.Models
                 //or any serilog sink you want
                 .CreateLogger();
 
-            AddLogger(logger);
+            AddLogger(logger, "@{log}", loginfo=> new object[] {loginfo});
+
+            //stop saving audit logs to applicaiton database
+            OnAuditLogGenerated += (sender, args) =>
+            {
+                args.SkipSaving = true;
+                args.SkipSavingLogToSerilog = false; // <-- this is false by default
+            };
         }
 
         public DbSet<Blog> Blogs { get; set; }
