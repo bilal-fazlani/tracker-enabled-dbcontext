@@ -30,6 +30,19 @@ namespace TrackerEnabledDbContext.Identity
     {
         private readonly CoreTracker _coreTracker;
 
+        private Func<string> _usernameFactory;
+        private string _defaultUsername;
+
+        public void ConfigureUsername(Func<string> usernameFactory)
+        {
+            _usernameFactory = usernameFactory;
+        }
+
+        public void ConfigureUsername(string defaultUsername)
+        {
+            _defaultUsername = defaultUsername;
+        }
+
         public TrackerIdentityContext()
         {
             _coreTracker = new CoreTracker(this);
@@ -87,7 +100,7 @@ namespace TrackerEnabledDbContext.Identity
                 return base.SaveChanges();
             }
 
-            _coreTracker.AuditChanges( userName);
+            _coreTracker.AuditChanges(userName);
 
             IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
             // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
@@ -113,8 +126,8 @@ namespace TrackerEnabledDbContext.Identity
             {
                 return base.SaveChanges();
             }
-            //var user = Thread.CurrentPrincipal?.Identity?.Name ?? "Anonymous";
-            return SaveChanges(null);
+
+            return SaveChanges(_usernameFactory?.Invoke() ?? _defaultUsername);
         }
 
         /// <summary>
@@ -256,7 +269,7 @@ namespace TrackerEnabledDbContext.Identity
                 return await base.SaveChangesAsync(CancellationToken.None);
             }
 
-            return await SaveChangesAsync(null, CancellationToken.None);
+            return await SaveChangesAsync(_usernameFactory?.Invoke() ?? _defaultUsername, CancellationToken.None);
         }
 
         /// <summary>
@@ -278,7 +291,7 @@ namespace TrackerEnabledDbContext.Identity
                 return await base.SaveChangesAsync(cancellationToken);
             }
 
-            return await SaveChangesAsync(null, cancellationToken);
+            return await SaveChangesAsync(_usernameFactory?.Invoke() ?? _defaultUsername, cancellationToken);
         }
 
         #endregion --

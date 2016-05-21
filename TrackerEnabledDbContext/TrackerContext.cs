@@ -23,6 +23,19 @@ namespace TrackerEnabledDbContext
     {
         private readonly CoreTracker _coreTracker;
 
+        private Func<string> _usernameFactory;
+        private string _defaultUsername;
+
+        public void ConfigureUsername(Func<string> usernameFactory)
+        {
+            _usernameFactory = usernameFactory;
+        }
+
+        public void ConfigureUsername(string defaultUsername)
+        {
+            _defaultUsername = defaultUsername;
+        }
+
         public TrackerContext()
         {
             _coreTracker = new CoreTracker(this);
@@ -107,8 +120,8 @@ namespace TrackerEnabledDbContext
         public override int SaveChanges()
         {
             if (!GlobalTrackingConfig.Enabled) return base.SaveChanges();
-            //var user = Thread.CurrentPrincipal?.Identity?.Name ?? "Anonymous"; 
-            return SaveChanges(null);
+
+            return SaveChanges(_usernameFactory?.Invoke() ?? _defaultUsername);
         }
 
         /// <summary>
@@ -238,7 +251,7 @@ namespace TrackerEnabledDbContext
         {
             if (!GlobalTrackingConfig.Enabled) return await base.SaveChangesAsync(CancellationToken.None);
 
-            return await SaveChangesAsync(null, CancellationToken.None);
+            return await SaveChangesAsync(_usernameFactory?.Invoke() ?? _defaultUsername, CancellationToken.None);
         }
 
         /// <summary>
@@ -257,7 +270,7 @@ namespace TrackerEnabledDbContext
         {
             if (!GlobalTrackingConfig.Enabled) return await base.SaveChangesAsync(cancellationToken);
 
-            return await SaveChangesAsync(null, cancellationToken);
+            return await SaveChangesAsync(_usernameFactory?.Invoke() ?? _defaultUsername, cancellationToken);
         }
 
         #endregion

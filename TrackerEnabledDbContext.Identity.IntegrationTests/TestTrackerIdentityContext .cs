@@ -14,6 +14,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
         public TestTrackerIdentityContext()
             : base(TestConnectionString)
         {
+            Database.SetInitializer(new DropCreateDatabaseAlways<TestTrackerIdentityContext>());
         }
 
         public DbSet<NormalModel> NormalModels { get; set; }

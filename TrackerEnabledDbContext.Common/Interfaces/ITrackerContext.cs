@@ -16,6 +16,9 @@ namespace TrackerEnabledDbContext.Common.Interfaces
 
         event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;
 
+        void ConfigureUsername(Func<string> usernameFactory);
+        void ConfigureUsername(string defaultUsername);
+
         void AddLogger(ILogger logger);
 
         void AddLogger(ILogger logger,

@@ -86,6 +86,7 @@
     <Compile Include="TestTrackerContext.cs" />
     <Compile Include="TrackerContextIntegrationTests.cs" />
     <Compile Include="SoftDeleteTests.cs" />
+    <Compile Include="UsernameConfigurationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TrackerEnabledDbContext.Common.Testing\TrackerEnabledDbContext.Common.Testing.csproj">
