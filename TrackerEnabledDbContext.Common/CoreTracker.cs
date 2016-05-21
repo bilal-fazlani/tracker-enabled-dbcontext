@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using Serilog;
+using Serilog.Events;
+using Serilog.Parsing;
 using TrackerEnabledDbContext.Common.Auditors;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.EventArgs;
@@ -13,6 +16,8 @@ namespace TrackerEnabledDbContext.Common
 {
     public class CoreTracker
     {
+        private ILogger _logger = null;
+
         public event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;
 
         private readonly ITrackerContext _context;
@@ -40,9 +45,15 @@ namespace TrackerEnabledDbContext.Common
                     {
                         var arg = new AuditLogGeneratedEventArgs(record, ent.Entity);
                         RaiseOnAuditLogGenerated(this, arg);
+
                         if (!arg.SkipSaving)
                         {
                             _context.AuditLog.Add(record);
+                        }
+
+                        if (!arg.SkipSavingLogToSerilog)
+                        {
+                            LogToLogger(arg.Log);
                         }
                     }
                 }
@@ -90,9 +101,15 @@ namespace TrackerEnabledDbContext.Common
                     {
                         var arg = new AuditLogGeneratedEventArgs(record, ent.Entity);
                         RaiseOnAuditLogGenerated(this, arg);
+
                         if (!arg.SkipSaving)
                         {
                             _context.AuditLog.Add(record);
+                        }
+
+                        if (!arg.SkipSavingLogToSerilog)
+                        {
+                            LogToLogger(arg.Log);
                         }
                     }
                 }
@@ -159,6 +176,32 @@ namespace TrackerEnabledDbContext.Common
         protected virtual void RaiseOnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)
         {
             OnAuditLogGenerated?.Invoke(sender, e);
+        }
+
+        public void AddLogger(ILogger logger)
+        {
+            _logger = logger;
+        }
+
+        public void AddLogger(ILogger logger,
+            string messageTemplate, 
+            Func<LogInfo, object[]> parameters)
+        {
+            _logger = logger;
+            _messageTemplate = messageTemplate;
+            _parameters = parameters;
+        }
+
+        private string _messageTemplate = "{@log}";
+        private Func<LogInfo, object[]> _parameters;
+
+        private void LogToLogger(AuditLog auditLog)
+        {
+            LogInfo log = new LogInfo(auditLog);
+
+            object[] paramters = _parameters?.Invoke(log) ?? new object[] {log};
+
+            _logger?.Information(_messageTemplate, paramters);
         }
     }
 }

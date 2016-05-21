@@ -1,6 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
+using System.IO;
+using Serilog;
 using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Identity;
 
@@ -11,6 +14,26 @@ namespace SampleLogMaker.Models
         public ApplicationDbContext()
             : base("DefaultConnection")
         {
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "log-{Date}.txt");
+
+            ILogger logger = new LoggerConfiguration()
+                .WriteTo
+                .RollingFile(filePath) 
+                //here you can add
+                //elastic search
+                //mongodb
+                //seq,
+                //or any serilog sink you want
+                .CreateLogger();
+
+            AddLogger(logger, "@{log}", loginfo=> new object[] {loginfo});
+
+            //stop saving audit logs to applicaiton database
+            OnAuditLogGenerated += (sender, args) =>
+            {
+                args.SkipSaving = true;
+                args.SkipSavingLogToSerilog = false; // <-- this is false by default
+            };
         }
 
         public DbSet<Blog> Blogs { get; set; }
