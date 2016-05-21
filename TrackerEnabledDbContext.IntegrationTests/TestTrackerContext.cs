@@ -13,6 +13,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public TestTrackerContext()
             : base(TestConnectionString)
         {
+            Database.SetInitializer(new DropCreateDatabaseAlways<TestTrackerContext>());
         }
 
         public DbSet<NormalModel> NormalModels { get; set; }
