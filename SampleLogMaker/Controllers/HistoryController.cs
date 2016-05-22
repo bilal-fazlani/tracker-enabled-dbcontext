@@ -66,6 +66,28 @@ namespace SampleLogMaker.Controllers
                             UserName = log.UserName,
                         });
                         break;
+                    case EventType.SoftDeleted: //SoftDeleted
+                        vm.Add(new SoftDeletedHistoryVM
+                        {
+                            Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.PropertyName, NewValue = x.NewValue, OldValue = x.OriginalValue }),
+                            Date = log.EventDateUTC.ToLocalTime(),
+                            LogId = log.AuditLogId,
+                            RecordId = log.RecordId,
+                            TypeFullName = log.TypeFullName,
+                            UserName = log.UserName,
+                        });
+                        break;
+                    case EventType.UnDeleted: //UnDeleted
+                        vm.Add(new UndeletedHistoryVM
+                        {
+                            Details = log.LogDetails.Select(x => new LogDetail { PropertyName = x.PropertyName, NewValue = x.NewValue, OldValue = x.OriginalValue }),
+                            Date = log.EventDateUTC.ToLocalTime(),
+                            LogId = log.AuditLogId,
+                            RecordId = log.RecordId,
+                            TypeFullName = log.TypeFullName,
+                            UserName = log.UserName,
+                        });
+                        break;
                 }
 
             }

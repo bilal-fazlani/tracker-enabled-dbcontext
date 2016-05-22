@@ -35,4 +35,14 @@ namespace SampleLogMaker.ViewModels
     {
         
     }
+
+    public class SoftDeletedHistoryVM : BaseHistoryVM
+    {
+
+    }
+
+    public class UndeletedHistoryVM : BaseHistoryVM
+    {
+
+    }
 }

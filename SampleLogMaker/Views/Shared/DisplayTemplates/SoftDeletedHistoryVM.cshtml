@@ -1,0 +1,19 @@
+﻿@using SampleLogMaker.ViewModels
+@model SoftDeletedHistoryVM
+
+<div class="changed">
+    @Model.UserName soft-deleted
+
+    <span class="historySpan changedHistoySpan tooltipper" title=" <div>
+        @foreach (var item in Model.Details)
+        {
+            <div>
+                @item.PropertyName : @item.OldValue -> @item.NewValue
+            </div>
+        }
+    </div>">
+        @Model.TypeFullName # @Model.RecordId
+    </span>
+
+    on @(Model.Date.ToString(Constants.DateFormat)).
+</div>

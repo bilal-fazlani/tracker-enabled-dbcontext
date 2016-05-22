@@ -275,6 +275,8 @@
     <Content Include="Views\Shared\DisplayTemplates\int.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\string.cshtml" />
     <Content Include="Views\History\_EntityHistory.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SoftDeletedHistoryVM.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\UndeletedHistoryVM.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

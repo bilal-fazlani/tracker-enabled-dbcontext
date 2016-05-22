@@ -51,6 +51,8 @@ namespace TrackerEnabledDbContext.Common
 
         private EventType GetEventType(DbEntityEntry entry)
         {
+            if(entry.State == EntityState.Deleted) return EventType.Deleted;
+
             var isSoftDeletable = GlobalTrackingConfig.SoftDeletableType?.IsInstanceOfType(entry.Entity);
 
             if (isSoftDeletable != null && isSoftDeletable.Value)
@@ -69,8 +71,7 @@ namespace TrackerEnabledDbContext.Common
                 }
             }
 
-            var eventType = entry.State == EntityState.Modified ? EventType.Modified : EventType.Deleted;
-            return eventType;
+            return EventType.Modified;
         }
 
         public IEnumerable<DbEntityEntry> GetAdditions()
