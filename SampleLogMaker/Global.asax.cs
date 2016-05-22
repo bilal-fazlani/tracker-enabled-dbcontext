@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Data.Entity;
+using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using SampleLogMaker.App_Start;
@@ -12,6 +13,8 @@ namespace SampleLogMaker
         protected void Application_Start()
         {
             GlobalTrackingConfig.SetSoftDeletableCriteria<ISoftDeletable>(x=>x.IsDeleted);
+            EntityTracker.TrackAllProperties<ApplicationUser>();
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<ApplicationDbContext>());
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

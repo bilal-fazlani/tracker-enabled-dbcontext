@@ -11,8 +11,6 @@ namespace SampleLogMaker.Models
         public ApplicationDbContext()
             : base("DefaultConnection")
         {
-            Database.SetInitializer(new DropCreateDatabaseAlways<ApplicationDbContext>());
-
         }
 
         public DbSet<Blog> Blogs { get; set; }
