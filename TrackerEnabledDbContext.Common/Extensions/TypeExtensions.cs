@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Objects;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -8,11 +7,23 @@ namespace TrackerEnabledDbContext.Common.Extensions
 {
     public static class TypeExtensions
     {
+        #region Constants
+
+        //todo:improve this recognition
+        private const string ProxyNamespace = @"System.Data.Entity.DynamicProxies";
+
+        #endregion
+
         #region -- public methods--
 
         public static Type GetEntityType(this Type entityType)
         {
-            return ObjectContext.GetObjectType(entityType);
+            if (entityType.Namespace == ProxyNamespace)
+            {
+                return GetEntityType(entityType.BaseType);
+            }
+
+            return entityType;
         }
 
         public static KeyValuePair<string, string> GetKeyValuePair<TEntity>(this TEntity entity, Expression<Func<TEntity, object>> property)
