@@ -12,13 +12,12 @@ namespace SampleLogMaker.Controllers
     public class AccountController : Controller
     {
         public AccountController()
-            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
-        {
-        }
 
-        public AccountController(UserManager<ApplicationUser> userManager)
         {
-            UserManager = userManager;
+            ApplicationDbContext db = new ApplicationDbContext();
+            db.ConfigureUsername(User?.Identity?.Name);
+            UserManager =
+                new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
         }
 
         public UserManager<ApplicationUser> UserManager { get; private set; }

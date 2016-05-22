@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using SampleLogMaker.Models;
 
 namespace SampleLogMaker.Controllers
@@ -14,10 +12,12 @@ namespace SampleLogMaker.Controllers
     public class UsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private UserManager<ApplicationUser> _userManager;
 
         public UsersController()
         {
-            db.ConfigureUsername(()=> User?.Identity?.Name);
+            db.ConfigureUsername(() => User?.Identity?.Name);
+            _userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
         }
 
         // GET: Users
