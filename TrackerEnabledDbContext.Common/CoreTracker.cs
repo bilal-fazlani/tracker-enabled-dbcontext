@@ -40,7 +40,7 @@ namespace TrackerEnabledDbContext.Common
                     {
                         var arg = new AuditLogGeneratedEventArgs(record, ent.Entity);
                         RaiseOnAuditLogGenerated(this, arg);
-                        if (!arg.SkipSaving)
+                        if (!arg.SkipSavingLog)
                         {
                             _context.AuditLog.Add(record);
                         }
@@ -91,7 +91,7 @@ namespace TrackerEnabledDbContext.Common
                     {
                         var arg = new AuditLogGeneratedEventArgs(record, ent.Entity);
                         RaiseOnAuditLogGenerated(this, arg);
-                        if (!arg.SkipSaving)
+                        if (!arg.SkipSavingLog)
                         {
                             _context.AuditLog.Add(record);
                         }
