@@ -83,7 +83,7 @@ namespace SampleLogMaker.Controllers
 
                 blog.Title = blogViewModel.Title;
                 blog.Description = blogViewModel.Description;
-                blog.IsDeleted = true;
+                blog.IsDeleted = blogViewModel.IsDeleted;
                 await db.SaveChangesAsync(User.Identity.Name);
                 return RedirectToAction("Index");
             }
