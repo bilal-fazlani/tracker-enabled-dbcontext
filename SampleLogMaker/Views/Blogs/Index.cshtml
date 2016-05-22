@@ -14,6 +14,7 @@
         <th>
             @Html.DisplayNameFor(model => model.Title)
         </th>
+        <th>Deleted</th>
         <th></th>
     </tr>
 
@@ -22,6 +23,7 @@
         <td>
             @item.Title
         </td>
+        <td>@item.IsDeleted</td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |

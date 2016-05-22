@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SampleLogMaker.Models
 {
     [TrackChanges]
-    public class Blog
+    public class Blog : ISoftDeletable
     {
         public Blog()
         {
@@ -26,5 +26,12 @@ namespace SampleLogMaker.Models
         public string Description { get; set; }
 
         public virtual List<Comment> Comments { get; set; }
+
+        public bool IsDeleted { get; set; }
+    }
+
+    public interface ISoftDeletable
+    {
+        bool IsDeleted { get; set; }
     }
 }

@@ -75,16 +75,19 @@ namespace SampleLogMaker.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Description,Title")] Blog blog)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Description,Title,IsDeleted")] Blog blogViewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Blogs.Find(blog.Id).Title = blog.Title;
-                db.Blogs.Find(blog.Id).Description = blog.Description;
+                var blog = db.Blogs.Find(blogViewModel.Id);
+
+                blog.Title = blogViewModel.Title;
+                blog.Description = blogViewModel.Description;
+                blog.IsDeleted = true;
                 await db.SaveChangesAsync(User.Identity.Name);
                 return RedirectToAction("Index");
             }
-            return View(blog);
+            return View(blogViewModel);
         }
 
         // GET: /Blogs/Delete/5
