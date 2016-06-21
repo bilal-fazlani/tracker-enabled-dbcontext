@@ -7,7 +7,6 @@ using TrackerEnabledDbContext.Common.Models;
 
 namespace SampleLogMaker.Controllers
 {
-    [Authorize]
 	public class HistoryController : Controller
 	{
 		//

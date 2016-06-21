@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Dynamic;
 using System.Linq;
 using TrackerEnabledDbContext.Common.Auditors;
 using TrackerEnabledDbContext.Common.Configuration;
@@ -22,7 +23,7 @@ namespace TrackerEnabledDbContext.Common
             _context = context;
         }
 
-        public void AuditChanges(object userName)
+        public void AuditChanges(object userName, ExpandoObject metadata)
         {
             // Get all Deleted/Modified entities (not Unmodified or Detached or Added)
             foreach (
@@ -34,11 +35,11 @@ namespace TrackerEnabledDbContext.Common
                 {
                     var eventType = GetEventType(ent);
 
-                    AuditLog record = auditer.CreateLogRecord(userName, eventType, _context);
+                    AuditLog record = auditer.CreateLogRecord(userName, eventType, _context, metadata);
 
                     if (record != null)
                     {
-                        var arg = new AuditLogGeneratedEventArgs(record, ent.Entity);
+                        var arg = new AuditLogGeneratedEventArgs(record, ent.Entity, metadata);
                         RaiseOnAuditLogGenerated(this, arg);
                         if (!arg.SkipSavingLog)
                         {
@@ -79,17 +80,17 @@ namespace TrackerEnabledDbContext.Common
             return _context.ChangeTracker.Entries().Where(p => p.State == EntityState.Added).ToList();
         }
 
-        public void AuditAdditions(object userName, IEnumerable<DbEntityEntry> addedEntries)
+        public void AuditAdditions(object userName, IEnumerable<DbEntityEntry> addedEntries, ExpandoObject metadata)
         {
             // Get all Added entities
             foreach (DbEntityEntry ent in addedEntries)
             {
                 using (var auditer = new LogAuditor(ent))
                 {
-                    AuditLog record = auditer.CreateLogRecord(userName, EventType.Added, _context);
+                    AuditLog record = auditer.CreateLogRecord(userName, EventType.Added, _context, metadata);
                     if (record != null)
                     {
-                        var arg = new AuditLogGeneratedEventArgs(record, ent.Entity);
+                        var arg = new AuditLogGeneratedEventArgs(record, ent.Entity, metadata);
                         RaiseOnAuditLogGenerated(this, arg);
                         if (!arg.SkipSavingLog)
                         {

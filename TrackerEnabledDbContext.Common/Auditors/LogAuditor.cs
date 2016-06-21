@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
+using System.Dynamic;
 using System.Linq;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Extensions;
@@ -22,7 +23,7 @@ namespace TrackerEnabledDbContext.Common.Auditors
         {
         }
 
-        internal AuditLog CreateLogRecord(object userName, EventType eventType, ITrackerContext context)
+        internal AuditLog CreateLogRecord(object userName, EventType eventType, ITrackerContext context, ExpandoObject metadata)
         {
             Type entityType = _dbEntry.Entity.GetType().GetEntityType();
 
@@ -35,7 +36,6 @@ namespace TrackerEnabledDbContext.Common.Auditors
 
             //todo: make this a static class
             var mapping = new DbMapping(context, entityType);
-
             List<PropertyConfiguerationKey> keyNames = mapping.PrimaryKeys().ToList();
 
             var newlog = new AuditLog
@@ -46,6 +46,18 @@ namespace TrackerEnabledDbContext.Common.Auditors
                 TypeFullName = entityType.FullName,
                 RecordId = GetPrimaryKeyValuesOf(_dbEntry, keyNames).ToString()
             };
+
+            var logMetadata = metadata
+                .Where(x=>x.Value != null)
+                .Select(m => new LogMetadata
+            {
+                AuditLog = newlog,
+                Key = m.Key,
+                Value = m.Value?.ToString()
+            })
+            .ToList();
+
+            newlog.Metadata = logMetadata;
 
             var detailsAuditor = GetDetailsAuditor(eventType, newlog);
             

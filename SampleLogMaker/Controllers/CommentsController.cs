@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Dynamic;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using Microsoft.CSharp.RuntimeBinder;
 using SampleLogMaker.Models;
 
 namespace SampleLogMaker.Controllers
@@ -9,17 +12,34 @@ namespace SampleLogMaker.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        public CommentsController()
+        {
+            db.ConfigureMetadata(metadata =>
+            {
+                metadata.IpAddress = Request.UserHostAddress;
+                metadata.RequestDevice = "AndroidPhone";
+                metadata.Country = Request.Cookies["country"];
+            });
+
+            db.OnAuditLogGenerated += (sender, args) =>
+            {
+                string ipAddress = args.Metadata.IpAddress;
+                string device = args.Metadata.RequestDevice;
+                string country = args.Metadata.Country;
+            };
+        }
+
         // GET: /Comments/
         public ActionResult Index(int? blogId = null)
         {
 
-            var vm = blogId.HasValue? db.Comments.Where(c => c.ParentBlog.Id == blogId).ToList()
+            var vm = blogId.HasValue ? db.Comments.Where(c => c.ParentBlog.Id == blogId).ToList()
                 :
                 db.Comments.ToList()
             ;
             return View(vm);
         }
-         
+
         // GET: /Comments/Details/5
         public ActionResult Details(int id)
         {

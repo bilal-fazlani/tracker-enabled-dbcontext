@@ -34,5 +34,7 @@ namespace TrackerEnabledDbContext.Common.Models
         public string RecordId { get; set; }
 
         public virtual ICollection<AuditLogDetail> LogDetails { get; set; } = new List<AuditLogDetail>();
+
+        public virtual ICollection<LogMetadata> Metadata { get; set; } = new List<LogMetadata>();
     }
 }
