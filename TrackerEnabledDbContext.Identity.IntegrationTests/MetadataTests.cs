@@ -6,10 +6,10 @@ using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Extensions;
 using TrackerEnabledDbContext.Common.Testing.Models;
 
-namespace TrackerEnabledDbContext.IntegrationTests
+namespace TrackerEnabledDbContext.Identity.IntegrationTests
 {
     [TestClass]
-    public class MetadataTests : PersistanceTests<TestTrackerContext>
+    public class MetadataTests : PersistanceTests<TestTrackerIdentityContext>
     {
         [TestMethod]
         public void ShouldAddSingleMetadata_WhenSingleMetadataIsProvided()
