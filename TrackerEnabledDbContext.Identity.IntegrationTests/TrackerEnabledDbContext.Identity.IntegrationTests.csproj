@@ -57,6 +57,7 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
@@ -75,6 +76,7 @@
   <ItemGroup>
     <Compile Include="EventTestsForIdentity.cs" />
     <Compile Include="FluentConfigurationTestsForIdentity.cs" />
+    <Compile Include="MetadataTests.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTrackerIdentityContext .cs" />

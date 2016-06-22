@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace TrackerEnabledDbContext.Common.Testing.Code
 {
-    public class ObjectFiller<TEntity> where TEntity : class
+    public class ObjectFiller 
     {
         private Predicate<string> _propertyNameIgnoreRule;
         readonly RandomDataGenerator _randomDataGenerator = new RandomDataGenerator();
@@ -14,7 +14,7 @@ namespace TrackerEnabledDbContext.Common.Testing.Code
             _propertyNameIgnoreRule = propertyNameIgnoreRule;
         }
 
-        public void Fill(TEntity obj)
+        public void Fill<TEntity>(TEntity obj) where TEntity : class
         {
             var properties = typeof (TEntity)
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)

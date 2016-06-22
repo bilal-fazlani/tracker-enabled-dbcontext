@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Models;
@@ -31,6 +30,29 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
 
                 lastLog.LogDetails.AssertAny(x => x.NewValue == keyValuePair.Value
                                                   && x.PropertyName == keyValuePair.Key);
+            }
+
+            return entity;
+        }
+
+        public static T AssertMetadata<T>(this T entity, ITrackerContext db, object entityId,
+            Dictionary<string, string> metadataCollection = null)
+        {
+            IEnumerable<AuditLog> logs = db.GetLogs<T>(entityId)
+                .AssertCountIsNotZero("log count is zero");
+
+            AuditLog lastLog = logs.LastOrDefault()
+                .AssertIsNotNull("log not found");
+
+            if (metadataCollection != null)
+            {
+                lastLog.Metadata.AssertCount(metadataCollection.Count, "Count of metadata is different.");
+
+                foreach (var metadata in metadataCollection)
+                {
+                    lastLog.Metadata.AssertAny(x => x.Key == metadata.Key && x.Value == metadata.Value,
+                        $"metadata not found: {metadata.Key} - {metadata.Value}");
+                }
             }
 
             return entity;

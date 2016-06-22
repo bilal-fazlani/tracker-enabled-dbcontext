@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace TrackerEnabledDbContext
 
         private Func<string> _usernameFactory;
         private string _defaultUsername;
+        private Action<dynamic> _metadataConfiguration;
 
         public void ConfigureUsername(Func<string> usernameFactory)
         {
@@ -33,6 +35,11 @@ namespace TrackerEnabledDbContext
         public void ConfigureUsername(string defaultUsername)
         {
             _defaultUsername = defaultUsername;
+        }
+
+        public void ConfigureMetadata(Action<dynamic> metadataConfiguration)
+        {
+            _metadataConfiguration = metadataConfiguration;
         }
 
         public TrackerContext()
@@ -97,14 +104,17 @@ namespace TrackerEnabledDbContext
         {
             if (!GlobalTrackingConfig.Enabled) return base.SaveChanges();
 
-            _coreTracker.AuditChanges(userName);
+            dynamic metaData = new ExpandoObject();
+            _metadataConfiguration?.Invoke(metaData);
+
+            _coreTracker.AuditChanges(userName, metaData);
 
             IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
             // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
             int result = base.SaveChanges();
             //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
 
-            _coreTracker.AuditAdditions(userName, addedEntries);
+            _coreTracker.AuditAdditions(userName, addedEntries, metaData);
 
             //save changes to audit of added entries
             base.SaveChanges();
@@ -184,7 +194,10 @@ namespace TrackerEnabledDbContext
             if (cancellationToken.IsCancellationRequested)
                 cancellationToken.ThrowIfCancellationRequested();
 
-            _coreTracker.AuditChanges(userName);
+            dynamic metadata = new ExpandoObject();
+            _metadataConfiguration?.Invoke(metadata);
+
+            _coreTracker.AuditChanges(userName, metadata);
 
             IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
 
@@ -192,7 +205,7 @@ namespace TrackerEnabledDbContext
             int result = await base.SaveChangesAsync(cancellationToken);
 
             //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
-            _coreTracker.AuditAdditions(userName, addedEntries);
+            _coreTracker.AuditAdditions(userName, addedEntries, metadata);
 
             //save changes to audit of added entries
             await base.SaveChangesAsync(cancellationToken);

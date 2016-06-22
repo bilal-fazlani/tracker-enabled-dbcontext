@@ -14,7 +14,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             Db.ConfigureUsername(()=> "bilal");
 
             NormalModel model = 
-                GetObjectFactory<NormalModel>().Create();
+                ObjectFactory.Create<NormalModel>();
             Db.NormalModels.Add(model);
             Db.SaveChanges();
             model.Id.AssertIsNotZero();
@@ -33,7 +33,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             Db.ConfigureUsername("rahul");
 
             NormalModel model =
-                GetObjectFactory<NormalModel>().Create();
+                ObjectFactory.Create<NormalModel>();
             Db.NormalModels.Add(model);
             Db.SaveChanges();
             model.Id.AssertIsNotZero();
@@ -51,7 +51,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             Db.ConfigureUsername("rahul");
 
             NormalModel model =
-                GetObjectFactory<NormalModel>().Create();
+                ObjectFactory.Create<NormalModel>();
             Db.NormalModels.Add(model);
             Db.SaveChanges();
             model.Id.AssertIsNotZero();

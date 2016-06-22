@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Models;
 using TrackerEnabledDbContext.Common.Testing;
-using TrackerEnabledDbContext.Common.Testing.Models;
 using TrackerEnabledDbContext.Common.Tools;
 
 namespace TrackerEnabledDbContext.IntegrationTests

@@ -17,6 +17,7 @@ namespace TrackerEnabledDbContext.Common.Interfaces
 
         void ConfigureUsername(Func<string> usernameFactory);
         void ConfigureUsername(string defaultUsername);
+        void ConfigureMetadata(Action<dynamic> metadataConfiguration);
 
         IQueryable<AuditLog> GetLogs(string entityFullName);
         IQueryable<AuditLog> GetLogs(string entityFullName, object primaryKey);
@@ -29,5 +30,7 @@ namespace TrackerEnabledDbContext.Common.Interfaces
         Task<int> SaveChangesAsync(object userName, CancellationToken cancellationToken);
         Task<int> SaveChangesAsync(int userId);
         Task<int> SaveChangesAsync(string userName);
+
+
     }
 }

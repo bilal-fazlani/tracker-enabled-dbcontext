@@ -51,6 +51,7 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
@@ -72,6 +73,7 @@
     <Compile Include="DisconnectedContextTests.cs" />
     <Compile Include="EventTests.cs" />
     <Compile Include="FluentConfigurationTests.cs" />
+    <Compile Include="MetadataTests.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MigrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -102,9 +104,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestCases.txt" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

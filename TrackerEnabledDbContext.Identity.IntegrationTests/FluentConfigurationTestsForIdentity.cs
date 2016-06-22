@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;
-using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Extensions;
 using TrackerEnabledDbContext.Common.Testing.Models;
@@ -23,7 +18,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             EntityTracker
                 .TrackAllProperties<POCO>();
 
-            POCO model = GetObjectFactory<POCO>().Create(false, true, Db);
+            POCO model = ObjectFactory.Create<POCO>(false, true, Db);
 
             model.AssertNoLogs(Db, model.Id);
         }
