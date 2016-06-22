@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;
-using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Extensions;
 using TrackerEnabledDbContext.Common.Testing.Models;
@@ -22,7 +21,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 .Except(x=>x.StartTime)
                 .And(x=>x.Color);
 
-            POCO model = GetObjectFactory<POCO>().Create();
+            POCO model = ObjectFactory.Create<POCO>();
             Db.POCOs.Add(model);
             Db.SaveChanges();
 

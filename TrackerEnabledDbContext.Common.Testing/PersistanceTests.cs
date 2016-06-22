@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;
-using TrackerEnabledDbContext.Common.Interfaces;
 using TrackerEnabledDbContext.Common.Testing.Code;
 
 namespace TrackerEnabledDbContext.Common.Testing
@@ -28,10 +26,7 @@ namespace TrackerEnabledDbContext.Common.Testing
 
         protected char RandomChar => _randomDataGenerator.Get<char>();
 
-        protected ObjectFactory<T, TContext> GetObjectFactory<T>() where T:class
-        {
-            return new ObjectFactory<T, TContext>();
-        }
+        protected ObjectFactory<TContext> ObjectFactory = new ObjectFactory<TContext>();
 
         [TestInitialize]
         public virtual void Initialize()

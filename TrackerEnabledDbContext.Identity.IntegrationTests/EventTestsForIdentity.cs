@@ -31,7 +31,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
                     }
                 };
 
-                var entity = GetObjectFactory<TrackedModelWithMultipleProperties>().Create(false);
+                var entity = ObjectFactory.Create<TrackedModelWithMultipleProperties>(false);
 
                 entity.Description = RandomText;
 
@@ -71,8 +71,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
                     }
                 };
 
-                var existingEntity = GetObjectFactory<TrackedModelWithMultipleProperties>()
-                    .Create(save: true, testDbContext:context);
+                var existingEntity = ObjectFactory
+                    .Create<TrackedModelWithMultipleProperties>(save: true, testDbContext:context);
 
                 string originalValue = existingEntity.Name;
                 existingEntity.Name = RandomText;
@@ -113,8 +113,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
                     }
                 };
 
-                var existingEntity = GetObjectFactory<NormalModel>()
-                    .Create(save: true, testDbContext: context);
+                var existingEntity = ObjectFactory
+                    .Create<NormalModel>(save: true, testDbContext: context);
 
                 context.NormalModels.Remove(existingEntity);
                 context.SaveChanges();
@@ -152,8 +152,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
                     }
                 };
 
-                var existingEntity = GetObjectFactory<SoftDeletableModel>()
-                    .Create(save: true, testDbContext: context);
+                var existingEntity = ObjectFactory
+                    .Create<SoftDeletableModel>(save: true, testDbContext: context);
 
                 existingEntity.Delete();
 
@@ -196,8 +196,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
                     }
                 };
 
-                var existingEntity = GetObjectFactory<SoftDeletableModel>()
-                    .Create(save: true, testDbContext: context);
+                var existingEntity = ObjectFactory
+                    .Create<SoftDeletableModel>(save: true, testDbContext: context);
                 
                 existingEntity.Delete();
 
@@ -242,7 +242,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
                     }
                 };
 
-                var entity = GetObjectFactory<TrackedModelWithMultipleProperties>().Create(save:true, testDbContext:context);
+                var entity = ObjectFactory.Create<TrackedModelWithMultipleProperties>(save:true, testDbContext:context);
 
                 //assert
                 Assert.IsTrue(eventRaised);
@@ -276,8 +276,8 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
                     }
                 };
 
-                var existingEntity = GetObjectFactory<TrackedModelWithMultipleProperties>()
-                    .Create(save: true, testDbContext: context);
+                var existingEntity = ObjectFactory
+                    .Create<TrackedModelWithMultipleProperties>(save: true, testDbContext: context);
 
                 string originalValue = existingEntity.Name;
                 string newValue = RandomText;

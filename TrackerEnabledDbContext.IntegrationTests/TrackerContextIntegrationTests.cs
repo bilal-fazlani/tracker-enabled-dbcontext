@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,7 +20,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_save_model()
         {
-            NormalModel model = GetObjectFactory<NormalModel>().Create();
+            NormalModel model = ObjectFactory.Create<NormalModel>();
             Db.NormalModels.Add(model);
             Db.SaveChanges();
             model.Id.AssertIsNotZero();
@@ -30,7 +29,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_save_when_entity_state_changed()
         {
-            NormalModel model = GetObjectFactory<NormalModel>().Create();
+            NormalModel model = ObjectFactory.Create<NormalModel>();
             Db.Entry(model).State = EntityState.Added;
             Db.SaveChanges();
             model.Id.AssertIsNotZero();
@@ -39,7 +38,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public async Task Can_save_async()
         {
-            NormalModel model = GetObjectFactory<NormalModel>().Create();
+            NormalModel model = ObjectFactory.Create<NormalModel>();
             Db.Entry(model).State = EntityState.Added;
             await Db.SaveChangesAsync();
             model.Id.AssertIsNotZero();
@@ -81,7 +80,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             string randomText = RandomText;
             string userName = RandomText;
 
-            NormalModel normalModel = GetObjectFactory<NormalModel>().Create();
+            NormalModel normalModel = ObjectFactory.Create<NormalModel>();
             normalModel.Description = randomText;
             Db.NormalModels.Add(normalModel);
             Db.SaveChanges(userName);
@@ -96,7 +95,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         {
             string randomText = RandomText;
 
-            NormalModel normalModel = GetObjectFactory<NormalModel>().Create();
+            NormalModel normalModel = ObjectFactory.Create<NormalModel>();
             normalModel.Description = randomText;
             Db.NormalModels.Add(normalModel);
             Db.SaveChanges();
@@ -112,7 +111,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             string randomText = RandomText;
             string userName = RandomText;
 
-            NormalModel model = GetObjectFactory<NormalModel>().Create();
+            NormalModel model = ObjectFactory.Create<NormalModel>();
             model.Description = randomText;
             Db.Entry(model).State = EntityState.Added;
             Db.SaveChanges(userName);
@@ -129,7 +128,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             string userName = RandomText;
 
             //add
-            NormalModel normalModel = GetObjectFactory<NormalModel>().Create();
+            NormalModel normalModel = ObjectFactory.Create<NormalModel>();
             normalModel.Description = description;
             Db.NormalModels.Add(normalModel);
             Db.SaveChanges(userName);
@@ -150,7 +149,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             string description = RandomText;
 
             //add
-            NormalModel normalModel = GetObjectFactory<NormalModel>().Create();
+            NormalModel normalModel = ObjectFactory.Create<NormalModel>();
             normalModel.Description = description;
             Db.NormalModels.Add(normalModel);
             Db.SaveChanges();
@@ -261,7 +260,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             string descr = RandomText;
 
 
-            ModelWithCompositeKey entity = GetObjectFactory<ModelWithCompositeKey>().Create();
+            ModelWithCompositeKey entity = ObjectFactory.Create<ModelWithCompositeKey>();
             entity.Description = descr;
             entity.Key1 = key1;
             entity.Key2 = key2;
@@ -281,7 +280,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public async Task Can_get_logs_by_table_name()
         {
             string descr = RandomText;
-            NormalModel model = GetObjectFactory<NormalModel>().Create();
+            NormalModel model = ObjectFactory.Create<NormalModel>();
             model.Description = descr;
 
             Db.NormalModels.Add(model);
@@ -302,7 +301,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public async Task Can_get_logs_by_entity_type()
         {
             string descr = RandomText;
-            NormalModel model = GetObjectFactory<NormalModel>().Create();
+            NormalModel model = ObjectFactory.Create<NormalModel>();
             model.Description = descr;
 
             Db.NormalModels.Add(model);
@@ -323,7 +322,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public async Task Can_get_all_logs()
         {
             string descr = RandomText;
-            NormalModel model = GetObjectFactory<NormalModel>().Create();
+            NormalModel model = ObjectFactory.Create<NormalModel>();
             model.Description = descr;
 
             Db.NormalModels.Add(model);
@@ -374,7 +373,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_Create_AuditLogDetail_ForAddedEntity_WithoutQueryingDatabase()
         {
-            NormalModel model = GetObjectFactory<NormalModel>().Create();
+            NormalModel model = ObjectFactory.Create<NormalModel>();
             Db.NormalModels.Add(model);
             Db.ChangeTracker.DetectChanges();
             var entry = Db.ChangeTracker.Entries().First();
@@ -388,7 +387,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_Create_AuditLogDetail_ForModifiedEntity_WithoutQueryingDatabase()
         {
-            NormalModel model = GetObjectFactory<NormalModel>().Create();
+            NormalModel model = ObjectFactory.Create<NormalModel>();
             Db.NormalModels.Add(model);
             Db.SaveChanges();
             model.Description += RandomText;
@@ -404,7 +403,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Can_Create_AuditLogDetail_ForDeletedEntity_WithoutQueryingDatabase()
         {
-            NormalModel model = GetObjectFactory<NormalModel>().Create();
+            NormalModel model = ObjectFactory.Create<NormalModel>();
             Db.NormalModels.Add(model);
             Db.SaveChanges();
             Db.NormalModels.Remove(model);

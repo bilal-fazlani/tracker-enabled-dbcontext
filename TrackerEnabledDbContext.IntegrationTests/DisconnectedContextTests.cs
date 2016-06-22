@@ -20,7 +20,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         [TestMethod]
         public void Should_Be_Able_To_Update()
         {
-            NormalModel entity = GetObjectFactory<NormalModel>().Create(save: true);
+            NormalModel entity = ObjectFactory.Create<NormalModel>(save: true);
 
             NormalModel newEntity = new NormalModel
             {
@@ -47,7 +47,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         {
             EntityTracker.TrackAllProperties<TrackedModelWithMultipleProperties>();
 
-            var entity = GetObjectFactory<TrackedModelWithMultipleProperties>().Create(save: true);
+            var entity = ObjectFactory.Create<TrackedModelWithMultipleProperties>(save: true);
 
             TrackedModelWithMultipleProperties newEntity = new TrackedModelWithMultipleProperties
             {
@@ -93,8 +93,8 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 .Except(x=>x.IsSpecial);
 
             TrackedModelWithMultipleProperties existingModel = 
-                GetObjectFactory<TrackedModelWithMultipleProperties>()
-                .Create(save: true);
+                ObjectFactory
+                .Create<TrackedModelWithMultipleProperties>(save: true);
 
             var newModel = new TrackedModelWithMultipleProperties
             {

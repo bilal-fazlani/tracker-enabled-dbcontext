@@ -2,11 +2,11 @@
 
 namespace TrackerEnabledDbContext.Common.Testing.Code
 {
-    public class ObjectFactory<TEntity, TContext>
-        where TEntity : class 
+    public class ObjectFactory<TContext>
+        
         where TContext : ITestDbContext, new()
     {
-        readonly ObjectFiller<TEntity> _filler= new ObjectFiller<TEntity>();
+        readonly ObjectFiller _filler = new ObjectFiller();
 
         public ObjectFactory()
         {
@@ -15,7 +15,9 @@ namespace TrackerEnabledDbContext.Common.Testing.Code
                 propName == "IsDeleted");
         }
 
-        public TEntity Create(bool fill = true, bool save = false, ITestDbContext testDbContext = null)
+        public TEntity Create<TEntity>
+            (bool fill = true, bool save = false, ITestDbContext testDbContext = null)
+            where TEntity : class
         {
             var instance = Activator.CreateInstance<TEntity>();
 
