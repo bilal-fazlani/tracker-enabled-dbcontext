@@ -35,6 +35,29 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
             return entity;
         }
 
+        public static T AssertMetadata<T>(this T entity, ITrackerContext db, object entityId,
+            Dictionary<string, string> metadataCollection = null)
+        {
+            IEnumerable<AuditLog> logs = db.GetLogs<T>(entityId)
+                .AssertCountIsNotZero("log count is zero");
+
+            AuditLog lastLog = logs.LastOrDefault()
+                .AssertIsNotNull("log not found");
+
+            if (metadataCollection != null)
+            {
+                lastLog.Metadata.AssertCount(metadataCollection.Count, "Count of metadata is different.");
+
+                foreach (var metadata in metadataCollection)
+                {
+                    lastLog.Metadata.AssertAny(x => x.Key == metadata.Key && x.Value == metadata.Value,
+                        $"metadata not found: {metadata.Key} - {metadata.Value}");
+                }
+            }
+
+            return entity;
+        }
+
         public static T AssertAuditForDeletion<T>(this T entity, ITrackerContext db, object entityId,
             string userName = null, params Expression<Func<T, object>>[] oldValueProperties)
         {
