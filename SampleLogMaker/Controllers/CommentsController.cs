@@ -1,9 +1,6 @@
-﻿using System;
-using System.Dynamic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using Microsoft.CSharp.RuntimeBinder;
 using SampleLogMaker.Models;
 
 namespace SampleLogMaker.Controllers

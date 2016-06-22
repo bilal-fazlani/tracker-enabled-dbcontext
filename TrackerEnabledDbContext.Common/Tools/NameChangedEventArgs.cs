@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TrackerEnabledDbContext.Common.Tools
+﻿namespace TrackerEnabledDbContext.Common.Tools
 {
     public class NameChangedEventArgs : System.EventArgs
     {
