@@ -34,17 +34,17 @@ namespace TrackerEnabledDbContext.Identity
         private string _defaultUsername;
         private Action<dynamic> _metadataConfiguration;
 
-        public void ConfigureUsername(Func<string> usernameFactory)
+        public virtual void ConfigureUsername(Func<string> usernameFactory)
         {
             _usernameFactory = usernameFactory;
         }
 
-        public void ConfigureUsername(string defaultUsername)
+        public virtual void ConfigureUsername(string defaultUsername)
         {
             _defaultUsername = defaultUsername;
         }
 
-        public void ConfigureMetadata(Action<dynamic> metadataConfiguration)
+        public virtual void ConfigureMetadata(Action<dynamic> metadataConfiguration)
         {
             _metadataConfiguration = metadataConfiguration;
         }
@@ -82,11 +82,11 @@ namespace TrackerEnabledDbContext.Identity
             _coreTracker = new CoreTracker(this);
         }
 
-        public DbSet<AuditLog> AuditLog { get; set; }
+        public virtual DbSet<AuditLog> AuditLog { get; set; }
 
-        public DbSet<AuditLogDetail> LogDetails { get; set; }
+        public virtual DbSet<AuditLogDetail> LogDetails { get; set; }
 
-        public event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated
+        public virtual event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated
         {
             add { _coreTracker.OnAuditLogGenerated += value; }
             remove { _coreTracker.OnAuditLogGenerated -= value; }
@@ -144,7 +144,7 @@ namespace TrackerEnabledDbContext.Identity
         /// </summary>
         /// <typeparam name="TEntity">Type of domain model</typeparam>
         /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs<TEntity>()
+        public virtual IQueryable<AuditLog> GetLogs<TEntity>()
         {
             return _coreTracker.GetLogs<TEntity>();
         }
@@ -154,7 +154,7 @@ namespace TrackerEnabledDbContext.Identity
         /// </summary>
         /// <param name="tableName">Name of table</param>
         /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs(string tableName)
+        public virtual IQueryable<AuditLog> GetLogs(string tableName)
         {
             return _coreTracker.GetLogs(tableName);
         }
@@ -165,7 +165,7 @@ namespace TrackerEnabledDbContext.Identity
         /// <typeparam name="TEntity">Type of domain model</typeparam>
         /// <param name="primaryKey">primary key of record</param>
         /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs<TEntity>(object primaryKey)
+        public virtual IQueryable<AuditLog> GetLogs<TEntity>(object primaryKey)
         {
             return _coreTracker.GetLogs<TEntity>(primaryKey);
         }
@@ -176,7 +176,7 @@ namespace TrackerEnabledDbContext.Identity
         /// <param name="tableName">table name</param>
         /// <param name="primaryKey">primary key of record</param>
         /// <returns></returns>
-        public IQueryable<AuditLog> GetLogs(string tableName, object primaryKey)
+        public virtual IQueryable<AuditLog> GetLogs(string tableName, object primaryKey)
         {
             return _coreTracker.GetLogs(tableName, primaryKey);
         }
@@ -193,7 +193,7 @@ namespace TrackerEnabledDbContext.Identity
         ///     to complete.
         /// </param>
         /// <returns>Returns the number of objects written to the underlying database.</returns>
-        public async Task<int> SaveChangesAsync(object userName, CancellationToken cancellationToken)
+        public virtual async Task<int> SaveChangesAsync(object userName, CancellationToken cancellationToken)
         {
             if (!GlobalTrackingConfig.Enabled)
             {
