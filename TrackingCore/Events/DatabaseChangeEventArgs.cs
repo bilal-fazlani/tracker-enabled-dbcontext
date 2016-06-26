@@ -4,7 +4,7 @@ using TrackingCore.Models;
 
 namespace TrackingCore.Events
 {
-    public class AuditLogGeneratedEventArgs : EventArgs
+    public class DatabaseChangeEventArgs : EventArgs
     {
         public object Entity { get; internal set; }
 

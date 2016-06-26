@@ -11,9 +11,9 @@ using TrackingCore.Models;
 
 namespace TrackingCore
 {
-    public class CoreTracker
+    internal class CoreTracker
     {
-        public event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;
+        public event EventHandler<DatabaseChangeEventArgs> OnDatabaseChange;
 
         private readonly ITrackerContext _context;
 
@@ -32,13 +32,13 @@ namespace TrackingCore
             {
                 EventType eventType = GetEventType(ent);
 
-                AuditLogGeneratedEventArgsFactory auditLogGeneratedEventArgsFactory = new AuditLogGeneratedEventArgsFactory(ent);
-                AuditLogGeneratedEventArgs arg = auditLogGeneratedEventArgsFactory.CreateEventArgs(userName, eventType,
-                    _context, metadata, ent.Entity);
+                DatabaseChangeEventArgsFactory databaseChangeEventArgsFactory = new DatabaseChangeEventArgsFactory(ent);
+                DatabaseChangeEventArgs arg = databaseChangeEventArgsFactory
+                    .CreateEventArgs(userName, eventType, _context, metadata, ent.Entity);
 
                 if (arg != null)
                 {
-                    RaiseOnAuditLogGenerated(this, arg);
+                    RaiseOnDatabaseChange(this, arg);
                 }
             }
         }
@@ -77,20 +77,20 @@ namespace TrackingCore
         {
             foreach (DbEntityEntry ent in addedEntries)
             {
-                var auditer = new AuditLogGeneratedEventArgsFactory(ent);
+                var auditer = new DatabaseChangeEventArgsFactory(ent);
 
-                AuditLogGeneratedEventArgs arg = auditer.CreateEventArgs(
+                DatabaseChangeEventArgs arg = auditer.CreateEventArgs(
                     userName, EventType.Added, _context, metadata, ent.Entity);
                 if (arg != null)
                 {
-                    RaiseOnAuditLogGenerated(this, arg);
+                    RaiseOnDatabaseChange(this, arg);
                 }
             }
         }
 
-        protected virtual void RaiseOnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)
+        protected virtual void RaiseOnDatabaseChange(object sender, DatabaseChangeEventArgs e)
         {
-            OnAuditLogGenerated?.Invoke(sender, e);
+            OnDatabaseChange?.Invoke(sender, e);
         }
     }
 }

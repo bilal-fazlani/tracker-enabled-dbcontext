@@ -30,10 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>MyKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -72,7 +73,7 @@
     <Compile Include="Auditors\Comparators\ValueTypeComparator.cs" />
     <Compile Include="Auditors\DeletetionLogDetailsAuditor.cs" />
     <Compile Include="Auditors\LogDetailsAuditorFactory.cs" />
-    <Compile Include="Events\AuditLogGeneratedEventArgsFactory.cs" />
+    <Compile Include="Events\DatabaseChangeEventArgsFactory.cs" />
     <Compile Include="Auditors\SoftDeletedLogDetailsAuditor.cs" />
     <Compile Include="Auditors\UnDeletedLogDetailsAudotor.cs" />
     <Compile Include="Configuration\DbMapping.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="Configuration\TrackingConfigurationValue.cs" />
     <Compile Include="Configuration\TrackingDataStore.cs" />
     <Compile Include="CoreTracker.cs" />
-    <Compile Include="Events\AuditLogGeneratedEventArgs.cs" />
+    <Compile Include="Events\DatabaseChangeEventArgs.cs" />
     <Compile Include="Extensions\EntityTypeConfigurationExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Interfaces\IDbContext.cs" />
@@ -102,7 +103,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="MyKey.snk" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

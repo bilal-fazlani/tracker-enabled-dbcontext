@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Data.Entity;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TrackingCore.Events;
-using TrackingCore.Models;
 
 namespace TrackingCore.Interfaces
 {
     public interface ITrackerContext : IDbContext
     {
-        event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;
+        event EventHandler<DatabaseChangeEventArgs> OnDatabaseChange;
 
         void ConfigureUsername(Func<string> usernameFactory);
 

@@ -11,16 +11,16 @@ using TrackingCore.Models;
 
 namespace TrackingCore.Events
 {
-    internal class AuditLogGeneratedEventArgsFactory
+    internal class DatabaseChangeEventArgsFactory
     {
         private readonly DbEntityEntry _dbEntry;
 
-        public AuditLogGeneratedEventArgsFactory(DbEntityEntry dbEntry)
+        public DatabaseChangeEventArgsFactory(DbEntityEntry dbEntry)
         {
             _dbEntry = dbEntry;
         }
 
-        internal AuditLogGeneratedEventArgs CreateEventArgs(
+        internal DatabaseChangeEventArgs CreateEventArgs(
             object userName, EventType eventType, 
             ITrackerContext context, 
             ExpandoObject metadata,
@@ -38,7 +38,7 @@ namespace TrackingCore.Events
             DbMapping mapping = new DbMapping(context, entityType);
             List<PropertyConfiguerationKey> keyNames = mapping.PrimaryKeys().ToList();
 
-            AuditLogGeneratedEventArgs args = new AuditLogGeneratedEventArgs
+            DatabaseChangeEventArgs args = new DatabaseChangeEventArgs
             {
                 Metadata = metadata,
                 Date = changeTime,
