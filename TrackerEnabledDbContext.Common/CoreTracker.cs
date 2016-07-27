@@ -58,7 +58,10 @@ namespace TrackerEnabledDbContext.Common
 
             if (isSoftDeletable != null && isSoftDeletable.Value)
             {
-                var previouslyDeleted = (bool)entry.OriginalValues[GlobalTrackingConfig.SoftDeletablePropertyName];
+                var previouslyDeleted = GlobalTrackingConfig.DisconnectedContext ?
+                    (bool)entry.GetDatabaseValues().GetValue<object>(GlobalTrackingConfig.SoftDeletablePropertyName) :
+                    (bool)entry.Property(GlobalTrackingConfig.SoftDeletablePropertyName).OriginalValue;
+
                 var nowDeleted = (bool)entry.CurrentValues[GlobalTrackingConfig.SoftDeletablePropertyName];
 
                 if (previouslyDeleted && !nowDeleted)
