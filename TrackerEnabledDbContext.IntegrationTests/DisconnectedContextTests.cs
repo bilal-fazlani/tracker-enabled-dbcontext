@@ -37,10 +37,38 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 new AuditLogDetail
                 {
                     NewValue = newEntity.Description,
-                    OriginalValue = null,
+                    OriginalValue = entity.Description,
                     PropertyName = nameof(NormalModel.Description)
                 });
         }
+
+        [TestMethod]
+        public void Should_Be_Soft_Deleted()
+        {
+            GlobalTrackingConfig.SetSoftDeletableCriteria<ISoftDeletable>(x => x.IsDeleted);
+
+            SoftDeletableModel entity = ObjectFactory.Create<SoftDeletableModel>(save: true);
+
+            SoftDeletableModel newEntity = new SoftDeletableModel
+            {
+                Id = entity.Id,
+                Description = entity.Description
+            };
+
+            TestTrackerContext newContext2 = GetNewContextInstance();
+            newEntity.Delete();
+            newContext2.Entry(newEntity).State = EntityState.Modified;
+            newContext2.SaveChanges();
+
+            newEntity.AssertAuditForSoftDeletion(newContext2, newEntity.Id, null,
+                new AuditLogDetail
+                {
+                    PropertyName = nameof(entity.IsDeleted),
+                    OriginalValue = false.ToString(),
+                    NewValue = true.ToString()
+                });
+        }
+
 
         [TestMethod]
         public void should_update_with_no_logs()
