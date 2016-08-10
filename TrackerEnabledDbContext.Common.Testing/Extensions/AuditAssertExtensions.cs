@@ -113,7 +113,7 @@ namespace TrackerEnabledDbContext.Common.Testing.Extensions
 
             foreach (var auditLogDetail in logdetails)
             {
-                logdetails.AssertAny(x => x.OriginalValue == auditLogDetail.OriginalValue
+                lastLog.LogDetails.AssertAny(x => x.OriginalValue == auditLogDetail.OriginalValue
                                           && x.NewValue == auditLogDetail.NewValue
                                           && x.PropertyName == auditLogDetail.PropertyName,
                     $"cound not find log detail with original value: {auditLogDetail.OriginalValue}, " +
