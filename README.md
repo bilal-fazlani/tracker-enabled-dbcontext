@@ -19,3 +19,5 @@ Please go through the ***[wiki](https://github.com/bilal-fazlani/tracker-enabled
 If you have any queries please reach me at *bilal.m.fazlani@gmail.com*
 
 Also check out my blog for updates : *http://bilal-fazlani.blogspot.in*
+
+Live discussions on https://goo.gl/spaces/tNfHXzXgP89gskjz9
