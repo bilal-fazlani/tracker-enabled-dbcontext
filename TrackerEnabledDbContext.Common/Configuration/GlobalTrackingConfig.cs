@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq.Expressions;
 using TrackerEnabledDbContext.Common.Extensions;
 
@@ -11,6 +12,16 @@ namespace TrackerEnabledDbContext.Common.Configuration
         public static bool TrackEmptyPropertiesOnAdditionAndDeletion { get; set; } = false;
 
         public static bool DisconnectedContext { get; set; } = false;
+
+        public static CultureInfo CultureOverride { get; set; } = null;
+
+        public static CultureInfo LogCulture 
+        { 
+            get
+            {
+                return CultureOverride ?? CultureInfo.CurrentCulture; 
+            } 
+        }
 
         /// <summary>
         /// This will clear all the configuration done by tracking fluent API.

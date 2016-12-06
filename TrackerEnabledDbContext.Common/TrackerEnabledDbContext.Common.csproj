@@ -81,6 +81,7 @@
     <Compile Include="Configuration\TrackingConfigurationValue.cs" />
     <Compile Include="EventArgs\AuditLogGeneratedEventArgs.cs" />
     <Compile Include="Extensions\EntityTypeConfigurationExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Interfaces\ILogDetailsAuditor.cs" />
     <Compile Include="Interfaces\IUnTrackable.cs" />
     <Compile Include="Attributes\SkipTrackingAttribute.cs" />
