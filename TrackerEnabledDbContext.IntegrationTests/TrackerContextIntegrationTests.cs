@@ -233,6 +233,38 @@ namespace TrackerEnabledDbContext.IntegrationTests
         }
 
         [TestMethod]
+        public void Can_track_complex_type_property_change()
+        {
+            //add enity
+            string oldDescription = RandomText;
+            string newDescription = RandomText;
+
+            var complexType = new ComplexType { Property1 = oldDescription };
+            var entity = new ModelWithComplexType { ComplexType = complexType };
+
+            Db.Entry(entity).State = EntityState.Added;
+            Db.SaveChanges();
+
+            //modify entity
+            entity.ComplexType.Property1 = newDescription;
+            Db.SaveChanges();
+
+            AuditLogDetail[] expectedLog = new List<AuditLogDetail>
+            {
+                new AuditLogDetail
+                {
+                    NewValue = newDescription,
+                    OriginalValue = oldDescription,
+                    PropertyName = "ComplexType_Property1"
+                }
+            }.ToArray();
+
+
+            //assert
+            entity.AssertAuditForModification(Db, entity.Id, null, expectedLog);
+        }
+
+        [TestMethod]
         public async Task Can_skip_tracking_of_property()
         {
             string username = RandomText;
