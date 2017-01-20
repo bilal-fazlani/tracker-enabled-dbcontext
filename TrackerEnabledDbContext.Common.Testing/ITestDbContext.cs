@@ -16,5 +16,6 @@ namespace TrackerEnabledDbContext.Common.Testing
         DbSet<TrackedModelWithMultipleProperties> TrackedModelsWithMultipleProperties { get; set; }
         DbSet<TrackedModelWithCustomTableAndColumnNames> TrackedModelsWithCustomTableAndColumnNames { get; set; }
         DbSet<SoftDeletableModel> SoftDeletableModels { get; set; }
+        DbSet<ModelWithComplexType> ModelsWithComplexType { get; set; }
     }
 }

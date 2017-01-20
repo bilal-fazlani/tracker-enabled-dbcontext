@@ -28,16 +28,47 @@ namespace TrackerEnabledDbContext.Common.Auditors
             foreach (string propertyName in PropertyNamesOfEntity())
             {
                 if (PropertyTrackingConfiguration.IsTrackingEnabled(
-                    new PropertyConfiguerationKey(propertyName, entityType.FullName), entityType ) 
+                    new PropertyConfiguerationKey(propertyName, entityType.FullName), entityType )
                     && IsValueChanged(propertyName))
                 {
-                    yield return new AuditLogDetail
+                    var entryMember = DbEntry.Member(propertyName) as DbComplexPropertyEntry;
+
+                    if (entryMember != null)
                     {
-                        PropertyName = propertyName,
-                        OriginalValue = OriginalValue(propertyName)?.ToString(),
-                        NewValue = CurrentValue(propertyName)?.ToString(),
-                        Log = _log
-                    };
+                        var complexTypeObj = entryMember.CurrentValue.GetType();
+                        foreach (var pi in complexTypeObj.GetProperties())
+                        {
+                            var complexTypePropertyName = $"{propertyName}_{pi.Name}";
+                            var complexTypeOrigValue = OriginalValue(propertyName);
+                            var complexTypeNewValue = CurrentValue(propertyName);
+
+                            var origValue = complexTypeOrigValue == null ? null : pi.GetValue(complexTypeOrigValue);
+                            var newValue = complexTypeNewValue == null ? null : pi.GetValue(complexTypeNewValue);
+
+                            Comparator comparator = ComparatorFactory.GetComparator(complexTypeObj);
+
+                            if (!comparator.AreEqual(newValue, origValue))
+                            {
+                                yield return new AuditLogDetail
+                                {
+                                    PropertyName = complexTypePropertyName,
+                                    OriginalValue = origValue?.ToString(),
+                                    NewValue = newValue?.ToString(),
+                                    Log = _log
+                                };
+                            }
+                        }
+                    }
+                    else
+                    {
+                        yield return new AuditLogDetail
+                        {
+                            PropertyName = propertyName,
+                            OriginalValue = OriginalValue(propertyName)?.ToString(),
+                            NewValue = CurrentValue(propertyName)?.ToString(),
+                            Log = _log
+                        };
+                    }
                 }
             }
         }
