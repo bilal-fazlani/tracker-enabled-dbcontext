@@ -239,6 +239,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             string oldDescription = RandomText;
             string newDescription = RandomText;
 
+            //only set one of the properties on the complex type
             var complexType = new ComplexType { Property1 = oldDescription };
             var entity = new ModelWithComplexType { ComplexType = complexType };
 

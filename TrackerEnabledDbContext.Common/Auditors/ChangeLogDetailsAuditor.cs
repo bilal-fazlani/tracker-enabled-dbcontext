@@ -28,35 +28,14 @@ namespace TrackerEnabledDbContext.Common.Auditors
             foreach (string propertyName in PropertyNamesOfEntity())
             {
                 if (PropertyTrackingConfiguration.IsTrackingEnabled(
-                    new PropertyConfiguerationKey(propertyName, entityType.FullName), entityType )
+                    new PropertyConfiguerationKey(propertyName, entityType.FullName), entityType)
                     && IsValueChanged(propertyName))
                 {
-                    var entryMember = DbEntry.Member(propertyName) as DbComplexPropertyEntry;
-
-                    if (entryMember != null)
+                    if (IsComplexType(propertyName))
                     {
-                        var complexTypeObj = entryMember.CurrentValue.GetType();
-                        foreach (var pi in complexTypeObj.GetProperties())
+                        foreach (var auditLogDetail in CreateComplexTypeLogDetails(propertyName))
                         {
-                            var complexTypePropertyName = $"{propertyName}_{pi.Name}";
-                            var complexTypeOrigValue = OriginalValue(propertyName);
-                            var complexTypeNewValue = CurrentValue(propertyName);
-
-                            var origValue = complexTypeOrigValue == null ? null : pi.GetValue(complexTypeOrigValue);
-                            var newValue = complexTypeNewValue == null ? null : pi.GetValue(complexTypeNewValue);
-
-                            Comparator comparator = ComparatorFactory.GetComparator(complexTypeObj);
-
-                            if (!comparator.AreEqual(newValue, origValue))
-                            {
-                                yield return new AuditLogDetail
-                                {
-                                    PropertyName = complexTypePropertyName,
-                                    OriginalValue = origValue?.ToString(),
-                                    NewValue = newValue?.ToString(),
-                                    Log = _log
-                                };
-                            }
+                            yield return auditLogDetail;
                         }
                     }
                     else
@@ -121,5 +100,46 @@ namespace TrackerEnabledDbContext.Common.Auditors
             var value = DbEntry.Property(propertyName).CurrentValue;
             return value;
         }
+
+        private bool IsComplexType(string propertyName)
+        {
+            var entryMember = DbEntry.Member(propertyName) as DbComplexPropertyEntry;
+
+            return entryMember != null;
+        }
+
+        private IEnumerable<AuditLogDetail> CreateComplexTypeLogDetails(string propertyName)
+        {
+            var entryMember = DbEntry.Member(propertyName) as DbComplexPropertyEntry;
+
+            if (entryMember != null)
+            {
+                var complexTypeObj = entryMember.CurrentValue.GetType();
+
+                foreach (var pi in complexTypeObj.GetProperties())
+                {
+                    var complexTypePropertyName = $"{propertyName}_{pi.Name}";
+                    var complexTypeOrigValue = OriginalValue(propertyName);
+                    var complexTypeNewValue = CurrentValue(propertyName);
+
+                    var origValue = complexTypeOrigValue == null ? null : pi.GetValue(complexTypeOrigValue);
+                    var newValue = complexTypeNewValue == null ? null : pi.GetValue(complexTypeNewValue);
+
+                    Comparator comparator = ComparatorFactory.GetComparator(complexTypeObj);
+
+                    if (!comparator.AreEqual(newValue, origValue))
+                    {
+                        yield return new AuditLogDetail
+                        {
+                            PropertyName = complexTypePropertyName,
+                            OriginalValue = origValue?.ToString(),
+                            NewValue = newValue?.ToString(),
+                            Log = _log
+                        };
+                    }
+                }
+            }
+        }
+
     }
 }
