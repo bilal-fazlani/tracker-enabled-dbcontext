@@ -413,5 +413,20 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
             var auditLogDetails = auditor.CreateLogDetails().ToList();
             Db.Database.Log = null;
         }
+
+
+
+        [TestMethod]
+        public void Can_recognise_context_tracking_indicator_when_disabled()
+        {
+
+            NormalModel model = ObjectFactory.Create<NormalModel>();
+            Db.NormalModels.Add(model);
+
+            Db.TrackingEnabled = false;
+            Db.SaveChanges();
+
+            model.AssertNoLogs(Db, model.Id);
+        }
     }
 }
