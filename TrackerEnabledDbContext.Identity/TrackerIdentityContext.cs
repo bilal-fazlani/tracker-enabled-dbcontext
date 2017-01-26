@@ -34,6 +34,19 @@ namespace TrackerEnabledDbContext.Identity
         private string _defaultUsername;
         private Action<dynamic> _metadataConfiguration;
 
+        private bool _trackingEnabled = true;
+        public bool TrackingEnabled
+        {
+            get
+            {
+                return GlobalTrackingConfig.Enabled && _trackingEnabled;
+            }
+            set
+            {
+                _trackingEnabled = value;
+            }
+        }
+
         public virtual void ConfigureUsername(Func<string> usernameFactory)
         {
             _usernameFactory = usernameFactory;
@@ -101,7 +114,7 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual int SaveChanges(object userName)
         {
-            if (!GlobalTrackingConfig.Enabled)
+            if (!TrackingEnabled)
             {
                 return base.SaveChanges();
             }
@@ -131,7 +144,7 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public override int SaveChanges()
         {
-            if (!GlobalTrackingConfig.Enabled)
+            if (!TrackingEnabled)
             {
                 return base.SaveChanges();
             }
@@ -195,7 +208,7 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual async Task<int> SaveChangesAsync(object userName, CancellationToken cancellationToken)
         {
-            if (!GlobalTrackingConfig.Enabled)
+            if (!TrackingEnabled)
             {
                 return await base.SaveChangesAsync(cancellationToken);
             }
@@ -230,7 +243,7 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual async Task<int> SaveChangesAsync(int userId)
         {
-            if (!GlobalTrackingConfig.Enabled)
+            if (!TrackingEnabled)
             {
                 return await base.SaveChangesAsync(CancellationToken.None);
             }
@@ -246,7 +259,7 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual async Task<int> SaveChangesAsync(string userName)
         {
-            if (!GlobalTrackingConfig.Enabled)
+            if (!TrackingEnabled)
             {
                 return await base.SaveChangesAsync(CancellationToken.None);
             }
@@ -264,7 +277,7 @@ namespace TrackerEnabledDbContext.Identity
         /// </returns>
         public override async Task<int> SaveChangesAsync()
         {
-            if (!GlobalTrackingConfig.Enabled)
+            if (!TrackingEnabled)
             {
                 return await base.SaveChangesAsync(CancellationToken.None);
             }
@@ -286,7 +299,7 @@ namespace TrackerEnabledDbContext.Identity
         /// </returns>
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            if (!GlobalTrackingConfig.Enabled)
+            if (!TrackingEnabled)
             {
                 return await base.SaveChangesAsync(cancellationToken);
             }
