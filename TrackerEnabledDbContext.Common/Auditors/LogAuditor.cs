@@ -48,19 +48,19 @@ namespace TrackerEnabledDbContext.Common.Auditors
             };
 
             var logMetadata = metadata
-                .Where(x=>x.Value != null)
+                .Where(x => x.Value != null)
                 .Select(m => new LogMetadata
-            {
-                AuditLog = newlog,
-                Key = m.Key,
-                Value = m.Value?.ToString()
-            })
+                {
+                    AuditLog = newlog,
+                    Key = m.Key,
+                    Value = m.Value?.ToString()
+                })
             .ToList();
 
             newlog.Metadata = logMetadata;
 
             var detailsAuditor = GetDetailsAuditor(eventType, newlog);
-            
+
             newlog.LogDetails = detailsAuditor.CreateLogDetails().ToList();
 
             if (newlog.LogDetails.Any())
@@ -93,25 +93,41 @@ namespace TrackerEnabledDbContext.Common.Auditors
             }
         }
 
-        private static object GetPrimaryKeyValuesOf(
+        private object GetPrimaryKeyValuesOf(
             DbEntityEntry dbEntry,
             List<PropertyConfiguerationKey> properties)
         {
             if (properties.Count == 1)
             {
-                return dbEntry.GetDatabaseValues().GetValue<object>(properties.Select(x => x.PropertyName).First());
+                return OriginalValue(properties.First().PropertyName);
             }
             if (properties.Count > 1)
             {
                 string output = "[";
 
                 output += string.Join(",",
-                    properties.Select(colName => dbEntry.GetDatabaseValues().GetValue<object>(colName.PropertyName)));
+                    properties.Select(colName => OriginalValue(colName.PropertyName)));
 
                 output += "]";
                 return output;
             }
             throw new KeyNotFoundException("key not found for " + dbEntry.Entity.GetType().FullName);
+        }
+
+        protected virtual object OriginalValue(string propertyName)
+        {
+            object originalValue = null;
+
+            if (GlobalTrackingConfig.DisconnectedContext)
+            {
+                originalValue = _dbEntry.GetDatabaseValues().GetValue<object>(propertyName);
+            }
+            else
+            {
+                originalValue = _dbEntry.Property(propertyName).OriginalValue;
+            }
+
+            return originalValue;
         }
     }
 }
