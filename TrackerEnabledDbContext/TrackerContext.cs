@@ -163,7 +163,7 @@ namespace TrackerEnabledDbContext
             dynamic metaData = new ExpandoObject();
             _metadataConfiguration?.Invoke(metaData);
 
-            if (ModificationTrackingEnabled) _coreTracker.AuditChanges(userName, metaData);
+            if (ModificationTrackingEnabled) _coreTracker.AuditModifications(userName, metaData);
             if (DeletionTrackingEnabled) _coreTracker.AuditDeletions(userName, metaData);
 
             int result;
@@ -263,7 +263,7 @@ namespace TrackerEnabledDbContext
             dynamic metadata = new ExpandoObject();
             _metadataConfiguration?.Invoke(metadata);
 
-            if (ModificationTrackingEnabled) _coreTracker.AuditChanges(userName, metadata);
+            if (ModificationTrackingEnabled) _coreTracker.AuditModifications(userName, metadata);
             if (DeletionTrackingEnabled) _coreTracker.AuditDeletions(userName, metadata);
 
             int result;
