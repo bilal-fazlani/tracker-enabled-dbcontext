@@ -34,16 +34,43 @@ namespace TrackerEnabledDbContext.Identity
         private string _defaultUsername;
         private Action<dynamic> _metadataConfiguration;
 
-        private bool _trackingEnabled = true;
-        public bool TrackingEnabled
+        private bool _additionTrackingEnabled = true;
+        private bool _changeTrackingEnabled = true;
+        private bool _deletionTrackingEnabled = true;
+
+        public bool AdditionTrackingEnabled
         {
             get
             {
-                return GlobalTrackingConfig.Enabled && _trackingEnabled;
+                return GlobalTrackingConfig.AdditionsEnabled && _additionTrackingEnabled;
             }
             set
             {
-                _trackingEnabled = value;
+                _additionTrackingEnabled = value;
+            }
+        }
+
+        public bool ChangeTrackingEnabled
+        {
+            get
+            {
+                return GlobalTrackingConfig.ChangesEnabled && _changeTrackingEnabled;
+            }
+            set
+            {
+                _changeTrackingEnabled = value;
+            }
+        }
+
+        public bool DeletionTrackingEnabled
+        {
+            get
+            {
+                return GlobalTrackingConfig.DeletionsEnabled && _deletionTrackingEnabled;
+            }
+            set
+            {
+                _deletionTrackingEnabled = value;
             }
         }
 
@@ -114,7 +141,9 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual int SaveChanges(object userName)
         {
-            if (!TrackingEnabled)
+            if (!(AdditionTrackingEnabled ||
+                ChangeTrackingEnabled ||
+                DeletionTrackingEnabled))
             {
                 return base.SaveChanges();
             }
@@ -122,14 +151,15 @@ namespace TrackerEnabledDbContext.Identity
             dynamic metadata = new ExpandoObject();
             _metadataConfiguration?.Invoke(metadata);
 
-            _coreTracker.AuditChanges(userName, metadata);
+            if (ChangeTrackingEnabled) _coreTracker.AuditChanges(userName, metadata);
+            if (DeletionTrackingEnabled) _coreTracker.AuditDeletions(userName, metadata);
 
             IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
             // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
             int result = base.SaveChanges();
             //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
 
-            _coreTracker.AuditAdditions(userName, addedEntries, metadata);
+            if (AdditionTrackingEnabled) _coreTracker.AuditAdditions(userName, addedEntries, metadata);
 
             //save changes to audit of added entries
             base.SaveChanges();
@@ -144,7 +174,9 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public override int SaveChanges()
         {
-            if (!TrackingEnabled)
+            if (!(AdditionTrackingEnabled ||
+                ChangeTrackingEnabled ||
+                DeletionTrackingEnabled))
             {
                 return base.SaveChanges();
             }
@@ -208,7 +240,9 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual async Task<int> SaveChangesAsync(object userName, CancellationToken cancellationToken)
         {
-            if (!TrackingEnabled)
+            if (!(AdditionTrackingEnabled ||
+                ChangeTrackingEnabled ||
+                DeletionTrackingEnabled))
             {
                 return await base.SaveChangesAsync(cancellationToken);
             }
@@ -219,7 +253,8 @@ namespace TrackerEnabledDbContext.Identity
             dynamic metadata = new ExpandoObject();
             _metadataConfiguration?.Invoke(metadata);
 
-            _coreTracker.AuditChanges(userName, metadata);
+            if (ChangeTrackingEnabled) _coreTracker.AuditChanges(userName, metadata);
+            if (DeletionTrackingEnabled) _coreTracker.AuditDeletions(userName, metadata);
 
             IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
 
@@ -227,7 +262,7 @@ namespace TrackerEnabledDbContext.Identity
             int result = await base.SaveChangesAsync(cancellationToken);
 
             //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
-            _coreTracker.AuditAdditions(userName, addedEntries, metadata);
+            if (AdditionTrackingEnabled) _coreTracker.AuditAdditions(userName, addedEntries, metadata);
 
             //save changes to audit of added entries
             await base.SaveChangesAsync(cancellationToken);
@@ -243,7 +278,9 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual async Task<int> SaveChangesAsync(int userId)
         {
-            if (!TrackingEnabled)
+            if (!(AdditionTrackingEnabled ||
+                ChangeTrackingEnabled ||
+                DeletionTrackingEnabled))
             {
                 return await base.SaveChangesAsync(CancellationToken.None);
             }
@@ -259,7 +296,9 @@ namespace TrackerEnabledDbContext.Identity
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual async Task<int> SaveChangesAsync(string userName)
         {
-            if (!TrackingEnabled)
+            if (!(AdditionTrackingEnabled ||
+                ChangeTrackingEnabled ||
+                DeletionTrackingEnabled))
             {
                 return await base.SaveChangesAsync(CancellationToken.None);
             }
@@ -277,7 +316,9 @@ namespace TrackerEnabledDbContext.Identity
         /// </returns>
         public override async Task<int> SaveChangesAsync()
         {
-            if (!TrackingEnabled)
+            if (!(AdditionTrackingEnabled ||
+                ChangeTrackingEnabled ||
+                DeletionTrackingEnabled))
             {
                 return await base.SaveChangesAsync(CancellationToken.None);
             }
@@ -299,7 +340,9 @@ namespace TrackerEnabledDbContext.Identity
         /// </returns>
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            if (!TrackingEnabled)
+            if (!(AdditionTrackingEnabled ||
+                ChangeTrackingEnabled ||
+                DeletionTrackingEnabled))
             {
                 return await base.SaveChangesAsync(cancellationToken);
             }
