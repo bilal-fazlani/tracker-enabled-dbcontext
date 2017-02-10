@@ -50,16 +50,21 @@ namespace TrackerEnabledDbContext.Common
 
         public void AuditDeletions(object userName, ExpandoObject metadata)
         {
-            // Get all Deleted entities (not Unmodified or Detached or Added)
+            // Get all Deleted or Modified entities (not Unmodified or Detached or Added)
             foreach (
                 DbEntityEntry ent in
                     _context.ChangeTracker.Entries()
-                        .Where(p => p.State == EntityState.Deleted))
+                        .Where(p => p.State == EntityState.Deleted || p.State == EntityState.Modified))
             {
                 using (var auditer = new LogAuditor(ent))
                 {
                     var eventType = GetEventType(ent);
 
+                    // Skip changes, as these are handled in the AuditChanges method
+                    if (eventType == EventType.Modified)
+                    {
+                        continue;
+                    }
                     AuditLog record = auditer.CreateLogRecord(userName, eventType, _context, metadata);
 
                     if (record != null)
