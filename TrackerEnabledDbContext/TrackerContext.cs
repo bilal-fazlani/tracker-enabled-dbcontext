@@ -152,15 +152,24 @@ namespace TrackerEnabledDbContext
             if (ChangeTrackingEnabled) _coreTracker.AuditChanges(userName, metaData);
             if (DeletionTrackingEnabled) _coreTracker.AuditDeletions(userName, metaData);
 
-            IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
-            // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
-            int result = base.SaveChanges();
-            //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
+            int result;
+            if (AdditionTrackingEnabled)
+            {
+                IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
+                // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
+                result = base.SaveChanges();
+                //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
 
-            if (AdditionTrackingEnabled) _coreTracker.AuditAdditions(userName, addedEntries, metaData);
-
-            //save changes to audit of added entries
-            base.SaveChanges();
+                _coreTracker.AuditAdditions(userName, addedEntries, metaData);
+                //save changes to audit of added entries
+                base.SaveChanges();
+            }
+            else
+            {
+                //save changes
+                result = base.SaveChanges();
+            }
+            
             return result;
         }
 
@@ -247,16 +256,25 @@ namespace TrackerEnabledDbContext
             if (ChangeTrackingEnabled) _coreTracker.AuditChanges(userName, metadata);
             if (DeletionTrackingEnabled) _coreTracker.AuditDeletions(userName, metadata);
 
-            IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
+            int result;
+            if (AdditionTrackingEnabled)
+            {
+                IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
 
-            // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
-            int result = await base.SaveChangesAsync(cancellationToken);
+                // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
+                result = await base.SaveChangesAsync(cancellationToken);
 
-            //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
-            if (AdditionTrackingEnabled) _coreTracker.AuditAdditions(userName, addedEntries, metadata);
+                //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
+                _coreTracker.AuditAdditions(userName, addedEntries, metadata);
 
-            //save changes to audit of added entries
-            await base.SaveChangesAsync(cancellationToken);
+                //save changes to audit of added entries
+                await base.SaveChangesAsync(cancellationToken);
+            }
+            else
+            {
+                //save changes
+                result = await base.SaveChangesAsync(cancellationToken);
+            }
 
             return result;
         }
