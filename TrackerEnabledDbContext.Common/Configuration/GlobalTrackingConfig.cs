@@ -6,7 +6,7 @@ namespace TrackerEnabledDbContext.Common.Configuration
 {
     public static class GlobalTrackingConfig
     {
-        public static bool ChangesEnabled
+        public static bool Enabled
         {
             get { return AdditionsEnabled || ModificationsEnabled || DeletionsEnabled; }
             set

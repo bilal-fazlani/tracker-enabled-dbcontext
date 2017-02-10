@@ -12,6 +12,7 @@ namespace TrackerEnabledDbContext.Common.Interfaces
     {
         DbSet<AuditLog> AuditLog { get; set; }
         DbSet<AuditLogDetail> LogDetails { get; set; }
+        bool TrackingEnabled { get; set; }
         bool AdditionTrackingEnabled { get; set; }
         bool ModificationTrackingEnabled { get; set; }
         bool DeletionTrackingEnabled { get; set; }

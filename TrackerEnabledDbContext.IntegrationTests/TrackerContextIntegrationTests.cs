@@ -572,9 +572,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             NormalModel model = ObjectFactory.Create<NormalModel>();
             Db.NormalModels.Add(model);
 
-            Db.AdditionTrackingEnabled = false;
-            Db.ModificationTrackingEnabled = false;
-            Db.DeletionTrackingEnabled = false;
+            Db.TrackingEnabled = false;
             Db.SaveChanges();
 
             model.AssertNoLogs(Db, model.Id);

@@ -32,9 +32,7 @@ namespace TrackerEnabledDbContext.Common.Testing
         public virtual void Initialize()
         {
             _transaction = Db.Database.BeginTransaction();
-            GlobalTrackingConfig.AdditionsEnabled = true;
-            GlobalTrackingConfig.ModificationsEnabled = true;
-            GlobalTrackingConfig.DeletionsEnabled = true;
+            GlobalTrackingConfig.Enabled = true;
             GlobalTrackingConfig.TrackEmptyPropertiesOnAdditionAndDeletion = false;
             GlobalTrackingConfig.DisconnectedContext = false;
             GlobalTrackingConfig.ClearFluentConfiguration();

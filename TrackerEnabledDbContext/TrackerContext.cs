@@ -35,7 +35,7 @@ namespace TrackerEnabledDbContext
         {
             get
             {
-                return GlobalTrackingConfig.ChangesEnabled && (_additionTrackingEnabled ||
+                return GlobalTrackingConfig.Enabled && (_additionTrackingEnabled ||
                                                                 _modificationTrackingEnabled ||
                                                                 _deletionTrackingEnabled);
             }
