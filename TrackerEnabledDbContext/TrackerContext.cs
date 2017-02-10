@@ -28,8 +28,24 @@ namespace TrackerEnabledDbContext
         private Action<dynamic> _metadataConfiguration;
 
         private bool _additionTrackingEnabled = true;
-        private bool _changeTrackingEnabled = true;
+        private bool _modificationTrackingEnabled = true;
         private bool _deletionTrackingEnabled = true;
+
+        public bool TrackingEnabled
+        {
+            get
+            {
+                return GlobalTrackingConfig.ChangesEnabled && (_additionTrackingEnabled ||
+                                                                _modificationTrackingEnabled ||
+                                                                _deletionTrackingEnabled);
+            }
+            set
+            {
+                _additionTrackingEnabled = value;
+                _modificationTrackingEnabled = value;
+                _deletionTrackingEnabled = value;
+            }
+        }
 
         public bool AdditionTrackingEnabled
         {
@@ -43,15 +59,15 @@ namespace TrackerEnabledDbContext
             }
         }
 
-        public bool ChangeTrackingEnabled
+        public bool ModificationTrackingEnabled
         {
             get
             {
-                return GlobalTrackingConfig.ChangesEnabled && _changeTrackingEnabled;
+                return GlobalTrackingConfig.ModificationsEnabled && _modificationTrackingEnabled;
             }
             set
             {
-                _changeTrackingEnabled = value;
+                _modificationTrackingEnabled = value;
             }
         }
 
@@ -142,14 +158,12 @@ namespace TrackerEnabledDbContext
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual int SaveChanges(object userName)
         {
-            if (!(ChangeTrackingEnabled ||
-                AdditionTrackingEnabled ||
-                DeletionTrackingEnabled)) return base.SaveChanges();
+            if (!TrackingEnabled) return base.SaveChanges();
 
             dynamic metaData = new ExpandoObject();
             _metadataConfiguration?.Invoke(metaData);
 
-            if (ChangeTrackingEnabled) _coreTracker.AuditChanges(userName, metaData);
+            if (ModificationTrackingEnabled) _coreTracker.AuditChanges(userName, metaData);
             if (DeletionTrackingEnabled) _coreTracker.AuditDeletions(userName, metaData);
 
             int result;
@@ -180,9 +194,7 @@ namespace TrackerEnabledDbContext
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public override int SaveChanges()
         {
-            if (!(ChangeTrackingEnabled ||
-                AdditionTrackingEnabled ||
-                DeletionTrackingEnabled)) return base.SaveChanges();
+            if (!TrackingEnabled) return base.SaveChanges();
 
             return SaveChanges(_usernameFactory?.Invoke() ?? _defaultUsername);
         }
@@ -243,9 +255,7 @@ namespace TrackerEnabledDbContext
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual async Task<int> SaveChangesAsync(object userName, CancellationToken cancellationToken)
         {
-            if (!(ChangeTrackingEnabled ||
-                AdditionTrackingEnabled ||
-                DeletionTrackingEnabled)) return await base.SaveChangesAsync(cancellationToken);
+            if (!TrackingEnabled) return await base.SaveChangesAsync(cancellationToken);
 
             if (cancellationToken.IsCancellationRequested)
                 cancellationToken.ThrowIfCancellationRequested();
@@ -253,7 +263,7 @@ namespace TrackerEnabledDbContext
             dynamic metadata = new ExpandoObject();
             _metadataConfiguration?.Invoke(metadata);
 
-            if (ChangeTrackingEnabled) _coreTracker.AuditChanges(userName, metadata);
+            if (ModificationTrackingEnabled) _coreTracker.AuditChanges(userName, metadata);
             if (DeletionTrackingEnabled) _coreTracker.AuditDeletions(userName, metadata);
 
             int result;
@@ -287,9 +297,7 @@ namespace TrackerEnabledDbContext
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual async Task<int> SaveChangesAsync(int userId)
         {
-            if (!(ChangeTrackingEnabled ||
-                AdditionTrackingEnabled ||
-                DeletionTrackingEnabled)) return await base.SaveChangesAsync(CancellationToken.None);
+            if (!TrackingEnabled) return await base.SaveChangesAsync(CancellationToken.None);
 
             return await SaveChangesAsync(userId, CancellationToken.None);
         }
@@ -302,9 +310,7 @@ namespace TrackerEnabledDbContext
         /// <returns>Returns the number of objects written to the underlying database.</returns>
         public virtual async Task<int> SaveChangesAsync(string userName)
         {
-            if (!(ChangeTrackingEnabled ||
-                AdditionTrackingEnabled ||
-                DeletionTrackingEnabled)) return await base.SaveChangesAsync(CancellationToken.None);
+            if (!TrackingEnabled) return await base.SaveChangesAsync(CancellationToken.None);
 
             return await SaveChangesAsync(userName, CancellationToken.None);
         }
@@ -319,9 +325,7 @@ namespace TrackerEnabledDbContext
         /// </returns>
         public override async Task<int> SaveChangesAsync()
         {
-            if (!(ChangeTrackingEnabled ||
-                AdditionTrackingEnabled ||
-                DeletionTrackingEnabled)) return await base.SaveChangesAsync(CancellationToken.None);
+            if (!TrackingEnabled) return await base.SaveChangesAsync(CancellationToken.None);
 
             return await SaveChangesAsync(_usernameFactory?.Invoke() ?? _defaultUsername, CancellationToken.None);
         }
@@ -340,9 +344,7 @@ namespace TrackerEnabledDbContext
         /// </returns>
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            if (!(ChangeTrackingEnabled ||
-                AdditionTrackingEnabled ||
-                DeletionTrackingEnabled)) return await base.SaveChangesAsync(cancellationToken);
+            if (!TrackingEnabled) return await base.SaveChangesAsync(cancellationToken);
 
             return await SaveChangesAsync(_usernameFactory?.Invoke() ?? _defaultUsername, cancellationToken);
         }

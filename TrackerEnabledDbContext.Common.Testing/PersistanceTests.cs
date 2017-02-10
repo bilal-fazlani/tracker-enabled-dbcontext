@@ -33,7 +33,7 @@ namespace TrackerEnabledDbContext.Common.Testing
         {
             _transaction = Db.Database.BeginTransaction();
             GlobalTrackingConfig.AdditionsEnabled = true;
-            GlobalTrackingConfig.ChangesEnabled = true;
+            GlobalTrackingConfig.ModificationsEnabled = true;
             GlobalTrackingConfig.DeletionsEnabled = true;
             GlobalTrackingConfig.TrackEmptyPropertiesOnAdditionAndDeletion = false;
             GlobalTrackingConfig.DisconnectedContext = false;

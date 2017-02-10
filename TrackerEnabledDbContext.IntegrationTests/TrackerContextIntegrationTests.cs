@@ -573,7 +573,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
             Db.NormalModels.Add(model);
 
             Db.AdditionTrackingEnabled = false;
-            Db.ChangeTrackingEnabled = false;
+            Db.ModificationTrackingEnabled = false;
             Db.DeletionTrackingEnabled = false;
             Db.SaveChanges();
 

@@ -15,7 +15,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
         public void Can_recognise_global_tracking_indicator_when_disabled()
         {
             GlobalTrackingConfig.AdditionsEnabled = false;
-            GlobalTrackingConfig.ChangesEnabled = false;
+            GlobalTrackingConfig.ModificationsEnabled = false;
             GlobalTrackingConfig.DeletionsEnabled = false;
             EntityTracker
                 .TrackAllProperties<POCO>();

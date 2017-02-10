@@ -425,7 +425,7 @@ namespace TrackerEnabledDbContext.Identity.IntegrationTests
 
             Db.AdditionTrackingEnabled = false;
             Db.DeletionTrackingEnabled = false;
-            Db.ChangeTrackingEnabled = false;
+            Db.ModificationTrackingEnabled = false;
             Db.SaveChanges();
 
             model.AssertNoLogs(Db, model.Id);
