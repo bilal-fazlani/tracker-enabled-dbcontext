@@ -11,7 +11,7 @@ namespace TrackerEnabledDbContext.Common.Models
     ///     For the audit purpose. Only selected tables can be tracked with the help of TrackChangesAttribute Attribute present
     ///     in the common library.
     /// </summary>
-    public class AuditLog: IUnTrackable
+    public partial class AuditLog: IUnTrackable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

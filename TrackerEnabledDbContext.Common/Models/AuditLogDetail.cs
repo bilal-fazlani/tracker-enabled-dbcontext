@@ -4,7 +4,7 @@ using TrackerEnabledDbContext.Common.Interfaces;
 
 namespace TrackerEnabledDbContext.Common.Models
 {
-    public class AuditLogDetail : IUnTrackable
+    public partial class AuditLogDetail : IUnTrackable
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
