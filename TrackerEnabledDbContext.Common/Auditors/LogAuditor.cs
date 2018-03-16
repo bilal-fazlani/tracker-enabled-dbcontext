@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Dynamic;
 using System.Linq;
@@ -34,9 +35,8 @@ namespace TrackerEnabledDbContext.Common.Auditors
 
             DateTime changeTime = DateTime.UtcNow;
 
-            //todo: make this a static class
-            var mapping = new DbMapping(context, entityType);
-            List<PropertyConfiguerationKey> keyNames = mapping.PrimaryKeys().ToList();
+            //changed to static class by Aaron Sulwer 3/16/2018
+            List<PropertyConfiguerationKey> keyNames = (context as DbContext).GetKeyNames(entityType).ToList();
 
             var newlog = new AuditLog
             {
