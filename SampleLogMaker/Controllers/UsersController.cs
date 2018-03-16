@@ -101,7 +101,7 @@ namespace SampleLogMaker.Controllers
                 }
                 catch (Exception ex)
                 {
-                    
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
                 }
                 
                 return RedirectToAction("Index");
