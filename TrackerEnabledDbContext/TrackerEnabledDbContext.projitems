@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>cf150c9e-bda4-4438-9493-6f10caec07a6</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>TrackerEnabledDbContext</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\SkipTrackingAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\TrackChangesAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\Comparator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\ComparatorFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\DateComparator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\NullableComparator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\NullableDateComparator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\StringComparator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\ValueTypeComparator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\EntityTracker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\EntityTrackingConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ExceptResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\GlobalTrackingConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\OverrideTrackingResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\PropertyTrackingConfigurationKey.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\PropertyTrackingConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\TrackAllResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\TrackingConfigurationPriority.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\TrackingConfigurationValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\TrackingDataStore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventArgs\AuditLogGeneratedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\TypeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ILogDetailsAuditor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUnTrackable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\AuditLog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\AuditLogDetail.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\EventType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LogMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tools\MigrationJobStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tools\NameChangedEventArgs.cs" />
+  </ItemGroup>
+</Project>

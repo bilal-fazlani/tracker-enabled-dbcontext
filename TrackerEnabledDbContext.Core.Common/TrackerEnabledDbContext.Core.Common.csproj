@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configuration\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Tools\" />
+  </ItemGroup>
+
+  <Import Project="..\TrackerEnabledDbContext\TrackerEnabledDbContext.projitems" Label="Shared" />
+
+</Project>
