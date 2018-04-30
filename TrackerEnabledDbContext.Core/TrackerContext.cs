@@ -143,8 +143,6 @@ namespace TrackerEnabledDbContext.Core
             return SaveChanges(_usernameFactory?.Invoke() ?? _defaultUsername);
         }
 
-        #region -- Async --
-
         /// <summary>
         ///     Asynchronously saves all changes made in this context to the underlying database.
         ///     If the tracker for an entity is active, it will also put the old values in tracking table.
@@ -230,12 +228,10 @@ namespace TrackerEnabledDbContext.Core
         ///     A task that represents the asynchronous save operation.  The task result
         ///     contains the number of objects written to the underlying database.
         /// </returns>        
-        public async Task<int> SaveChangesAsync()
+        public virtual async Task<int> SaveChangesAsync()
         {
             if (!TrackingEnabled) return await base.SaveChangesAsync(CancellationToken.None);
             return await SaveChangesAsync(_usernameFactory?.Invoke() ?? _defaultUsername, CancellationToken.None);
         }
-
-        #endregion
     }
 }

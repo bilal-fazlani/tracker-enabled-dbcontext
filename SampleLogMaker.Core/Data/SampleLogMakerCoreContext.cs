@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Core.Identity;
+using SampleLogMaker.Core.Models;
 
 namespace SampleLogMaker.Core.Models
 {
@@ -52,5 +53,7 @@ namespace SampleLogMaker.Core.Models
         }
 
         public DbSet<Blog> Blog { get; set; }
+
+        public DbSet<SampleLogMaker.Core.Models.Comment> Comment { get; set; }
     }
 }

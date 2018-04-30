@@ -25,17 +25,21 @@ namespace TrackerEnabledDbContext.Core.Common.Auditors
 
         public IEnumerable<AuditLogDetail> CreateLogDetails()
         {
-            Type entityType = DbEntry.Entity.GetType().GetEntityType();
+            Type entityType = DbEntry.Entity.GetType();            
 
-            foreach (string propertyName in PropertyNamesOfEntity())
+            //not using PropertyNamesOfEntity
+            foreach (MemberEntry me in DbEntry.Members)
             {
-                if (PropertyTrackingConfiguration.IsTrackingEnabled(new PropertyConfigurationKey(propertyName, entityType.FullName), entityType) && IsValueChanged(propertyName))
+                string pn = me.Metadata.Name;
+
+                //skip anything with SkipTracking attribute applied and (NavigationEntry and ReferenceEntry)
+                if (PropertyTrackingConfiguration.IsTrackingEnabled(new PropertyConfigurationKey(pn, entityType.FullName), entityType) && (IsPropertyEntry(pn) && IsValueChanged(pn)))
                 {
                     yield return new AuditLogDetail
                     {
-                        PropertyName = propertyName,
-                        OriginalValue = OriginalValue(propertyName)?.ToString(),
-                        NewValue = CurrentValue(propertyName)?.ToString(),
+                        PropertyName = pn,
+                        OriginalValue = OriginalValue(pn)?.ToString(),
+                        NewValue = CurrentValue(pn)?.ToString(),
                         Log = _log
                     };
                 }
@@ -64,8 +68,7 @@ namespace TrackerEnabledDbContext.Core.Common.Auditors
 
             Comparator comparator = ComparatorFactory.GetComparator(propertyType);
 
-            var changed = (StateOfEntity() == EntityState.Modified
-                && prop.IsModified && !comparator.AreEqual(CurrentValue(propertyName), originalValue));
+            var changed = (StateOfEntity() == EntityState.Modified && prop.IsModified && !comparator.AreEqual(CurrentValue(propertyName), originalValue));
             return changed;
         }
 
@@ -89,6 +92,12 @@ namespace TrackerEnabledDbContext.Core.Common.Auditors
         {
             var value = DbEntry.Property(propertyName).CurrentValue;
             return value;
-        }        
+        }
+
+        private bool IsPropertyEntry(string pn)
+        {
+            PropertyEntry entryMember = DbEntry.Member(pn) as PropertyEntry;
+            return entryMember != null;
+        }
     }
 }

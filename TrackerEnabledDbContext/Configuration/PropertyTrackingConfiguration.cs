@@ -20,7 +20,7 @@ namespace TrackerEnabledDbContext.Common.Configuration
             return result.Value;
         }
 
-        internal static TrackingConfigurationValue PropertyConfigValueFactory(string propertyName,   Type entityType)
+        internal static TrackingConfigurationValue PropertyConfigValueFactory(string propertyName, Type entityType)
         {
             //if property is missing from the model assume it is not tracked
             PropertyInfo pi = entityType.GetProperty(propertyName);
@@ -37,5 +37,4 @@ namespace TrackerEnabledDbContext.Common.Configuration
             return new TrackingConfigurationValue(trackValue);
         }
     }
-
 }

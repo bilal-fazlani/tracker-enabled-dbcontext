@@ -126,7 +126,7 @@ namespace SampleLogMaker.Core.Migrations
 
             modelBuilder.Entity("SampleLogMaker.Core.Models.Blog", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("IsDeleted")
@@ -142,6 +142,22 @@ namespace SampleLogMaker.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Blog");
+                });
+
+            modelBuilder.Entity("SampleLogMaker.Core.Models.Comment", b =>
+                {
+                    b.Property<Guid?>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("BlogId");
+
+                    b.Property<string>("Description");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlogId");
+
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("TrackerEnabledDbContext.Common.Models.AuditLog", b =>
@@ -230,6 +246,13 @@ namespace SampleLogMaker.Core.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SampleLogMaker.Core.Models.Comment", b =>
+                {
+                    b.HasOne("SampleLogMaker.Core.Models.Blog", "Blog")
+                        .WithMany("Comments")
+                        .HasForeignKey("BlogId");
                 });
 
             modelBuilder.Entity("TrackerEnabledDbContext.Common.Models.AuditLogDetail", b =>

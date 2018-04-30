@@ -9,13 +9,14 @@ namespace TrackerEnabledDbContext.Common.Extensions
     {
         #region Constants
 
-        //todo:improve this recognition
+        //TODO: improve this recognition
         private const string ProxyNamespace = @"System.Data.Entity.DynamicProxies";
 
         #endregion
 
         #region -- public methods--
 
+        //TODO: not used in Core, only EF6; test if it can be removed
         public static Type GetEntityType(this Type entityType)
         {
             if (entityType.Namespace == ProxyNamespace)
@@ -97,6 +98,7 @@ namespace TrackerEnabledDbContext.Common.Extensions
 
             throw new ArgumentException( $"Expression '{propertyLambda.Name}' refers is not a member expression or unary expression.");
         }
+
         #endregion
     }
 }

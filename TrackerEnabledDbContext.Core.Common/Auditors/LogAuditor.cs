@@ -27,7 +27,7 @@ namespace TrackerEnabledDbContext.Core.Common.Auditors
 
         internal AuditLog CreateLogRecord(object userName, EventType eventType, ITrackerContext context, ExpandoObject metadata)
         {
-            Type entityType = _dbEntry.Entity.GetType().GetEntityType();
+            Type entityType = _dbEntry.Entity.GetType();
 
             if (!EntityTrackingConfiguration.IsTrackingEnabled(entityType))
             {

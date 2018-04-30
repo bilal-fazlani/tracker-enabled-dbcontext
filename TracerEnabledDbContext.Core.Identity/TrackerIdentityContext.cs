@@ -105,7 +105,6 @@ namespace TrackerEnabledDbContext.Core.Identity
         {
             return _coreTracker.GetLogs<TEntity>();
         }
-
         /// <summary>
         ///     Get all logs for the given table name
         /// </summary>
@@ -115,7 +114,6 @@ namespace TrackerEnabledDbContext.Core.Identity
         {
             return _coreTracker.GetLogs(tableName);
         }
-
         /// <summary>
         ///     Get all logs for the given model type for a specific record
         /// </summary>
@@ -126,7 +124,6 @@ namespace TrackerEnabledDbContext.Core.Identity
         {
             return _coreTracker.GetLogs<TEntity>(primaryKey);
         }
-
         /// <summary>
         ///     Get all logs for the given table name for a specific record
         /// </summary>
@@ -168,7 +165,6 @@ namespace TrackerEnabledDbContext.Core.Identity
             base.SaveChanges();
             return result;
         }
-
         /// <summary>
         ///     This method saves the model changes to the database.
         ///     If the tracker for a table is active, it will also put the old values in tracking table.
@@ -184,8 +180,6 @@ namespace TrackerEnabledDbContext.Core.Identity
 
             return SaveChanges(_usernameFactory?.Invoke() ?? _defaultUsername);
         }
-
-        #region -- Async --
 
         /// <summary>
         ///     Asynchronously saves all changes made in this context to the underlying database.
@@ -225,7 +219,6 @@ namespace TrackerEnabledDbContext.Core.Identity
 
             return result;
         }
-
         /// <summary>
         ///     Asynchronously saves all changes made in this context to the underlying database.
         ///     If the tracker for a table is active, it will also put the old values in tracking table.
@@ -241,7 +234,6 @@ namespace TrackerEnabledDbContext.Core.Identity
 
             return await SaveChangesAsync(userId, CancellationToken.None);
         }
-
         /// <summary>
         ///     Asynchronously saves all changes made in this context to the underlying database.
         ///     If the tracker for a table is active, it will also put the old values in tracking table.
@@ -257,25 +249,6 @@ namespace TrackerEnabledDbContext.Core.Identity
 
             return await SaveChangesAsync(userName, CancellationToken.None);
         }
-
-        /// <summary>
-        ///     Asynchronously saves all changes made in this context to the underlying database.
-        ///     If the tracker for a table is active, it will also put the old values in tracking table with null UserName.
-        /// </summary>
-        /// <returns>
-        ///     A task that represents the asynchronous save operation.  The task result
-        ///     contains the number of objects written to the underlying database.
-        /// </returns>
-        public async Task<int> SaveChangesAsync()
-        {
-            if (!TrackingEnabled)
-            {
-                return await base.SaveChangesAsync(CancellationToken.None);
-            }
-
-            return await SaveChangesAsync(_usernameFactory?.Invoke() ?? _defaultUsername, CancellationToken.None);
-        }
-
         /// <summary>
         ///     Asynchronously saves all changes made in this context to the underlying database.
         ///     If the tracker for a table is active, it will also put the old values in tracking table with null UserName.
@@ -297,7 +270,22 @@ namespace TrackerEnabledDbContext.Core.Identity
 
             return await SaveChangesAsync(_usernameFactory?.Invoke() ?? _defaultUsername, cancellationToken);
         }
+        /// <summary>
+        ///     Asynchronously saves all changes made in this context to the underlying database.
+        ///     If the tracker for a table is active, it will also put the old values in tracking table with null UserName.
+        /// </summary>
+        /// <returns>
+        ///     A task that represents the asynchronous save operation.  The task result
+        ///     contains the number of objects written to the underlying database.
+        /// </returns>
+        public virtual async Task<int> SaveChangesAsync()
+        {
+            if (!TrackingEnabled)
+            {
+                return await base.SaveChangesAsync(CancellationToken.None);
+            }
 
-        #endregion --
+            return await SaveChangesAsync(_usernameFactory?.Invoke() ?? _defaultUsername, CancellationToken.None);
+        }
     }        
 }

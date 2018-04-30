@@ -66,6 +66,5 @@ namespace TrackerEnabledDbContext.Common.Configuration
                 newValue,
                 (key, value) => newValue);
         }
-
     }
 }

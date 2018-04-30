@@ -9,22 +9,22 @@ using SampleLogMaker.Core.Models;
 
 namespace SampleLogMaker.Core.Controllers
 {
-    public class BlogsController : Controller
+    public class CommentsController : Controller
     {
         private readonly SampleLogMakerCoreContext _context;
 
-        public BlogsController(SampleLogMakerCoreContext context)
+        public CommentsController(SampleLogMakerCoreContext context)
         {
             _context = context;
         }
 
-        // GET: Blogs
+        // GET: Comments
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Blog.ToListAsync());
+            return View(await _context.Comment.ToListAsync());
         }
 
-        // GET: Blogs/Details/5
+        // GET: Comments/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -32,56 +32,39 @@ namespace SampleLogMaker.Core.Controllers
                 return NotFound();
             }
 
-            var blog = await _context.Blog
+            var comment = await _context.Comment
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (blog == null)
+            if (comment == null)
             {
                 return NotFound();
             }
 
-            return View(blog);
+            return View(comment);
         }
 
-        // GET: Blogs/Create
+        // GET: Comments/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Blogs/Create
+        // POST: Comments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,X,Y")] Blog blog)
+        public async Task<IActionResult> Create([Bind("Id,Description")] Comment comment)
         {
             if (ModelState.IsValid)
             {
-                //create comment, save, then assign to blog
-                //Comment c1 = new Comment { Description = "just a test" };
-                //Comment c2 = new Comment { Description = "just a test" };
-                //_context.AddRange(new[] { c1, c2 });
-                //await _context.SaveChangesAsync();
-
-                //blog.Comments = new List<Comment> { c1, c2 };
-
-                //_context.Add(blog);
-                //await _context.SaveChangesAsync();
-
-                //save blog, assign BlogId & Blog to comments, respectively, save comments
-                _context.Add(blog);
+                _context.Add(comment);
                 await _context.SaveChangesAsync();
-
-                Comment c1 = new Comment { Blog = blog, Description = "just a test" }; //fails to cause BlogId to update
-                _context.Add(c1);
-                await _context.SaveChangesAsync();
-
                 return RedirectToAction(nameof(Index));
             }
-            return View(blog);
+            return View(comment);
         }
 
-        // GET: Blogs/Edit/5
+        // GET: Comments/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -89,22 +72,22 @@ namespace SampleLogMaker.Core.Controllers
                 return NotFound();
             }
 
-            var blog = await _context.Blog.SingleOrDefaultAsync(m => m.Id == id);
-            if (blog == null)
+            var comment = await _context.Comment.Include(b => b.Blog).SingleOrDefaultAsync(m => m.Id == id);
+            if (comment == null)
             {
                 return NotFound();
             }
-            return View(blog);
+            return View(comment);
         }
 
-        // POST: Blogs/Edit/5
+        // POST: Comments/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid? id, [Bind("Id,Title,X,Y")] Blog blog)
+        public async Task<IActionResult> Edit(Guid? id, [Bind("Id,Description")] Comment comment)
         {
-            if (id != blog.Id)
+            if (id != comment.Id)
             {
                 return NotFound();
             }
@@ -113,12 +96,12 @@ namespace SampleLogMaker.Core.Controllers
             {
                 try
                 {
-                    _context.Update(blog);
+                    _context.Update(comment);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BlogExists(blog.Id))
+                    if (!CommentExists(comment.Id))
                     {
                         return NotFound();
                     }
@@ -129,10 +112,10 @@ namespace SampleLogMaker.Core.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(blog);
+            return View(comment);
         }
 
-        // GET: Blogs/Delete/5
+        // GET: Comments/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -140,30 +123,30 @@ namespace SampleLogMaker.Core.Controllers
                 return NotFound();
             }
 
-            var blog = await _context.Blog
+            var comment = await _context.Comment
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (blog == null)
+            if (comment == null)
             {
                 return NotFound();
             }
 
-            return View(blog);
+            return View(comment);
         }
 
-        // POST: Blogs/Delete/5
+        // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid? id)
         {
-            var blog = await _context.Blog.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Blog.Remove(blog);
+            var comment = await _context.Comment.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Comment.Remove(comment);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BlogExists(Guid? id)
+        private bool CommentExists(Guid? id)
         {
-            return _context.Blog.Any(e => e.Id == id);
+            return _context.Comment.Any(e => e.Id == id);
         }
     }
 }

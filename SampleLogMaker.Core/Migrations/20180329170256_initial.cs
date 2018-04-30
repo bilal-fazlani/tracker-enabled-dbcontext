@@ -55,8 +55,7 @@ namespace SampleLogMaker.Core.Migrations
                 name: "Blog",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
                     Title = table.Column<string>(nullable: true),
                     X = table.Column<decimal>(nullable: true),
@@ -171,6 +170,25 @@ namespace SampleLogMaker.Core.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Comment",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    BlogId = table.Column<Guid>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comment_Blog_BlogId",
+                        column: x => x.BlogId,
+                        principalTable: "Blog",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
                 table: "AspNetUserClaims",
@@ -192,6 +210,11 @@ namespace SampleLogMaker.Core.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_BlogId",
+                table: "Comment",
+                column: "BlogId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LogDetails_AuditLogId",
@@ -216,7 +239,7 @@ namespace SampleLogMaker.Core.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Blog");
+                name: "Comment");
 
             migrationBuilder.DropTable(
                 name: "LogDetails");
@@ -226,6 +249,9 @@ namespace SampleLogMaker.Core.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Blog");
 
             migrationBuilder.DropTable(
                 name: "AuditLog");
