@@ -16,10 +16,21 @@ using TrackerEnabledDbContext.Core.Common.Interfaces;
 
 namespace TrackerEnabledDbContext.Core.Identity
 {
-    public class TrackerIdentityContext<TUser> : TrackerIdentityContext<TUser, string>
+    public class TrackerIdentityContext : TrackerIdentityContext<IdentityUser, IdentityRole, string>
+    {
+        public TrackerIdentityContext() : base()
+        {
+
+        }
+        public TrackerIdentityContext(DbContextOptions options) : base(options)
+        {
+
+        }
+    }
+    public class TrackerIdentityContext<TUser> : TrackerIdentityContext<TUser, IdentityRole, string>
         where TUser : IdentityUser
     {
-        public TrackerIdentityContext()
+        public TrackerIdentityContext() : base()
         {
 
         }
@@ -28,11 +39,12 @@ namespace TrackerEnabledDbContext.Core.Identity
 
         }
     }
-    public class TrackerIdentityContext<TUser, TKey> : TrackerIdentityContext<TUser, TKey, IdentityUserClaim<TKey>, IdentityUserLogin<TKey>, IdentityUserToken<TKey>>
+    public class TrackerIdentityContext<TUser, TRole, TKey> : TrackerIdentityContext<TUser, TRole, TKey, IdentityUserClaim<TKey>, IdentityUserRole<TKey>, IdentityUserLogin<TKey>, IdentityRoleClaim<TKey>, IdentityUserToken<TKey>>
         where TUser : IdentityUser<TKey>
+        where TRole : IdentityRole<TKey>
         where TKey : IEquatable<TKey>
     {
-        public TrackerIdentityContext()
+        public TrackerIdentityContext() : base()
         {
 
         }
@@ -41,11 +53,14 @@ namespace TrackerEnabledDbContext.Core.Identity
 
         }
     }
-    public class TrackerIdentityContext<TUser, TKey, TUserClaim, TUserLogin, TUserToken> : IdentityUserContext<TUser, TKey, TUserClaim, TUserLogin, TUserToken>, ITrackerContext
+    public class TrackerIdentityContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken> : IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>, ITrackerContext
         where TUser : IdentityUser<TKey>
+        where TRole : IdentityRole<TKey>
         where TKey : IEquatable<TKey>
         where TUserClaim : IdentityUserClaim<TKey>
+        where TUserRole : IdentityUserRole<TKey>
         where TUserLogin : IdentityUserLogin<TKey>
+        where TRoleClaim : IdentityRoleClaim<TKey>
         where TUserToken : IdentityUserToken<TKey>
     {
         private readonly CoreTracker _coreTracker;
@@ -74,7 +89,7 @@ namespace TrackerEnabledDbContext.Core.Identity
             remove { _coreTracker.OnAuditLogGenerated -= value; }
         }
 
-        public TrackerIdentityContext()
+        public TrackerIdentityContext() : base()
         {
             _coreTracker = new CoreTracker(this);
         }
