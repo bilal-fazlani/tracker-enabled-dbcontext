@@ -238,7 +238,7 @@ namespace TrackerEnabledDbContext.EF6.IntegrationTests
                         eventEntity != null)
                     {
                         eventRaised = true;
-                        args.SkipSaving = true;
+                        args.SkipSavingLog = true;
                     }
                 };
 

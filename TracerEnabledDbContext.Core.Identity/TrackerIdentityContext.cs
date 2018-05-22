@@ -16,7 +16,7 @@ using TrackerEnabledDbContext.Core.Common.Interfaces;
 
 namespace TrackerEnabledDbContext.Core.Identity
 {
-    public class TrackerIdentityContext : TrackerIdentityContext<IdentityUser, IdentityRole, string>
+    public class TrackerIdentityContext : TrackerIdentityContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
     {
         public TrackerIdentityContext() : base()
         {
@@ -27,8 +27,21 @@ namespace TrackerEnabledDbContext.Core.Identity
 
         }
     }
-    public class TrackerIdentityContext<TUser> : TrackerIdentityContext<TUser, IdentityRole, string>
-        where TUser : IdentityUser
+    public class TrackerIdentityContext<TUser> : TrackerIdentityContext<TUser, IdentityRole<Guid>, Guid>
+        where TUser : IdentityUser<Guid>
+    {
+        public TrackerIdentityContext() : base()
+        {
+            
+        }
+        public TrackerIdentityContext(DbContextOptions options) : base(options)
+        {
+
+        }
+    }
+    public class TrackerIdentityContext<TUser, TKey> : TrackerIdentityContext<TUser, IdentityRole<TKey>, TKey>
+        where TUser : IdentityUser<TKey>
+        where TKey : IEquatable<TKey>
     {
         public TrackerIdentityContext() : base()
         {
@@ -53,6 +66,7 @@ namespace TrackerEnabledDbContext.Core.Identity
 
         }
     }
+
     public class TrackerIdentityContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken> : IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>, ITrackerContext
         where TUser : IdentityUser<TKey>
         where TRole : IdentityRole<TKey>

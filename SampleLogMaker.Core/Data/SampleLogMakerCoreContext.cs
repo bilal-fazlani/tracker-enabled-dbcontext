@@ -11,7 +11,7 @@ using SampleLogMaker.Core.Models;
 
 namespace SampleLogMaker.Core.Models
 {
-    public class SampleLogMakerCoreContext : TrackerIdentityContext<IdentityUser>
+    public class SampleLogMakerCoreContext : TrackerIdentityContext
     {
         public SampleLogMakerCoreContext (DbContextOptions<SampleLogMakerCoreContext> options)
             : base(options)
