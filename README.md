@@ -16,7 +16,9 @@ It comes with an ***[GNU Lesser General Public License v3.0](./LICENSE.md)*** Li
 
 Please go through the ***[wiki](https://github.com/bilal-fazlani/tracker-enabled-dbcontext/wiki)*** for any FAQs  
 
-If you have any queries please reach me at *bilal.m.fazlani@gmail.com*
+> If you have any queries please reach us at
+> 1. EF6 questions -> *bilal.m.fazlani@gmail.com*
+> 2. Core questions -> *aslwer@gmail.com*
 
 Also check out my blog for updates : *http://bilal-fazlani.blogspot.in*
 
