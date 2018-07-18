@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{578F0B6A-A461-402F-91F1-ACC7A423E97D}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
+		MyKey.snk = MyKey.snk
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackerEnabledDbContext.Core.Common", "TrackerEnabledDbContext.Core.Common\TrackerEnabledDbContext.Core.Common.csproj", "{1BD23D0B-5F7D-477D-A8DA-F56ECBD5D1D8}"
@@ -44,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackerEnabledDbContext.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackerEnabledDbContext.Core.Identity", "TracerEnabledDbContext.Core.Identity\TrackerEnabledDbContext.Core.Identity.csproj", "{96A06DFB-2B24-4E13-A069-04B09358DCCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleLogMaker.Core", "SampleLogMaker.Core\SampleLogMaker.Core.csproj", "{E02E1F25-229F-44C7-9735-D478E6C5EC36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleLogMaker.Core", "SampleLogMaker.Core\SampleLogMaker.Core.csproj", "{E02E1F25-229F-44C7-9735-D478E6C5EC36}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
