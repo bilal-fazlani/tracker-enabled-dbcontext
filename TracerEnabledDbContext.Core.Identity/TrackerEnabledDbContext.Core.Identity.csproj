@@ -5,6 +5,9 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>MyKey.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/asulwer/tracker-enabled-dbcontext</PackageProjectUrl>
+    <Version>4.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
