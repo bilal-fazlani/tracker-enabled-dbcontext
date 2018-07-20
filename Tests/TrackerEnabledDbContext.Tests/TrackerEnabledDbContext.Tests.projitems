@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>6ef84a00-0441-41bd-9378-67144c064928</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>TrackerEnabledDbContext.Tests</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Code\ObjectFiller.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Code\RandomDataGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\AssertExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ISoftDeletable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LogDetailsEqualityComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ChildModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ModelWithComplexType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ModelWithCompositeKey.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ModelWithConventionalKey.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ModelWithSkipTracking.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NormalModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ParentModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\POCO.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SoftDeletableModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\TrackedModelWithCustomTableAndColumnNames.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\TrackedModelWithMultipleProperties.cs" />
+  </ItemGroup>
+</Project>

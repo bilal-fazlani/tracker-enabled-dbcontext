@@ -43,7 +43,7 @@ namespace TrackerEnabledDbContext.EF6.Common
                         RaiseOnAuditLogGenerated(this, arg);
                         if (!arg.SkipSavingLog)
                         {
-                            _context.AuditLog.Add(record);
+                            _context.AuditLogs.Add(record);
                         }
                     }
                 }
@@ -97,7 +97,7 @@ namespace TrackerEnabledDbContext.EF6.Common
                         RaiseOnAuditLogGenerated(this, arg);
                         if (!arg.SkipSavingLog)
                         {
-                            _context.AuditLog.Add(record);
+                            _context.AuditLogs.Add(record);
                         }
                     }
                 }
@@ -119,7 +119,7 @@ namespace TrackerEnabledDbContext.EF6.Common
         public IQueryable<AuditLog> GetLogs<TEntity>()
         {
             IEnumerable<string> entityTypeNames = EntityTypeNames<TEntity>();
-            return _context.AuditLog.Where(x => entityTypeNames.Contains(x.TypeFullName));
+            return _context.AuditLogs.Where(x => entityTypeNames.Contains(x.TypeFullName));
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace TrackerEnabledDbContext.EF6.Common
         /// <returns></returns>
         public IQueryable<AuditLog> GetLogs(string entityTypeName)
         {
-            return _context.AuditLog.Where(x => x.TypeFullName == entityTypeName);
+            return _context.AuditLogs.Where(x => x.TypeFullName == entityTypeName);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace TrackerEnabledDbContext.EF6.Common
             string key = primaryKey.ToString();
             IEnumerable<string> entityTypeNames = EntityTypeNames<TEntity>();
 
-            return _context.AuditLog.Where(x => entityTypeNames.Contains(x.TypeFullName) && x.RecordId == key);
+            return _context.AuditLogs.Where(x => entityTypeNames.Contains(x.TypeFullName) && x.RecordId == key);
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace TrackerEnabledDbContext.EF6.Common
         public IQueryable<AuditLog> GetLogs(string entityTypeName, object primaryKey)
         {
             string key = primaryKey.ToString();
-            return _context.AuditLog.Where(x => x.TypeFullName == entityTypeName && x.RecordId == key);
+            return _context.AuditLogs.Where(x => x.TypeFullName == entityTypeName && x.RecordId == key);
         }
 
         protected virtual void RaiseOnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)

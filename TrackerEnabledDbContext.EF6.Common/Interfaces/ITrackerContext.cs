@@ -10,8 +10,8 @@ namespace TrackerEnabledDbContext.EF6.Common.Interfaces
 {
     public interface ITrackerContext : IDbContext
     {
-        DbSet<AuditLog> AuditLog { get; set; }
-        DbSet<AuditLogDetail> LogDetails { get; set; }
+        DbSet<AuditLog> AuditLogs { get; set; }
+        DbSet<AuditLogDetail> AuditLogDetails { get; set; }
         bool TrackingEnabled { get; set; }
 
         event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;

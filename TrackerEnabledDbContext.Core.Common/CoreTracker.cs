@@ -48,7 +48,7 @@ namespace TrackerEnabledDbContext.Core.Common
                 }
             }
 
-            _context.AuditLog.AddRange(records);
+            _context.AuditLogs.AddRange(records);
         }
 
         private EventType GetEventType(EntityEntry entry)
@@ -106,7 +106,7 @@ namespace TrackerEnabledDbContext.Core.Common
                 }
             }
 
-            _context.AuditLog.AddRange(records);
+            _context.AuditLogs.AddRange(records);
         }
 
         private IEnumerable<string> EntityTypeNames<TEntity>()
@@ -124,7 +124,7 @@ namespace TrackerEnabledDbContext.Core.Common
         public IQueryable<AuditLog> GetLogs<TEntity>()
         {
             IEnumerable<string> entityTypeNames = EntityTypeNames<TEntity>();
-            return _context.AuditLog.Where(x => entityTypeNames.Contains(x.TypeFullName));
+            return _context.AuditLogs.Where(x => entityTypeNames.Contains(x.TypeFullName));
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace TrackerEnabledDbContext.Core.Common
         /// <returns></returns>
         public IQueryable<AuditLog> GetLogs(string entityTypeName)
         {
-            return _context.AuditLog.Where(x => x.TypeFullName == entityTypeName);
+            return _context.AuditLogs.Where(x => x.TypeFullName == entityTypeName);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace TrackerEnabledDbContext.Core.Common
             string key = primaryKey.ToString();
             IEnumerable<string> entityTypeNames = EntityTypeNames<TEntity>();
 
-            return _context.AuditLog.Where(x => entityTypeNames.Contains(x.TypeFullName) && x.RecordId == key);
+            return _context.AuditLogs.Where(x => entityTypeNames.Contains(x.TypeFullName) && x.RecordId == key);
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace TrackerEnabledDbContext.Core.Common
         public IQueryable<AuditLog> GetLogs(string entityTypeName, object primaryKey)
         {
             string key = primaryKey.ToString();
-            return _context.AuditLog.Where(x => x.TypeFullName == entityTypeName && x.RecordId == key);
+            return _context.AuditLogs.Where(x => x.TypeFullName == entityTypeName && x.RecordId == key);
         }
 
         protected virtual void RaiseOnAuditLogGenerated(object sender, AuditLogGeneratedEventArgs e)

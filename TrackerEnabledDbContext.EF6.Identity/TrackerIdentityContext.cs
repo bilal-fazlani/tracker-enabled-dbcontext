@@ -94,9 +94,9 @@ namespace TrackerEnabledDbContext.EF6.Identity
             _coreTracker = new CoreTracker(this);
         }
 
-        public virtual DbSet<AuditLog> AuditLog { get; set; }
+        public virtual DbSet<AuditLog> AuditLogs { get; set; }
 
-        public virtual DbSet<AuditLogDetail> LogDetails { get; set; }
+        public virtual DbSet<AuditLogDetail> AuditLogDetails { get; set; }
 
         public virtual event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated
         {

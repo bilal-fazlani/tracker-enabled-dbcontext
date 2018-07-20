@@ -14,8 +14,8 @@
     <Description>Use this to extend Entity Framework functionality to store changes in database. This is very useful for auditing purpose. It stores WHO changed WHAT and WHEN. It will let you choose which tables and columns you want to track with the help of attributes.
 
 Forked from Bilal Fazlani to support EF Core 2</Description>
-    <FileVersion>4.0.0.2</FileVersion>
-    <AssemblyVersion>4.0.0.2</AssemblyVersion>
+    <FileVersion>4.0.2.0</FileVersion>
+    <AssemblyVersion>4.0.2.0</AssemblyVersion>
     <PackageTags>SQL, Database, EntityFramework</PackageTags>
   </PropertyGroup>
 

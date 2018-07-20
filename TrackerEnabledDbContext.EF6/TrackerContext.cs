@@ -101,9 +101,9 @@ namespace TrackerEnabledDbContext.EF6
             remove { _coreTracker.OnAuditLogGenerated -= value; }
         }
 
-        public virtual DbSet<AuditLog> AuditLog { get; set; }
+        public virtual DbSet<AuditLog> AuditLogs { get; set; }
 
-        public virtual DbSet<AuditLogDetail> LogDetails { get; set; }
+        public virtual DbSet<AuditLogDetail> AuditLogDetails { get; set; }
 
         /// <summary>
         ///     This method saves the model changes to the database.

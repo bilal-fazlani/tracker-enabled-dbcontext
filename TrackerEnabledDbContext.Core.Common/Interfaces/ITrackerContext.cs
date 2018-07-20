@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TrackerEnabledDbContext.Common.EventArgs;
 using TrackerEnabledDbContext.Common.Models;
 
@@ -10,8 +10,8 @@ namespace TrackerEnabledDbContext.Core.Common.Interfaces
 {
     public interface ITrackerContext : IDbContext
     {
-        DbSet<AuditLog> AuditLog { get; set; }
-        DbSet<AuditLogDetail> LogDetails { get; set; }
+        DbSet<AuditLog> AuditLogs { get; set; }
+        DbSet<AuditLogDetail> AuditLogDetails { get; set; }
         bool TrackingEnabled { get; set; }
 
         event EventHandler<AuditLogGeneratedEventArgs> OnAuditLogGenerated;

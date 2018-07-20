@@ -139,7 +139,7 @@ namespace TrackerEnabledDbContext.Core.Common.Tools
 
         private IEnumerable<AuditLogDetail> GetAuditLogDetailRows(string columnName, string typeFullname)
         {
-            return _trackerContext.LogDetails
+            return _trackerContext.AuditLogDetails
                 .Where(x => x.PropertyName == columnName
                             && x.Log.TypeFullName == typeFullname);
         }
@@ -177,7 +177,7 @@ namespace TrackerEnabledDbContext.Core.Common.Tools
 
         private IEnumerable<AuditLog> GetAuditLogRows(string tableName)
         {
-            return _trackerContext.AuditLog
+            return _trackerContext.AuditLogs
                 .Where(x => x.TypeFullName == tableName);
         }
 

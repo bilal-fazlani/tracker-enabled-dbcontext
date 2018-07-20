@@ -34,8 +34,8 @@ namespace TrackerEnabledDbContext.Core
                 _trackingEnabled = value;
             }
         }
-        public virtual DbSet<AuditLog> AuditLog { get; set; }
-        public virtual DbSet<AuditLogDetail> LogDetails { get; set; }
+        public virtual DbSet<AuditLog> AuditLogs { get; set; }
+        public virtual DbSet<AuditLogDetail> AuditLogDetails { get; set; }
 
         public TrackerContext()
         {

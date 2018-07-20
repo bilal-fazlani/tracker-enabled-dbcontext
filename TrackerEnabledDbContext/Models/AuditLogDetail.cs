@@ -4,6 +4,7 @@ using TrackerEnabledDbContext.Common.Interfaces;
 
 namespace TrackerEnabledDbContext.Common.Models
 {
+    [Table("AuditLogDetails")]
     public class AuditLogDetail : IUnTrackable
     {
         [Key]
