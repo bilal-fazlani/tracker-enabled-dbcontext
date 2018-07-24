@@ -1,25 +1,14 @@
 Tracker-enabled DbContext
 =========================
 
-[![Join the chat at https://gitter.im/bilal-fazlani/tracker-enabled-dbcontext](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bilal-fazlani/tracker-enabled-dbcontext?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![Build status](https://ci.appveyor.com/api/projects/status/v2b8ng3pcd3gy6wv?svg=true)](https://ci.appveyor.com/project/bilal-fazlani/tracker-enabled-dbcontext)
-
-[![Nuget](https://img.shields.io/nuget/dt/trackerenableddbcontext.svg)](http://www.nuget.org/packages/TrackerEnabledDbContext/)
-
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/TrackerEnabledDbContext.svg)](http://www.nuget.org/packages/TrackerEnabledDbContext/)
+***[Forked](https://github.com/bilal-fazlani/tracker-enabled-dbcontext)*** from to support Core 2.0
+> Core 2.1 support coming soon
 
 This library is built on top of entity framework. If offers you to implement full auditing in your application. With the help of this library, we can track all the CRUD operations on database including table names, column names, what was the old value, what's the new value,
 who changed it, when did it get changed, etc.
 
 It comes with an ***[GNU Lesser General Public License v3.0](./LICENSE.md)*** Licence.
 
-Please go through the ***[wiki](https://github.com/bilal-fazlani/tracker-enabled-dbcontext/wiki)*** for any FAQs  
+Please go through the ***[EF6 wiki](https://github.com/bilal-fazlani/tracker-enabled-dbcontext/wiki)*** for any FAQs  
 
-> If you have any queries please reach us at
-> 1. EF6 questions -> *bilal.m.fazlani@gmail.com*
-> 2. Core questions -> *aslwer@gmail.com*
-
-Also check out my blog for updates : *http://bilal-fazlani.blogspot.in*
-
-Live discussions on https://goo.gl/spaces/tNfHXzXgP89gskjz9
+***Wiki for Core coming soon***

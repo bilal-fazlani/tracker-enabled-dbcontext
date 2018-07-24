@@ -7,7 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{07AA70F2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{578F0B6A-A461-402F-91F1-ACC7A423E97D}"
 	ProjectSection(SolutionItems) = preProject
-		appveyor.yml = appveyor.yml
 		MyKey.snk = MyKey.snk
 		README.md = README.md
 	EndProjectSection
@@ -44,9 +43,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleLogMaker.Core", "Test
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TrackerEnabledDbContext.Tests", "Tests\TrackerEnabledDbContext.Tests\TrackerEnabledDbContext.Tests.shproj", "{6EF84A00-0441-41BD-9378-67144C064928}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerEnabledDbContext.Core.Common.Tests", "Tests\TrackerEnabledDbContext.Core.Common.Tests\TrackerEnabledDbContext.Core.Common.Tests.csproj", "{24F888AA-E3BC-44F4-A45B-C86C5AF460C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackerEnabledDbContext.Core.Common.Tests", "Tests\TrackerEnabledDbContext.Core.Common.Tests\TrackerEnabledDbContext.Core.Common.Tests.csproj", "{24F888AA-E3BC-44F4-A45B-C86C5AF460C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerEnabledDbContext.Core.Tests", "Tests\TrackerEnabledDbContext.Core.Tests\TrackerEnabledDbContext.Core.Tests.csproj", "{D6CDED19-531F-4777-8261-2F3CC55823DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackerEnabledDbContext.Core.Tests", "Tests\TrackerEnabledDbContext.Core.Tests\TrackerEnabledDbContext.Core.Tests.csproj", "{D6CDED19-531F-4777-8261-2F3CC55823DF}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
