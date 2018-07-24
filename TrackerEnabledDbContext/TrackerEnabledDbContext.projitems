@@ -11,6 +11,8 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\SkipTrackingAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\TrackChangesAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\AdditionLogDetailsAuditor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\ChangeLogDetailsAuditor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\Comparator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\ComparatorFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\DateComparator.cs" />
@@ -18,6 +20,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\NullableDateComparator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\StringComparator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Auditors\Comparators\ValueTypeComparator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\DeletetionLogDetailsAuditor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\LogAuditor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\SoftDeletedLogDetailsAuditor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Auditors\UnDeletedLogDetailsAudotor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\DbContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\EntityTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\EntityTrackingConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ExceptResponse.cs" />
@@ -29,14 +36,19 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\TrackingConfigurationPriority.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\TrackingConfigurationValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\TrackingDataStore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CoreTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventArgs\AuditLogGeneratedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityTypeConfigurationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TypeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IDbContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ILogDetailsAuditor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ITrackerContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUnTrackable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\AuditLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\AuditLogDetail.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\EventType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LogMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tools\LogDataMigration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tools\MigrationJobStatus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tools\NameChangedEventArgs.cs" />
   </ItemGroup>

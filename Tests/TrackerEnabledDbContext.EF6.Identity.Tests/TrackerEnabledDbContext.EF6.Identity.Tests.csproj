@@ -81,20 +81,6 @@
     <Compile Include="UsernameConfigurationTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\TrackerEnabledDbContext.EF6.Common\TrackerEnabledDbContext.EF6.Common.csproj">
-      <Project>{ac9808cc-8932-40ae-8f26-3fba558a5549}</Project>
-      <Name>TrackerEnabledDbContext.EF6.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TrackerEnabledDbContext.EF6.Identity\TrackerEnabledDbContext.EF6.Identity.csproj">
-      <Project>{8a73486c-9d6b-4132-b94b-007e6737b734}</Project>
-      <Name>TrackerEnabledDbContext.EF6.Identity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TrackerEnabledDbContext.EF6.Common.Tests\TrackerEnabledDbContext.EF6.Common.Tests.csproj">
-      <Project>{D56578A4-4642-4FCE-B7F7-993D815DD2FD}</Project>
-      <Name>TrackerEnabledDbContext.EF6.Common.Tests</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

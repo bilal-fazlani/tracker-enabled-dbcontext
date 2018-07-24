@@ -1,14 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Models;
 using TrackerEnabledDbContext.Common.Tests;
 using TrackerEnabledDbContext.Common.Tests.Models;
 using TrackerEnabledDbContext.Core.Tests;
-using TrackerEnabledDbContext.Core.Common.Tests;
-using TrackerEnabledDbContext.Core.Common.Tests.Extensions;
+using TrackerEnabledDbContext.Common.Tests.Extensions;
 using TrackerEnabledDbContext.Common.Tests.Code;
-using System;
 
 namespace TrackerEnabledDbContext.EF6.Tests
 {

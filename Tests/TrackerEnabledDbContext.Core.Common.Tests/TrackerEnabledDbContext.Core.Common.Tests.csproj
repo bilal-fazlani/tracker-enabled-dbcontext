@@ -13,10 +13,8 @@
     <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\TrackerEnabledDbContext.Core.Common\TrackerEnabledDbContext.Core.Common.csproj" />
-  </ItemGroup>
-
   <Import Project="..\TrackerEnabledDbContext.Tests\TrackerEnabledDbContext.Tests.projitems" Label="Shared" />
+
+  <Import Project="..\..\TrackerEnabledDbContext\TrackerEnabledDbContext.projitems" Label="Shared" />
 
 </Project>

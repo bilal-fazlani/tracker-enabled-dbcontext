@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Tests.Models;
-using TrackerEnabledDbContext.Core.Common.Tests;
+using TrackerEnabledDbContext.Common.Tests;
 
 namespace TrackerEnabledDbContext.Core.Tests
 {

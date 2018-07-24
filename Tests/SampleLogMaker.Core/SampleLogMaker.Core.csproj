@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\TracerEnabledDbContext.Core.Identity\TrackerEnabledDbContext.Core.Identity.csproj" />
-    <ProjectReference Include="..\..\TrackerEnabledDbContext.Core.Common\TrackerEnabledDbContext.Core.Common.csproj" />
   </ItemGroup>
 
 </Project>

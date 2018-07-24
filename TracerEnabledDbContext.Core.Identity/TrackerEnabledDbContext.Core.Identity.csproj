@@ -25,8 +25,6 @@ Forked from Bilal Fazlani to support EF Core 2</Description>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TrackerEnabledDbContext.Core.Common\TrackerEnabledDbContext.Core.Common.csproj" />
-  </ItemGroup>
+  <Import Project="..\TrackerEnabledDbContext\TrackerEnabledDbContext.projitems" Label="Shared" />
 
 </Project>

@@ -5,8 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Tests.Code;
 using TrackerEnabledDbContext.Common.Tests.Models;
-using TrackerEnabledDbContext.Core.Common.Tests;
-using TrackerEnabledDbContext.Core.Common.Tests.Extensions;
+using TrackerEnabledDbContext.Common.Tests.Extensions;
 
 namespace TrackerEnabledDbContext.Core.Tests
 {

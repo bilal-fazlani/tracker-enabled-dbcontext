@@ -16,9 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\TrackerEnabledDbContext.Core.Common\TrackerEnabledDbContext.Core.Common.csproj" />
     <ProjectReference Include="..\..\TrackerEnabledDbContext.Core\TrackerEnabledDbContext.Core.csproj" />
-    <ProjectReference Include="..\TrackerEnabledDbContext.Core.Common.Tests\TrackerEnabledDbContext.Core.Common.Tests.csproj" />
   </ItemGroup>
+
+  <Import Project="..\TrackerEnabledDbContext.Tests\TrackerEnabledDbContext.Tests.projitems" Label="Shared" />
 
 </Project>

@@ -12,7 +12,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Code\ObjectFiller.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Code\RandomDataGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\AssertExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\AuditAssertExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ISoftDeletable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ITestDbContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LogDetailsEqualityComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ChildModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ModelWithComplexType.cs" />
