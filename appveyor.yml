@@ -1,4 +1,4 @@
-version: {branch}-{build}
+version: v{build}
 os: Visual Studio 2015
 assembly_info:
   patch: false
