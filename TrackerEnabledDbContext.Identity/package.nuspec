@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
   <metadata>
     <id>TrackerEnabledDbContext.Identity</id>
-    <version>3.7</version>
+    <version>3.7.1</version>
     <title>Tracker Enabled DbContext For Asp.Net Identity</title>
     <authors>Bilal Fazlani</authors>
     <owners>Bilal</owners>
@@ -17,6 +17,9 @@
       It extends Entity Framework functionality to store changes in database. This is very useful for auditing purpose. It stores WHO changed WHAT &amp; WHEN.
     </summary>
     <releaseNotes>
+      v 3.7.1
+      - Fixed missing dependencies in the nuget package
+
       v 3.7
       - Removed all references/usages to EntityFramework.MappingApi
 
@@ -76,8 +79,7 @@
       The version is for IdentityContext. To be used with ASP.Net MVC 5.
     </releaseNotes>
     <copyright>2015</copyright>
-    <language>es-US</language>
-    <tags>EntityFramework SQL Database ASP.NET</tags>
+    <tags>SQL Entity Framework Tacking Audit C# Database ASP.NET</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
         <dependency id="EntityFramework" version="6.2" />

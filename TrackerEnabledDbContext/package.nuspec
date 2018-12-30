@@ -89,8 +89,7 @@
       http://bilal-fazlani.blogspot.in/2013/09/adding-log-audit-feature-to-entity.html
     </releaseNotes>
     <copyright>2015</copyright>
-    <language>es-US</language>
-    <tags>EntityFramework SQL Database</tags>
+    <tags>SQL Entity Framework Tacking Audit C# Database ASP.NET</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
         <dependency id="EntityFramework" version="6.2" />
