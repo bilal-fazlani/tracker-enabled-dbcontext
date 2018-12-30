@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata>
+    <id>TrackerEnabledDbContext.Identity</id>
+    <version>3.7</version>
+    <title>Tracker Enabled DbContext For Asp.Net Identity</title>
+    <authors>Bilal Fazlani</authors>
+    <owners>Bilal</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/bilal-fazlani/tracker-enabled-dbcontext</projectUrl>
+    <description>
+      This is DbContext for use with ASP.Net Identity.
+      It extends Entity Framework functionality to store changes in database. This is very useful for auditing purpose. It stores WHO changed WHAT &amp; WHEN.
+    </description>
+    <summary>
+      This is DbContext for use with ASP.Net Identity.
+      It extends Entity Framework functionality to store changes in database. This is very useful for auditing purpose. It stores WHO changed WHAT &amp; WHEN.
+    </summary>
+    <releaseNotes>
+      v 3.7
+      - Removed all references/usages to EntityFramework.MappingApi
+
+      v 3.6.2-beta
+      - Added context specific tracking enabled indicator.
+      - Added support for complex types
+      - Performance Improvements
+
+      v 3.6.1
+      - Added feature to add metadata with audit logs
+      - Made mathods vitual so that devs can override if needed
+
+      v 3.6
+      - Fixed bug where application would crash when deleting a soft-deletable object.
+      - Removing serilog integration ( use events to dump logs manually )
+
+      v 3.5.20-beta
+      Added "ConfigureUsername(Func&lt;string&gt;) method on dbcontext. Once configured, you dont have to specify useraname in all SaveChanges() calls.
+
+      v 3.5.15-beta
+      Added integration with Serilog. An ILogger can now be provided to ITrackerContext. If you decide you ILogger for logging audit logs, you can take advantage of any Serilog sinks, such as MongoDb. ElasticSearch, Seq, etc.
+
+      v 3.5.2
+      Users can now use the event to make changes to log &amp; ENTITY before the log gets saved. This can be useful for scenarios when you have fields like - LastModified or LastModifiedBy.
+
+      v 3.5.1
+      Fixed MySQL compatibility issues
+
+      v 3.5
+      Added an event when log is generated and before it is saved to local database. This event can be used to save log to external datastore instead of local.
+      https://github.com/bilal-fazlani/tracker-enabled-dbcontext/wiki/Events
+
+      v3.4
+      Added Softdeletable feature
+      Bug fixes
+
+      v3.3
+      Added Support for Disconnected contexts (for n-tier applications)
+      Bug Fixes
+      Minonr Improvements
+
+      v.3.1
+      - Fluent API configuration
+      - Enable/Disable tracking at runtime
+      - Bug fixes and performance improvements
+      - Ability to migrate legacy log data
+
+      v1.1
+      - even if you dont provide a username/userId (anonymous user) , entity will be audited.
+      - no need to add the [Key] attribute. It's optional now.
+      - fixed the bug where changes din't get audited when "db.Entry(update).State = EntityState.Modified" was used
+      - added async support
+      - added support for composite primary keys
+
+      ---- Base Version -----
+
+      The version is for IdentityContext. To be used with ASP.Net MVC 5.
+    </releaseNotes>
+    <copyright>2015</copyright>
+    <language>es-US</language>
+    <tags>EntityFramework SQL Database ASP.NET</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="EntityFramework" version="6.2" />
+        <dependency id="Microsoft.AspNet.Identity.Core" version="2.2.1" />
+        <dependency id="Microsoft.AspNet.Identity.EntityFramework" version="2.2.1" />
+        <dependency id="TrackerEnabledDbContext.Common" version="3.7" />
+      </group>
+    </dependencies>
+    <references>
+      <group targetFramework=".NETFramework4.5">
+        <reference file="TrackerEnabledDbContext.Identity.dll" />
+      </group>
+    </references>
+  </metadata>
+</package>

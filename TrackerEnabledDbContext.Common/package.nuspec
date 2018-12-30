@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata>
+    <id>TrackerEnabledDbContext.Common</id>
+    <version>3.7</version>
+    <title>Common Library for TrackerEnabledDbContext</title>
+    <authors>Bilal Fazlani</authors>
+    <owners>Bilal</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/bilal-fazlani/tracker-enabled-dbcontext</projectUrl>
+    <description>Common nuget package required for TrackerEnabledDbContext &amp; TrackerEnabledDbContext.Identity</description>
+    <summary>Common nuget package required for TrackerEnabledDbContext &amp; TrackerEnabledDbContext.Identity</summary>
+    <releaseNotes>
+      v 3.7
+      - Removed all references/usages to EntityFramework.MappingApi
+
+      v 3.6.2-beta
+      - Added context specific tracking enabled indicator.
+      - Added support for complex types
+      - Performance Improvements
+
+      v 3.6.1
+      - Added feature to add metadata with audit logs
+      - Made mathods vitual so that devs can override if needed
+
+      v 3.6
+      - Fixed bug where application would crash when deleting a soft-deletable object.
+      - Removing serilog integration ( use events to dump logs manually )
+
+      v 3.5.20-beta
+      Added "ConfigureUsername(Func&lt;string&gt;) method on dbcontext. Once configured, you dont have to specify useraname in all SaveChanges() calls.
+
+      v 3.5.15-beta
+      Added integration with Serilog. An ILogger can now be provided to ITrackerContext. If you decide you ILogger for logging audit logs, you can take advantage of any Serilog sinks, such as MongoDb. ElasticSearch, Seq, etc.
+
+      v 3.5.2
+      Users can now use the event to make changes to log &amp; ENTITY before the log gets saved. This can be useful for scenarios when you have fields like - LastModified or LastModifiedBy.
+
+      v 3.5.1
+      Fixed MySQL compatibility issues
+
+      v 3.5
+      Added an event when log is generated and before it is saved to local database. This event can be used to save log to external datastore instead of local.
+      https://github.com/bilal-fazlani/tracker-enabled-dbcontext/wiki/Events
+
+      v3.4
+      Added Softdeletable feature
+      Bug fixes
+
+      v3.3
+      Added Support for Disconnected contexts (for n-tier applications)
+      Bug fixes,
+      MInor improvements
+
+      v3.1
+      Fluent API configuration
+      Bug fixes
+      Performance improvements
+      Ability to migrate legacy log data
+
+      v.1.1.0
+      Async Support,
+      Performance Improvement and Bug Fixes.
+      --------------------------
+      v1.0.0
+      Base version
+    </releaseNotes>
+    <copyright>2015</copyright>
+    <tags>SQL Entity Framework Tacking Audit C# Database ASP.NET</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="EntityFramework" version="6.2" />
+      </group>
+    </dependencies>
+    <references>
+      <group targetFramework=".NETFramework4.5">
+        <reference file="TrackerEnabledDbContext.Common.dll" />
+      </group>
+    </references>
+  </metadata>
+</package>

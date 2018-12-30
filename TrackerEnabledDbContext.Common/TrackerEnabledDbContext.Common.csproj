@@ -104,6 +104,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="MyKey.snk" />
+    <None Include="package.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
