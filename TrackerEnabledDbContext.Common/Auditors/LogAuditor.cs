@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Dynamic;
 using System.Linq;
+using TrackerEnabledDbContext.Common.Auditors.Helpers;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Interfaces;
@@ -97,37 +98,25 @@ namespace TrackerEnabledDbContext.Common.Auditors
             DbEntityEntry dbEntry,
             List<PropertyConfiguerationKey> properties)
         {
+            if (properties.Count == 0)
+            {
+                throw new KeyNotFoundException("key not found for " + dbEntry.Entity.GetType().FullName);
+            }
+
+            var valuesWrapper = new DbEntryValuesWrapper(_dbEntry);
+
             if (properties.Count == 1)
             {
-                return OriginalValue(properties.First().PropertyName);
-            }
-            if (properties.Count > 1)
-            {
-                string output = "[";
-
-                output += string.Join(",",
-                    properties.Select(colName => OriginalValue(colName.PropertyName)));
-
-                output += "]";
-                return output;
-            }
-            throw new KeyNotFoundException("key not found for " + dbEntry.Entity.GetType().FullName);
-        }
-
-        protected virtual object OriginalValue(string propertyName)
-        {
-            object originalValue = null;
-
-            if (GlobalTrackingConfig.DisconnectedContext)
-            {
-                originalValue = _dbEntry.GetDatabaseValues().GetValue<object>(propertyName);
-            }
-            else
-            {
-                originalValue = _dbEntry.Property(propertyName).OriginalValue;
+                return valuesWrapper.OriginalValue(properties.First().PropertyName);
             }
 
-            return originalValue;
+            string output = "[";
+
+            output += string.Join(",",
+                properties.Select(colName => valuesWrapper.OriginalValue(colName.PropertyName)));
+
+            output += "]";
+            return output;
         }
     }
 }
