@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using TrackerEnabledDbContext.Common.Auditors.Comparators;
+using TrackerEnabledDbContext.Common.Auditors.Helpers;
 using TrackerEnabledDbContext.Common.Configuration;
 using TrackerEnabledDbContext.Common.Extensions;
 using TrackerEnabledDbContext.Common.Interfaces;
@@ -14,11 +15,13 @@ namespace TrackerEnabledDbContext.Common.Auditors
     {
         protected readonly DbEntityEntry DbEntry;
         private readonly AuditLog _log;
+        private readonly DbEntryValuesWrapper _dbEntryValuesWrapper;
 
         public ChangeLogDetailsAuditor(DbEntityEntry dbEntry, AuditLog log)
         {
             DbEntry = dbEntry;
             _log = log;
+            _dbEntryValuesWrapper = new DbEntryValuesWrapper(dbEntry);
         }
 
         public IEnumerable<AuditLogDetail> CreateLogDetails()
@@ -81,18 +84,7 @@ namespace TrackerEnabledDbContext.Common.Auditors
 
         protected virtual object OriginalValue(string propertyName)
         {
-            object originalValue = null;
-
-            if (GlobalTrackingConfig.DisconnectedContext)
-            {
-                originalValue = DbEntry.GetDatabaseValues().GetValue<object>(propertyName);
-            }
-            else
-            {
-                originalValue = DbEntry.Property(propertyName).OriginalValue;
-            }
-
-            return originalValue;
+            return _dbEntryValuesWrapper.OriginalValue(propertyName);
         }
 
         protected virtual object CurrentValue(string propertyName)
