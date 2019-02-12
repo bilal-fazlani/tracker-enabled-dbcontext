@@ -83,6 +83,7 @@
     <Compile Include="ITestDbContext.cs" />
     <Compile Include="LogDetailsEqualityComparer.cs" />
     <Compile Include="Models\ChildModel.cs" />
+    <Compile Include="Models\ModelInheritance.cs" />
     <Compile Include="Models\ModelWithComplexType.cs" />
     <Compile Include="Models\ModelWithCompositeKey.cs" />
     <Compile Include="Models\ModelWithConventionalKey.cs" />
