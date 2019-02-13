@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;
+using TrackerEnabledDbContext.Common.Models;
 using TrackerEnabledDbContext.Common.Testing;
 using TrackerEnabledDbContext.Common.Testing.Extensions;
 using TrackerEnabledDbContext.Common.Testing.Models;
@@ -102,5 +103,69 @@ namespace TrackerEnabledDbContext.IntegrationTests
         }
 
         //TODO: can track CHAR properties ? NO
+
+        [TestMethod]
+        public void CanOverrideUntrackedBaseClassProperties()
+        {
+            EntityTracker
+                .OverrideTracking<TrackedExtendedModel>()
+                .Enable(x => x.UntrackedProperty);
+
+            var existingEntity = ObjectFactory.Create<TrackedExtendedModel>(save: true, testDbContext: Db);
+
+            var originalValue = existingEntity.UntrackedProperty;
+            var newValue = RandomText;
+            existingEntity.UntrackedProperty = newValue;
+
+            Db.SaveChanges();
+
+            existingEntity.AssertAuditForModification(Db, existingEntity.Id, null,
+                new AuditLogDetail
+                {
+                    PropertyName = nameof(existingEntity.UntrackedProperty),
+                    OriginalValue = originalValue,
+                    NewValue = newValue
+                });
+        }
+
+        [TestMethod]
+        public void CanTrackBaseClassProperties()
+        {
+            EntityTracker
+                .TrackAllProperties<ExtendedModel>()
+                .Except(m => m.Modified);
+
+            var existingEntity = ObjectFactory.Create<ExtendedModel>(save: true, testDbContext: Db);
+
+            var originalValue = existingEntity.TrackedProperty;
+            var newValue = RandomText;
+            existingEntity.TrackedProperty = newValue;
+
+            Db.SaveChanges();
+
+            existingEntity.AssertAuditForModification(Db, existingEntity.Id, null,
+                new AuditLogDetail
+                {
+                    PropertyName = nameof(existingEntity.TrackedProperty),
+                    OriginalValue = originalValue,
+                    NewValue = newValue
+                });
+        }
+
+        [TestMethod]
+        public void ShouldSkipUntrackedBaseClassProperties()
+        {
+            EntityTracker
+                .TrackAllProperties<ExtendedModel>()
+                .Except(m => m.Modified);
+
+            var existingEntity = ObjectFactory.Create<ExtendedModel>(save: true, testDbContext: Db);
+
+            existingEntity.Modified = RandomDate;
+
+            Db.SaveChanges();
+
+            existingEntity.AssertNoLogs(Db, existingEntity.Id, EventType.Modified);
+        }
     }
 }
