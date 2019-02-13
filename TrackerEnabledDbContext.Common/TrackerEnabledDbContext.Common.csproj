@@ -64,6 +64,7 @@
     <Compile Include="Auditors\Comparators\StringComparator.cs" />
     <Compile Include="Auditors\Comparators\ValueTypeComparator.cs" />
     <Compile Include="Auditors\DeletetionLogDetailsAuditor.cs" />
+    <Compile Include="Auditors\Helpers\DbEntryValuesWrapper.cs" />
     <Compile Include="Auditors\SoftDeletedLogDetailsAuditor.cs" />
     <Compile Include="Auditors\UnDeletedLogDetailsAudotor.cs" />
     <Compile Include="Configuration\DbContextExtensions.cs" />
