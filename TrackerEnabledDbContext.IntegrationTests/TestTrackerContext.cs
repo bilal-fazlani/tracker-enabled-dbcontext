@@ -28,5 +28,6 @@ namespace TrackerEnabledDbContext.IntegrationTests
         public DbSet<SoftDeletableModel> SoftDeletableModels { get; set; }
         public DbSet<ModelWithComplexType> ModelsWithComplexType { get; set; }
         public DbSet<ExtendedModel> ExtendedModels { get; set; }
+        public DbSet<TrackedExtendedModel> TrackedExtendedModels { get; set; }
     }
 }

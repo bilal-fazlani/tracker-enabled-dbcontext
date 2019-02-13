@@ -105,6 +105,30 @@ namespace TrackerEnabledDbContext.IntegrationTests
         //TODO: can track CHAR properties ? NO
 
         [TestMethod]
+        public void CanOverrideUntrackedBaseClassProperties()
+        {
+            EntityTracker
+                .OverrideTracking<TrackedExtendedModel>()
+                .Enable(x => x.UntrackedProperty);
+
+            var existingEntity = ObjectFactory.Create<TrackedExtendedModel>(save: true, testDbContext: Db);
+
+            var originalValue = existingEntity.UntrackedProperty;
+            var newValue = RandomText;
+            existingEntity.UntrackedProperty = newValue;
+
+            Db.SaveChanges();
+
+            existingEntity.AssertAuditForModification(Db, existingEntity.Id, null,
+                new AuditLogDetail
+                {
+                    PropertyName = nameof(existingEntity.UntrackedProperty),
+                    OriginalValue = originalValue,
+                    NewValue = newValue
+                });
+        }
+
+        [TestMethod]
         public void CanTrackBaseClassProperties()
         {
             EntityTracker
