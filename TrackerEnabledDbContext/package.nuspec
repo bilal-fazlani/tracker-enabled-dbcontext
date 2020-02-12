@@ -22,73 +22,7 @@
 
       Click here to get started : http://bilal-fazlani.blogspot.in/2013/09/adding-log-audit-feature-to-entity.html
     </summary>
-    <releaseNotes>
-      v 3.7
-      - Removed all references/usages to EntityFramework.MappingApi
-
-      v 3.6.2-beta
-      - Added context specific tracking enabled indicator.
-      - Added support for complex types
-      - Performance Improvements
-
-      v 3.6.1
-      - Added feature to add metadata with audit logs
-      - Made mathods vitual so that devs can override if needed
-
-      v 3.6
-      - Fixed bug where application would crash when deleting a soft-deletable object.
-      - Removing serilog integration ( use events to dump logs manually )
-
-      v 3.5.20-beta
-      Added "ConfigureUsername(Func&lt;string&gt;) method on dbcontext. Once configured, you dont have to specify useraname in all SaveChanges() calls.
-
-      v 3.5.15-beta
-      Added integration with Serilog. An ILogger can now be provided to ITrackerContext. If you decide you ILogger for logging audit logs, you can take advantage of any Serilog sinks, such as MongoDb. ElasticSearch, Seq, etc.
-
-      v 3.5.2
-      Users can now use the event to make changes to log &amp; ENTITY before the log gets saved. This can be useful for scenarios when you have fields like - LastModified or LastModifiedBy.
-
-      v 3.5.1
-      Fixed MySQL compatibility issues
-
-      v 3.5
-      Added an event when log is generated and before it is saved to local database. This event can be used to save log to external datastore instead of local.
-      https://github.com/bilal-fazlani/tracker-enabled-dbcontext/wiki/Events
-
-      v3.4
-      Added Softdeletable feature
-      Bug fixes
-
-      v3.3
-      Added Support for Disconnected contexts (for n-tier applications)
-      Bug Fixes
-      Minor Improvements
-
-      v3.1
-      - configure tracking without annotation with the help of FLUENT API
-      - enable/disable tracking at runtime
-      - various bug fixes
-      - performance improvements
-      - ability to migrate legacy log data
-
-      v2.7
-      - even if you dont provide a username/userId (anonymous user) , entity will be audited.
-      - no need to add the [Key] attribute. It's optional now.
-      - fixed the bug where changes din't get audited when "db.Entry(update).State = EntityState.Modified" was used
-      - added async support
-      - added support for composite primary keys
-      - improved performance
-      -----------------------------------------------
-      - Performance &amp; Reliability Improvements
-      - Bug Fixes
-      -----------------------------------------------
-      - Added GetLogs&lt;&gt;()  method
-      - Bug Fixes
-      - Performance Improvements
-
-      http://bilal-fazlani.blogspot.in/2013/09/adding-log-audit-feature-to-entity.html
-    </releaseNotes>
-    <copyright>2015</copyright>
+    <copyright>2020</copyright>
     <tags>SQL Entity Framework Tacking Audit C# Database ASP.NET</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
