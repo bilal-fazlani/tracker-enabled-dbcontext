@@ -17,9 +17,9 @@ build:
 test: off
 
 before_deploy:
-  - cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj -OutputDirectory .\artifacts -Version %APPVEYOR_REPO_TAG_NAME% 
-  - cmd: nuget pack .\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj -OutputDirectory .\artifacts -Version %APPVEYOR_REPO_TAG_NAME% 
-  - cmd: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -OutputDirectory .\artifacts -Version %APPVEYOR_REPO_TAG_NAME%   
+  - cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts -Version %APPVEYOR_REPO_TAG_NAME% 
+  - cmd: nuget pack .\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts -Version %APPVEYOR_REPO_TAG_NAME% 
+  - cmd: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts -Version %APPVEYOR_REPO_TAG_NAME%   
 deploy:
   provider: NuGet
   api_key: $(API_KEY)
@@ -29,5 +29,5 @@ deploy:
     appveyor_repo_tag: true
 
 artifacts:
-  - path: '.\artifacts\*.*'
+  - path: '$(APPVEYOR_BUILD_FOLDER)\artifacts\*'
     name: packages
