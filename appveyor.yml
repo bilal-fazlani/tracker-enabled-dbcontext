@@ -9,11 +9,12 @@ environment:
   TestIdentityConnectionString: Server=(local)\SQL2014;Database=TrackerEnabledDbContextIdentityTests;User ID=sa;Password=Password12!
 services: mssql2014
 before_build:
-- cmd: nuget restore
-- cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj
+  - cmd: nuget restore
 build:  
   verbosity: minimal
   publish_nuget: true
+after:build:
+  - cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj  
 
 test: off
 
