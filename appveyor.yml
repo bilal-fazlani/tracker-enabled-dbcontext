@@ -22,5 +22,4 @@ before_deploy:
   - cmd: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -Version %APPVEYOR_REPO_TAG_NAME% -o %APPVEYOR_BUILD_FOLDER%\artifacts  
 deploy_script:
   - echo tag deploy
-  on:
-    APPVEYOR_REPO_TAG: true
+  
