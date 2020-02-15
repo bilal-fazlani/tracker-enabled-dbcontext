@@ -3,19 +3,20 @@ os: Visual Studio 2015
 assembly_info:
   patch: false
 install:
-- set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
+  - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 environment:
   TestGenericConnectionString: Server=(local)\SQL2014;Database=TrackerEnabledDbContextTests;User ID=sa;Password=Password12!
   TestIdentityConnectionString: Server=(local)\SQL2014;Database=TrackerEnabledDbContextIdentityTests;User ID=sa;Password=Password12!
 services: mssql2014
 before_build:
-- cmd: nuget restore
+  - cmd: nuget restore
 build:
   verbosity: minimal
-notifications:
-- provider: Email
-  to:
-  - bilal.m.fazlani@gmail.com
-  on_build_success: false
-  on_build_failure: true
-  on_build_status_changed: false
+deploy:
+  provider: NuGet
+  server: # remove to push to NuGet.org
+  api_key:
+    secure: m49OJ7+Jdt9an3jPcTukHA==
+  skip_symbols: false
+  symbol_server: # remove to push symbols to SymbolSource.org
+  artifact: /.*\.nupkg/
