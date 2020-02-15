@@ -29,5 +29,5 @@ deploy:
     appveyor_repo_tag: true
 
 artifacts:
-  - path: 'C:\projects\tracker-enabled-dbcontext\artifacts\'
+  - path: '**\artifacts\*.nupkg'
     name: packages
