@@ -21,8 +21,8 @@ before_deploy:
   - cmd: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -Version %APPVEYOR_REPO_TAG_NAME%
 deploy:
   provider: NuGet
-  api_key: 
-    secure: $(API_KEY)    
+  api_key: $(API_KEY)    
   skip_symbols: false
+  artifact: *.nupkg
   on:
     APPVEYOR_REPO_TAG: true
