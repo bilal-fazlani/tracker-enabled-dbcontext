@@ -17,9 +17,9 @@ build:
 test: off
 
 before_deploy:
-  - cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj -Version %APPVEYOR_REPO_TAG_NAME% -o %APPVEYOR_BUILD_FOLDER%\artifacts
-  - cmd: nuget pack .\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj -Version %APPVEYOR_REPO_TAG_NAME% -o %APPVEYOR_BUILD_FOLDER%\artifacts
-  - cmd: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -Version %APPVEYOR_REPO_TAG_NAME% -o %APPVEYOR_BUILD_FOLDER%\artifacts  
+  - cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj -Version %APPVEYOR_REPO_TAG_NAME% -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts
+  - cmd: nuget pack .\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj -Version %APPVEYOR_REPO_TAG_NAME% -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts
+  - cmd: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -Version %APPVEYOR_REPO_TAG_NAME% -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts  
 deploy_script:
   - echo tag deploy
   
