@@ -13,7 +13,7 @@ before_build:
 build:  
   verbosity: minimal
   publish_nuget: true
-after:build:
+after_build:
   - cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj  
 
 test: off
