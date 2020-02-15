@@ -28,6 +28,6 @@ deploy:
   on:
     appveyor_repo_tag: true
 
-artifacts:
-  - path: '$(APPVEYOR_BUILD_FOLDER)\artifacts\*'
-    name: packages
+# artifacts:
+#   - path: '$(APPVEYOR_BUILD_FOLDER)\artifacts\*'
+#     name: packages
