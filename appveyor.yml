@@ -12,7 +12,8 @@ before_build:
   - cmd: nuget restore
 build:  
   verbosity: minimal
-after_build:
+
+before_package:
   - cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts -Version %APPVEYOR_REPO_TAG_NAME% 
   - cmd: nuget pack .\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts -Version %APPVEYOR_REPO_TAG_NAME% 
   - cmd: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts -Version %APPVEYOR_REPO_TAG_NAME%   
