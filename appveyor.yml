@@ -20,10 +20,8 @@ before_deploy:
   - cmd: nuget pack .\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj -Version %APPVEYOR_REPO_TAG_NAME%
   - cmd: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -Version %APPVEYOR_REPO_TAG_NAME%
 deploy:
+  provider: NuGet
+  api_key: $(API_KEY)    
+  skip_symbols: false
   on:
     APPVEYOR_REPO_TAG: true
-  - cmd: nuget SetApiKey %API_KEY%
-  - cmd: nuget push TrackerEnabledDbContext.%APPVEYOR_REPO_TAG_NAME%.nupkg -Source https://api.nuget.org/v3/index.json
-  - cmd: nuget push TrackerEnabledDbContext.Common.%APPVEYOR_REPO_TAG_NAME%.nupkg -Source https://api.nuget.org/v3/index.json
-  - cmd: nuget push TrackerEnabledDbContext.Identity.%APPVEYOR_REPO_TAG_NAME%.nupkg -Source https://api.nuget.org/v3/index.json
-  
