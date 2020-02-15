@@ -11,4 +11,6 @@ services: mssql2014
 before_build:
 - cmd: nuget restore
 build:
+  test: off
   verbosity: minimal
+  publish_nuget: true
