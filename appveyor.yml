@@ -29,5 +29,5 @@ deploy:
     appveyor_repo_tag: true
 
 artifacts:
-  - path: '%APPVEYOR_BUILD_FOLDER%\artifacts\*.nupkg'
+  - path: '$(APPVEYOR_BUILD_FOLDER)\artifacts\*.nupkg'
     name: packages
