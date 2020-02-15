@@ -27,3 +27,7 @@ deploy:
   artifact: /.*\.nupkg/
   on:
     appveyor_repo_tag: true
+
+artifacts:
+  - path: '**\*.nupkg'
+    name: packages
