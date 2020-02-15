@@ -10,14 +10,12 @@ environment:
 services: mssql2014
 before_build:
 - cmd: nuget restore
+- cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj
 build:  
   verbosity: minimal
   publish_nuget: true
 
 test: off
-
-before_deploy:
-  - cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj
 
 deploy:
   provider: NuGet
