@@ -9,11 +9,9 @@ environment:
   TestIdentityConnectionString: Server=(local)\SQL2014;Database=TrackerEnabledDbContextIdentityTests;User ID=sa;Password=Password12!
 services: mssql2014
 before_build:
-  - cmd: nuget restore
-build:  
+- cmd: nuget restore
+build:
   verbosity: minimal
-
-test: off
 
 before_package:
   - ps: if ($env:APPVEYOR_REPO_TAG -eq $TRUE) { nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj -OutputDirectory $env:APPVEYOR_BUILD_FOLDER\artifacts -Version $env:APPVEYOR_REPO_TAG_NAME }  
@@ -31,3 +29,11 @@ deploy:
 artifacts:
   - path: '**\artifacts\*.nupkg'
     name: packages
+
+notifications:
+  - provider: Email
+    to:
+      - bilal.m.fazlani@gmail.com
+    on_build_success: false
+    on_build_failure: true
+    on_build_status_changed: false
