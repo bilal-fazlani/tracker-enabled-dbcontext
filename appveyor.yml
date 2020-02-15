@@ -12,14 +12,15 @@ before_build:
   - cmd: nuget restore
 build:  
   verbosity: minimal
-  publish_nuget: true
-
-test: off
-
-before_deploy:
+after_build:
   - cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts -Version %APPVEYOR_REPO_TAG_NAME% 
   - cmd: nuget pack .\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts -Version %APPVEYOR_REPO_TAG_NAME% 
   - cmd: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts -Version %APPVEYOR_REPO_TAG_NAME%   
+  on:
+    appveyor_repo_tag: true
+
+test: off
+
 deploy:
   provider: NuGet
   api_key: $(API_KEY)
