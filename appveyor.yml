@@ -17,8 +17,6 @@ test: off
 
 before_package:
   - ps: if ($env:APPVEYOR_REPO_TAG -eq $TRUE) { nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj -OutputDirectory $env:APPVEYOR_BUILD_FOLDER\artifacts -Version $env:APPVEYOR_REPO_TAG }
-  # - ps: nuget pack .\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts -Version %APPVEYOR_REPO_TAG_NAME%
-  # - ps: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -OutputDirectory %APPVEYOR_BUILD_FOLDER%\artifacts -Version %APPVEYOR_REPO_TAG_NAME%
 
 deploy:
   provider: NuGet
