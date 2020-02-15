@@ -10,7 +10,8 @@ environment:
 services: mssql2014
 before_build:
 - cmd: nuget restore
-build:
-  test: off
+build:  
   verbosity: minimal
   publish_nuget: true
+
+test: off
