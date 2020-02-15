@@ -14,9 +14,7 @@ build:
   verbosity: minimal
 deploy:
   provider: NuGet
-  server: # remove to push to NuGet.org
-  api_key:
+    api_key:
     secure: m49OJ7+Jdt9an3jPcTukHA==
   skip_symbols: false
-  symbol_server: # remove to push symbols to SymbolSource.org
   artifact: /.*\.nupkg/
