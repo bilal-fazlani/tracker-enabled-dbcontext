@@ -15,7 +15,8 @@ build:
   publish_nuget: true
 
 test: off
-after_build:
+
+before_deploy:
   - cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj -Version %APPVEYOR_REPO_TAG_NAME% -o %APPVEYOR_BUILD_FOLDER%\artifacts
   - cmd: nuget pack .\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj -Version %APPVEYOR_REPO_TAG_NAME% -o %APPVEYOR_BUILD_FOLDER%\artifacts
   - cmd: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -Version %APPVEYOR_REPO_TAG_NAME% -o %APPVEYOR_BUILD_FOLDER%\artifacts
