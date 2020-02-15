@@ -23,6 +23,6 @@ deploy:
   provider: NuGet
   api_key: $(API_KEY)    
   skip_symbols: false
-  artifact: *.nupkg
+  artifact: /.*\.nupkg/
   on:
     APPVEYOR_REPO_TAG: true
