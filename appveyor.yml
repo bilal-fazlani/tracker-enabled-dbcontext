@@ -16,11 +16,13 @@ build:
 
 test: off
 before_deploy:
-  - cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj -OutputDirectory ..\ -Version $(appveyor_build_version)
-  - cmd: nuget pack .\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj -OutputDirectory ..\ -Version $(appveyor_build_version)
-  - cmd: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -OutputDirectory ..\ -Version $(appveyor_build_version)
+  - cmd: nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj -OutputDirectory ..\ -Version $(APPVEYOR_REPO_TAG_NAME)
+  - cmd: nuget pack .\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj -OutputDirectory ..\ -Version $(APPVEYOR_REPO_TAG_NAME)
+  - cmd: nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -OutputDirectory ..\ -Version $(APPVEYOR_REPO_TAG_NAME)
 deploy:
   provider: NuGet
   api_key: oy2k5goo2gygxixi66dqcdcmksovekzuvmqxrue27em4aq    
   skip_symbols: false
   artifact: /.*\.nupkg/
+  on:
+    APPVEYOR_REPO_TAG: true
