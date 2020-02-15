@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
   <metadata>
-    <id>TrackerEnabledDbContext</id>
+    <id>TrackerEnabledDbContext.beta</id>
     <version>3.7</version>
     <title>Tracker Enabled DbContext</title>
     <authors>Bilal Fazlani</authors>

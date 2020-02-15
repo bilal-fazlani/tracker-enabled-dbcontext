@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
   <metadata>
-    <id>TrackerEnabledDbContext.Identity</id>
+    <id>TrackerEnabledDbContext.Identity.beta</id>
     <version>3.7.1</version>
     <title>Tracker Enabled DbContext For Asp.Net Identity</title>
     <authors>Bilal Fazlani</authors>
