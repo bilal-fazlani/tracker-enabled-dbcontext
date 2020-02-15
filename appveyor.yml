@@ -24,5 +24,3 @@ deploy:
   api_key: oy2k5goo2gygxixi66dqcdcmksovekzuvmqxrue27em4aq    
   skip_symbols: false
   artifact: /.*\.nupkg/
-  # on:
-  #   APPVEYOR_REPO_TAG: true
