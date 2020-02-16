@@ -12,10 +12,28 @@ before_build:
 - cmd: nuget restore
 build:
   verbosity: minimal
+
+before_package:
+  - ps: if ($env:APPVEYOR_REPO_TAG -eq $TRUE) { nuget pack .\TrackerEnabledDbContext\TrackerEnabledDbContext.csproj -OutputDirectory $env:APPVEYOR_BUILD_FOLDER\artifacts -Version $env:APPVEYOR_REPO_TAG_NAME }  
+  - ps: if ($env:APPVEYOR_REPO_TAG -eq $TRUE) { nuget pack .\TrackerEnabledDbContext.Common\TrackerEnabledDbContext.Common.csproj -OutputDirectory $env:APPVEYOR_BUILD_FOLDER\artifacts -Version $env:APPVEYOR_REPO_TAG_NAME }  
+  - ps: if ($env:APPVEYOR_REPO_TAG -eq $TRUE) { nuget pack .\TrackerEnabledDbContext.Identity\TrackerEnabledDbContext.Identity.csproj -OutputDirectory $env:APPVEYOR_BUILD_FOLDER\artifacts -Version $env:APPVEYOR_REPO_TAG_NAME }  
+
+deploy:
+  provider: NuGet
+  api_key: $(API_KEY)
+  skip_symbols: false
+  artifact: /.*\.nupkg/
+  on:
+    appveyor_repo_tag: true
+
+artifacts:
+  - path: '**\artifacts\*.nupkg'
+    name: packages
+
 notifications:
-- provider: Email
-  to:
-  - bilal.m.fazlani@gmail.com
-  on_build_success: false
-  on_build_failure: true
-  on_build_status_changed: false
+  - provider: Email
+    to:
+      - bilal.m.fazlani@gmail.com
+    on_build_success: false
+    on_build_failure: true
+    on_build_status_changed: false
