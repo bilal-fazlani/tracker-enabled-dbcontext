@@ -7,6 +7,8 @@ install:
 environment:
   TestGenericConnectionString: Server=(local)\SQL2014;Database=TrackerEnabledDbContextTests;User ID=sa;Password=Password12!
   TestIdentityConnectionString: Server=(local)\SQL2014;Database=TrackerEnabledDbContextIdentityTests;User ID=sa;Password=Password12!
+  API_KEY:
+    secure: 3VVZa5Re9wO4iminljj/HKsta69CrLSi8YdAUnEEVZnaE3ZqKSGW1nbJKeIaFXi4  
 services: mssql2014
 before_build:
 - cmd: nuget restore
