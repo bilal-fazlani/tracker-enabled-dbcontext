@@ -23,7 +23,7 @@
         <dependency id="EntityFramework" version="6.2" />
         <dependency id="Microsoft.AspNet.Identity.Core" version="2.2.1" />
         <dependency id="Microsoft.AspNet.Identity.EntityFramework" version="2.2.1" />
-        <dependency id="TrackerEnabledDbContext.Common" version="3.7" />
+        <dependency id="TrackerEnabledDbContext.Common" version="3.*" />
       </group>
     </dependencies>
     <references>

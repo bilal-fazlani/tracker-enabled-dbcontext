@@ -20,14 +20,14 @@
 
       NOTE: TO USE WITH ASP.NET MVC 5 IDENTITY, USE : TrackerEnabledDbContext.Identity
 
-      Click here to get started : http://bilal-fazlani.blogspot.in/2013/09/adding-log-audit-feature-to-entity.html
+      Click here to get started : https://github.com/bilal-fazlani/tracker-enabled-dbcontext/wiki
     </summary>
     <copyright>2020</copyright>
     <tags>SQL Entity Framework Tacking Audit C# Database ASP.NET</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
         <dependency id="EntityFramework" version="6.2" />
-        <dependency id="TrackerEnabledDbContext.Common" version="3.7" />
+        <dependency id="TrackerEnabledDbContext.Common" version="3.*" />
       </group>
     </dependencies>
     <references>
