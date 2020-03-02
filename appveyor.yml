@@ -1,15 +1,13 @@
 version: v{build}
-os: Visual Studio 2015
+os: Visual Studio 2019
 assembly_info:
   patch: false
-install:
-- set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 environment:
-  TestGenericConnectionString: Server=(local)\SQL2014;Database=TrackerEnabledDbContextTests;User ID=sa;Password=Password12!
-  TestIdentityConnectionString: Server=(local)\SQL2014;Database=TrackerEnabledDbContextIdentityTests;User ID=sa;Password=Password12!
+  TestGenericConnectionString: Server=(local)\SQL2017;Database=TrackerEnabledDbContextTests;User ID=sa;Password=Password12!;MultipleActiveResultSets=true;
+  TestIdentityConnectionString: Server=(local)\SQL2017;Database=TrackerEnabledDbContextIdentityTests;User ID=sa;Password=Password12!;MultipleActiveResultSets=true;
   API_KEY:
     secure: 3VVZa5Re9wO4iminljj/HKsta69CrLSi8YdAUnEEVZnaE3ZqKSGW1nbJKeIaFXi4  
-services: mssql2014
+services: mssql2017
 before_build:
 - cmd: nuget restore
 build:
