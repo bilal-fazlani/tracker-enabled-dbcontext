@@ -1,0 +1,75 @@
+site_name: Tracker Enabled DbContext
+site_description: Tracker-enabled DbContext offers you to implement full auditing in your database
+repo_name: 'bilal-fazlani/tracker-enabled-dbcontext'
+repo_url: 'https://github.com/bilal-fazlani/tracker-enabled-dbcontext'
+
+strict: true
+
+nav:
+  - index.md
+  - types-of-tedb.md
+  - techniques.md
+  - configuration.md
+  - username.md
+  - events.md
+  - data.md
+  - metadata.md
+  - soft-deletable.md
+  - v3-breaking-changes.md
+theme:
+  features:
+    # - tabs
+    - instant
+  name: 'material'
+  icon:
+    repo: fontawesome/brands/github
+  favicon: 'img/favicon.ico'
+  palette:
+    primary: 'black'
+    accent: 'red'  
+  # logo: 'img/small-logo.svg'
+
+# google_analytics:
+  # - 'UA-39358317-3'
+  # - 'auto'
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - codehilite:
+      linenums: false
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.escapeall:
+      nbsp: true
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - toc:
+     permalink: "#"   
+
+plugins:
+  - search
+  # - git-revision-date-localized
+
+# Customization
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: 'https://github.com/bilal-fazlani'
+    - icon: fontawesome/brands/twitter
+      link: 'https://twitter.com/bilal_fazlani'
+    - icon: fontawesome/brands/linkedin
+      link: 'https://www.linkedin.com/in/bilal-fazlani/'
