@@ -10,5 +10,5 @@ This library is built on top of entity framework. If offers you to implement ful
 
 It comes with an ***[GNU Lesser General Public License v3.0](./LICENSE.md)*** Licence.
 
-👉[Documentation](https://github.com/bilal-fazlani/tracker-enabled-dbcontext/wiki)
+👉[Documentation](https://tracker-enabled-dbcontext.bilal-fazlani.com/)
 
