@@ -29,9 +29,9 @@ theme:
     accent: 'red'  
   # logo: 'img/small-logo.svg'
 
-# google_analytics:
-  # - 'UA-39358317-3'
-  # - 'auto'
+google_analytics:
+  - 'UA-166887711-1'
+  - 'auto'
 
 markdown_extensions:
   - admonition
