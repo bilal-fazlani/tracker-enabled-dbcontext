@@ -1,7 +1,7 @@
 version: v{build}
 os: Visual Studio 2019
 assembly_info:
-  patch: true
+  patch: false
 environment:
   TestGenericConnectionString: Server=(local)\SQL2017;Database=TrackerEnabledDbContextTests;User ID=sa;Password=Password12!;MultipleActiveResultSets=true;
   TestIdentityConnectionString: Server=(local)\SQL2017;Database=TrackerEnabledDbContextIdentityTests;User ID=sa;Password=Password12!;MultipleActiveResultSets=true;
