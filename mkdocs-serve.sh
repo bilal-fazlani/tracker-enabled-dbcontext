@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# docker build --no-cache -t mkdocs .
+# Build MkDocs
+docker build --no-cache -t mkdocs .
 
 EXPOSED_PORT=8001
 echo 'Connect your browser to 127.0.0.1:'${EXPOSED_PORT}

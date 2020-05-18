@@ -1,4 +1,4 @@
-FROM squidfunk/mkdocs-material:5.1.1
+FROM squidfunk/mkdocs-material:5.2.0
 
 COPY requirements-local.txt ./
 

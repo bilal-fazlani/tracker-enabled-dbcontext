@@ -3,7 +3,7 @@ site_description: Tracker-enabled DbContext offers you to implement full auditin
 repo_name: 'bilal-fazlani/tracker-enabled-dbcontext'
 repo_url: 'https://github.com/bilal-fazlani/tracker-enabled-dbcontext'
 
-strict: true
+strict: false
 
 nav:
   - index.md
@@ -25,8 +25,9 @@ theme:
     repo: fontawesome/brands/github
   favicon: 'img/favicon.ico'
   palette:
-    primary: 'black'
-    accent: 'red'  
+    scheme: slate
+    primary: 'red'
+    accent: 'orange'  
   # logo: 'img/small-logo.svg'
 
 google_analytics:
