@@ -3,11 +3,11 @@ code span.k {
 }
 
 code span.nc {
-    color: #f75595 !important;
+    color: #fc87d7 !important;
 }
 
 code span.nf {
-    color: #f75595 !important;
+    color: #fa763d !important;
 }
 
 code span.s {
@@ -24,4 +24,16 @@ code span.na {
 
 code span.err {
     color: #ff497a !important;
+}
+
+code span.n {
+    color: #dec7be !important;
+}
+
+code span.p {
+    color: #ed9876 !important;
+}
+
+code span.c1 {
+    color: #8a7f7f !important;
 }
