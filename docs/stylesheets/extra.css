@@ -37,3 +37,7 @@ code span.p {
 code span.c1 {
     color: #8a7f7f !important;
 }
+
+code span.nb {
+    color: #dec7be !important;
+}
