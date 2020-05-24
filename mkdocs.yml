@@ -74,3 +74,6 @@ extra:
       link: 'https://twitter.com/bilal_fazlani'
     - icon: fontawesome/brands/linkedin
       link: 'https://www.linkedin.com/in/bilal-fazlani/'
+
+extra_css:
+  - stylesheets/extra.css      
