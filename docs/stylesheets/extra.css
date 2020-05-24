@@ -34,10 +34,10 @@ code span.p {
     color: #ed9876 !important;
 }
 
-code span.c1 {
+code span.c1, code span.cm {
     color: #8a7f7f !important;
 }
 
 code span.nb {
-    color: #dec7be !important;
+    color: #cda2f9 !important;
 }
