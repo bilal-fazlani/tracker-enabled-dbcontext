@@ -1,7 +1,8 @@
 site_name: Tracker Enabled DbContext
 site_description: Tracker-enabled DbContext offers you to implement full auditing in your database
-repo_name: 'bilal-fazlani/tracker-enabled-dbcontext'
-repo_url: 'https://github.com/bilal-fazlani/tracker-enabled-dbcontext'
+site_url: https://tracker-enabled-dbcontext.bilal-fazlani.com
+repo_name: "bilal-fazlani/tracker-enabled-dbcontext"
+repo_url: "https://github.com/bilal-fazlani/tracker-enabled-dbcontext"
 
 strict: true
 
@@ -17,28 +18,31 @@ nav:
   - soft-deletable.md
   - v3-breaking-changes.md
 theme:
+  name: "material"
   features:
-    # - tabs
-    - instant
-  name: 'material'
+    - navigation.instant
+    - navigation.tracking
+    - navigation.footer
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.expand
+    - navigation.path
+    - toc.follow
+    - search.suggest
+    - search.highlight
   icon:
     repo: fontawesome/brands/github
-  favicon: 'img/favicon.ico'
   palette:
     scheme: slate
-    primary: 'red'
-    accent: 'orange'  
-  # logo: 'img/small-logo.svg'
-
-google_analytics:
-  - 'UA-166887711-1'
-  - 'auto'
+    primary: red
+    accent: orange
 
 markdown_extensions:
   - admonition
   - attr_list
   - codehilite:
-      linenums: false
+      linenums: true
   - pymdownx.arithmatex
   - pymdownx.betterem:
       smart_enable: all
@@ -46,7 +50,8 @@ markdown_extensions:
   - pymdownx.critic
   - pymdownx.details
   - pymdownx.emoji:
-      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.escapeall:
       nbsp: true
   - pymdownx.inlinehilite
@@ -54,26 +59,29 @@ markdown_extensions:
   - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.superfences
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
   - toc:
-     permalink: "#"   
+      permalink: "#"
 
 plugins:
   - search
-  # - git-revision-date-localized
 
 # Customization
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: 'https://github.com/bilal-fazlani'
+      link: "https://github.com/bilal-fazlani"
     - icon: fontawesome/brands/twitter
-      link: 'https://twitter.com/bilal_fazlani'
+      link: "https://twitter.com/bilal_fazlani"
     - icon: fontawesome/brands/linkedin
-      link: 'https://www.linkedin.com/in/bilal-fazlani/'
+      link: "https://www.linkedin.com/in/bilal-fazlani/"
+  analytics:
+    provider: google
+    property: G-RL4N6BKL7B
 
 extra_css:
-  - stylesheets/extra.css      
+  - stylesheets/extra.css

@@ -6,3 +6,8 @@
 
   # Default build command.
   command = "mkdocs build"
+
+  ignore = "if [ ${COMMIT_REF} == ${CACHED_COMMIT_REF} ] ; then false ; else git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF mkdocs.yml requirements.txt netlify.toml docs/ ; fi"
+
+[build.environment]
+  PYTHON_VERSION = "3.8"
