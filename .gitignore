@@ -162,3 +162,5 @@ $RECYCLE.BIN/
 /.vs
 *.nupkg
 site/
+Pipfile
+Pipfile.lock
