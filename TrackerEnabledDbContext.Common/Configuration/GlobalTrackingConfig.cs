@@ -6,7 +6,20 @@ namespace TrackerEnabledDbContext.Common.Configuration
 {
     public static class GlobalTrackingConfig
     {
-        public static bool Enabled { get; set; } = true;
+        public static bool Enabled
+        {
+            get { return AdditionsEnabled || ModificationsEnabled || DeletionsEnabled; }
+            set
+            {
+                AdditionsEnabled = value;
+                ModificationsEnabled = value;
+                DeletionsEnabled = value;
+            }
+        }
+
+        public static bool AdditionsEnabled { get; set; } = true;
+        public static bool ModificationsEnabled { get; set; } = true;
+        public static bool DeletionsEnabled { get; set; } = true;
 
         public static bool TrackEmptyPropertiesOnAdditionAndDeletion { get; set; } = false;
 

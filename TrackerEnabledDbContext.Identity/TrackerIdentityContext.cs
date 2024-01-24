@@ -34,16 +34,59 @@ namespace TrackerEnabledDbContext.Identity
         private string _defaultUsername;
         private Action<dynamic> _metadataConfiguration;
 
-        private bool _trackingEnabled = true;
+        private bool _additionTrackingEnabled = true;
+        private bool _modificationTrackingEnabled = true;
+        private bool _deletionTrackingEnabled = true;
+
         public bool TrackingEnabled
         {
             get
             {
-                return GlobalTrackingConfig.Enabled && _trackingEnabled;
+                return GlobalTrackingConfig.Enabled && (_additionTrackingEnabled ||
+                                                               _modificationTrackingEnabled ||
+                                                               _deletionTrackingEnabled);
             }
             set
             {
-                _trackingEnabled = value;
+                AdditionTrackingEnabled = value;
+                ModificationTrackingEnabled = value;
+                DeletionTrackingEnabled = value;
+            }
+        }
+
+        public bool AdditionTrackingEnabled
+        {
+            get
+            {
+                return GlobalTrackingConfig.AdditionsEnabled && _additionTrackingEnabled;
+            }
+            set
+            {
+                _additionTrackingEnabled = value;
+            }
+        }
+
+        public bool ModificationTrackingEnabled
+        {
+            get
+            {
+                return GlobalTrackingConfig.ModificationsEnabled && _modificationTrackingEnabled;
+            }
+            set
+            {
+                _modificationTrackingEnabled = value;
+            }
+        }
+
+        public bool DeletionTrackingEnabled
+        {
+            get
+            {
+                return GlobalTrackingConfig.DeletionsEnabled && _deletionTrackingEnabled;
+            }
+            set
+            {
+                _deletionTrackingEnabled = value;
             }
         }
 
@@ -122,17 +165,28 @@ namespace TrackerEnabledDbContext.Identity
             dynamic metadata = new ExpandoObject();
             _metadataConfiguration?.Invoke(metadata);
 
-            _coreTracker.AuditChanges(userName, metadata);
+            if (ModificationTrackingEnabled) _coreTracker.AuditModifications(userName, metadata);
+            if (DeletionTrackingEnabled) _coreTracker.AuditDeletions(userName, metadata);
 
-            IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
-            // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
-            int result = base.SaveChanges();
-            //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
+            int result;
+            if (AdditionTrackingEnabled)
+            {
+                IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
+                // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
+                result = base.SaveChanges();
+                //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
 
-            _coreTracker.AuditAdditions(userName, addedEntries, metadata);
+                _coreTracker.AuditAdditions(userName, addedEntries, metadata);
 
-            //save changes to audit of added entries
-            base.SaveChanges();
+                //save changes to audit of added entries
+                base.SaveChanges();
+            }
+            else
+            {
+                //save changes
+                result = base.SaveChanges();
+            }
+
             return result;
         }
 
@@ -219,18 +273,28 @@ namespace TrackerEnabledDbContext.Identity
             dynamic metadata = new ExpandoObject();
             _metadataConfiguration?.Invoke(metadata);
 
-            _coreTracker.AuditChanges(userName, metadata);
+            if (ModificationTrackingEnabled) _coreTracker.AuditModifications(userName, metadata);
+            if (DeletionTrackingEnabled) _coreTracker.AuditDeletions(userName, metadata);
 
-            IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
+            int result;
+            if (AdditionTrackingEnabled)
+            {
+                IEnumerable<DbEntityEntry> addedEntries = _coreTracker.GetAdditions();
 
-            // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
-            int result = await base.SaveChangesAsync(cancellationToken);
+                // Call the original SaveChanges(), which will save both the changes made and the audit records...Note that added entry auditing is still remaining.
+                result = await base.SaveChangesAsync(cancellationToken);
 
-            //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
-            _coreTracker.AuditAdditions(userName, addedEntries, metadata);
+                //By now., we have got the primary keys of added entries of added entiries because of the call to savechanges.
+                _coreTracker.AuditAdditions(userName, addedEntries, metadata);
 
-            //save changes to audit of added entries
-            await base.SaveChangesAsync(cancellationToken);
+                //save changes to audit of added entries
+                await base.SaveChangesAsync(cancellationToken);
+            }
+            else
+            {
+                //save changes
+                result = await base.SaveChangesAsync(cancellationToken);
+            }
 
             return result;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TrackerEnabledDbContext.Common.Configuration;
@@ -13,9 +14,9 @@ namespace TrackerEnabledDbContext.IntegrationTests
     public class FluentConfigurationTests : PersistanceTests<TestTrackerContext>
     {
         [TestMethod]
-        public void Can_recognise_global_tracking_indicator_when_disabled()
+        public void Can_recognise_global_addition_tracking_indicator_when_disabled()
         {
-            GlobalTrackingConfig.Enabled = false;
+            GlobalTrackingConfig.AdditionsEnabled = false;
 
             EntityTracker
                 .TrackAllProperties<POCO>()
@@ -30,7 +31,7 @@ namespace TrackerEnabledDbContext.IntegrationTests
         }
 
         [TestMethod]
-        public void Can_recognise_global_tracking_indicator_when_enabled()
+        public void Can_recognise_global_addition_tracking_indicator_when_enabled()
         {
             EntityTracker
                 .TrackAllProperties<POCO>();
@@ -50,6 +51,96 @@ namespace TrackerEnabledDbContext.IntegrationTests
                 x=>x.Id,
                 x=>x.Height,
                 x=>x.StartTime);
+        }
+
+        [TestMethod]
+        public void Can_recognise_global_change_tracking_indicator_when_disabled()
+        {
+            GlobalTrackingConfig.ModificationsEnabled = false;
+
+            EntityTracker
+                .TrackAllProperties<POCO>()
+                .Except(x => x.StartTime)
+                .And(x => x.Color);
+
+            POCO model = ObjectFactory.Create<POCO>();
+            Db.POCOs.Add(model);
+            Db.SaveChanges();
+            model.Height++;
+            Db.SaveChanges();
+
+            model.AssertNoLogs(Db, model.Id, Common.Models.EventType.Modified);
+        }
+
+        [TestMethod]
+        public void Can_recognise_global_change_tracking_indicator_when_enabled()
+        {
+            EntityTracker
+                .TrackAllProperties<POCO>();
+
+            POCO model = new POCO
+            {
+                Color = "Red",
+                Height = 67.4,
+                StartTime = new DateTime(2015, 5, 5)
+            };
+
+            Db.POCOs.Add(model);
+            Db.SaveChanges();
+            model.Color = "Green";
+            Db.SaveChanges();
+
+            model.AssertAuditForModification(Db, model.Id, null, new AuditLogDetail
+            {
+                NewValue = "Green",
+                OriginalValue = "Red",
+                PropertyName = "Color"
+            });
+        }
+
+        [TestMethod]
+        public void Can_recognise_global_deletion_tracking_indicator_when_disabled()
+        {
+            GlobalTrackingConfig.DeletionsEnabled = false;
+
+            EntityTracker
+                .TrackAllProperties<POCO>()
+                .Except(x => x.StartTime)
+                .And(x => x.Color);
+
+            POCO model = ObjectFactory.Create<POCO>();
+            Db.POCOs.Add(model);
+            Db.SaveChanges();
+            Db.POCOs.Remove(model);
+            Db.SaveChanges();
+
+            model.AssertNoLogs(Db, model.Id, Common.Models.EventType.Modified);
+        }
+
+        [TestMethod]
+        public void Can_recognise_global_deletion_tracking_indicator_when_enabled()
+        {
+            EntityTracker
+                .TrackAllProperties<POCO>();
+
+            POCO model = new POCO
+            {
+                Color = "Red",
+                Height = 67.4,
+                StartTime = new DateTime(2015, 5, 5)
+            };
+
+            Db.POCOs.Add(model);
+            Db.SaveChanges();
+            Db.POCOs.Remove(model);
+            Db.ChangeTracker.DetectChanges();
+            Db.SaveChanges();
+
+            model.AssertAuditForDeletion(Db, model.Id, null,
+                x => x.Id,
+                x => x.Color, 
+                x => x.Height,
+                x => x.StartTime);
         }
 
         [TestMethod]
